@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+//prodotto lo metti sempre tu in vendita
 public class Prodotto {
 
     @Id
@@ -34,8 +35,11 @@ public class Prodotto {
     @OneToMany(mappedBy = "prodotto")
     private List<Foto> foto;
 
-    //categoria
+    // il prodotto puo essere in piu categorie ?
+    //se il rpodotto è tamburo e piatti non c'è problema
 
+    @ManyToOne
+    private Categoria categoria;
     //il mio prodotto puo essere in piu riche di ordine
     @OneToMany(mappedBy = "prodotto")
     private List<RigaOrdine> rigaOrdine;
