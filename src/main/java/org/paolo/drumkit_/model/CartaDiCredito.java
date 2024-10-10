@@ -13,8 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 //stiamo impostando che le due chiavi che gli diamo , saranno univoche
-@Table(name = "carta_di_credito")
-//@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"numero_carta","id_utente"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"numero_carta","id_utente"})})
 public class CartaDiCredito {
 
     @Id
