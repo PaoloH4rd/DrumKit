@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
-
+// le request sono le info che ti invia il client per fare una richiesta
 @Data
 public class CambiaPasswordRequestDTO {
 

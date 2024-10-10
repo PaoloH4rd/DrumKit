@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 public class RegistrazioneRequestDTO {
 
-
+    //logica sul singolo campo = VALIDATION
     @NotBlank(message = "tutte le persone hanno un nome")
     private String nome;
 

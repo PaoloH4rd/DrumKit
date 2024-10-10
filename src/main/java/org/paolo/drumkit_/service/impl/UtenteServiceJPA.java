@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -27,7 +28,9 @@ public class UtenteServiceJPA implements UtenteService {
 
     @Override
     public void add(Utente u) {
-        if(u.getId() != 0 )throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        if(u.getId() != 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        Optional<Utente> optionalUtente = Urepo.findByEmailAndIsDisattivatoIsFalse(u.getEmail());
+        if (optionalUtente.isPresent()) throw new ResponseStatusException(HttpStatus.CONFLICT);
         Urepo.save(u);
     }
 

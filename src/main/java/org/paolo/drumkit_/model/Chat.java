@@ -23,8 +23,7 @@ public class Chat {
     @JoinColumn(nullable = false , updatable = false , name = "id_cliente")
     private Utente cliente;
 
-    //TODO why admin on chat ?
-    //
+    //TODO why admin on chat -> chat is with vendor
     @ManyToOne
     @JoinColumn(nullable = false , updatable = false , name ="id_admin")
     private Utente admin;

@@ -36,10 +36,11 @@ public class Prodotto {
     private List<Foto> foto;
 
     // il prodotto puo essere in piu categorie ?
-    //se il rpodotto è tamburo e piatti non c'è problema
-
+    //se il prodotto è tamburo e piatti non c'è problema
     @ManyToOne
+    @JoinColumn(nullable = false , updatable = false , name = "id_categoria")
     private Categoria categoria;
+
     //il mio prodotto puo essere in piu riche di ordine
     @OneToMany(mappedBy = "prodotto")
     private List<RigaOrdine> rigaOrdine;

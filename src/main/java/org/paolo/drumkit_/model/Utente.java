@@ -30,7 +30,7 @@ public class Utente  {
     @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(nullable = false)
     private LocalDate dataNascita;
 
     @Column(nullable = false)
@@ -53,10 +53,14 @@ public class Utente  {
     @OneToMany(mappedBy = "cliente")
     private List<Chat> chats;
 
-
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    //
-    // ///////////
-    // vuole ruolo_ -> sarebbe un get ruolo con spring seurity
+    public Utente(String nome, String cognome, String email, String password, String dataNascita, Ruolo ruolo) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.password = password;
+        this.dataNascita = LocalDate.parse(dataNascita);
+        this.ruolo = ruolo;
+    }
+    ///////////
+    // vuole ruolo -> sarebbe un get ruolo con spring security
 }
