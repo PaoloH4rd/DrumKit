@@ -19,20 +19,10 @@ public class ChatServiceJPA implements ChatService {
 
     private final ChatRepository repo;
 
-//    @Override
-//    public List<Chat> getByCliente_IdAndIsChiusaIsfalse(Utente u) {
-//        return repo.findAllByCliente_IdAndChiusaIsfalse(u.getId());
-//    }
-//
-//    @Override
-//    public List<Chat> getByAdmin_IdAndIsChiusaIsfalse(Utente u) {
-//        return repo.findAllByAdmin_IdAndChiusaIsfalse(u.getId());
-//    }
-//
-//    @Override
-//    public List<Chat> getByCliente_IdAndAdmin_IdAndIsChiusaIsfalse(Utente cliente, Utente admin) {
-//        return repo.findAllByCliente_IdAndAdmin_IdAndIsChiusaIsfalse(cliente.getId(), admin.getId());
-//    }
+    @Override
+    public List<Chat> getByCliente_IdAndIsChiusaIsfalse(Utente u) {
+        return repo.findAllByCliente_IdAndIsChiusaIsFalse(u.getId());
+    }
 
     @Override
     public void add(Chat chat) {
@@ -49,26 +39,17 @@ public class ChatServiceJPA implements ChatService {
         c.setMessaggi(chat.getMessaggi());
         repo.save(c);
     }
-    @Override
-    public List<Chat> getAll() {
-        return List.of();
-    }
 
     @Override
     public Chat getById(long id) {
-        return null;
+        return repo.findByIdAndIsChiusaIsFalse(id).orElseThrow(()->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-//    @Override
-//    public List<Chat> getAll() {
-//        return repo.findAllByChiusaIsFalse();
-//    }
-//
-//    @Override
-//    public Chat getById(long id) {
-//        return repo.findByIdAndChiusaIsFalse().orElseThrow(()->
-//                new ResponseStatusException(HttpStatus.NOT_FOUND));
-//    }
+    @Override
+    public List<Chat> getAll() {
+        return repo.findAllByIsChiusaIsFalse();
+    }
 
     @Override
     public void setDisattivatoTrue(long id) {

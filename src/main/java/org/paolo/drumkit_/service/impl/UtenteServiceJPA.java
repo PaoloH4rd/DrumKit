@@ -18,16 +18,17 @@ public class UtenteServiceJPA implements UtenteService {
 
     private final UtenteRepository Urepo;
     //sql init properties
-    @Override
-    public void add(Utente u) {
-        if(u.getId() != 0 )throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        Urepo.save(u);
-    }
 
     @Override
     public Utente login(String email, String password) {
         return Urepo.findByEmailAndPasswordAndIsDisattivatoIsFalse(email , password).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public void add(Utente u) {
+        if(u.getId() != 0 )throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        Urepo.save(u);
     }
 
     @Override

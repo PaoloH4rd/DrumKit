@@ -44,13 +44,13 @@ public class RecensioneServiceJPA implements RecensioneService {
     }
 
     @Override
-    public List<Recensione> getAll() {
-        return repo.findAll();
+    public Recensione getById(long id) {
+        return repo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public Recensione getById(long id) {
-        return repo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public List<Recensione> getAll() {
+        return repo.findAll();
     }
 
     @Override

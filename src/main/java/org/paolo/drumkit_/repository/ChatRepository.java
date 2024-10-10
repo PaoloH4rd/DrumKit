@@ -8,9 +8,7 @@ import java.util.Optional;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
-//    List<Chat> findAllByCliente_IdAndIsChiusaIsfalse(long idCliente);
-//    List<Chat> findAllByAdmin_IdAndIsChiusaIsfalse(long idAdmin);
-////    List<Chat> findAllByCliente_IdAndAdmin_IdAndIsChiusaIsfalse(long idCliente, long idAdmin);
-//    List<Chat> findAllByChiusaIsFalse();
-//    Optional<Chat> findByIdAndChiusaIsFalse();
+    List<Chat> findAllByCliente_IdAndIsChiusaIsFalse(long idCliente);
+    List<Chat> findAllByIsChiusaIsFalse();
+    Optional<Chat> findByIdAndIsChiusaIsFalse(long idChat);
 }

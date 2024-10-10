@@ -18,10 +18,10 @@ public class CartaDiCreditoServiceJPA implements CarteDiCreditoService {
     private final CartaDiCreditoRepository repo;
 
     //torna tutte le carte di un utente con il suo id
-//    @Override
-//    public List<CartaDiCredito> getByIdUtente(long id) {
-//        return repo.findAllByUtente_IdAndDisattivatoIsFalse(id);
-//    }
+    @Override
+    public List<CartaDiCredito> getByUtente_id(long id) {
+        return repo.findAllByUtente_IdAndIsDisattivatoIsFalse(id);
+    }
 
     @Override
     public void add(CartaDiCredito c) {
@@ -44,15 +44,15 @@ public class CartaDiCreditoServiceJPA implements CarteDiCreditoService {
     }
 
     @Override
+    public List<CartaDiCredito> getAll() {
+        return repo.findAll();
+    }
+
+    @Override
     public void setDisattivatoTrue(long id) {
         CartaDiCredito carta = getById(id);
         carta.setDisattivato(true);
         repo.save(carta);
-    }
-
-    @Override
-    public List<CartaDiCredito> getAll() {
-        return repo.findAll();
     }
 
 }

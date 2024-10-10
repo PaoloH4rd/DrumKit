@@ -31,16 +31,16 @@ public class MessaggioServiceJPA implements MessaggioService {
         m.setTesto(messaggio.getTesto());
         repo.save(m);
     }
+    @Override
+    public Messaggio getById(long id) {
+        return repo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
 
     @Override
     public List<Messaggio> getAll() {
         return repo.findAll();
     }
 
-    @Override
-    public Messaggio getById(long id) {
-        return repo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
 
     @Override
     public void setDisattivatoTrue(long id) {

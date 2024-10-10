@@ -1,7 +1,5 @@
 package org.paolo.drumkit_.model;
 
-
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -44,14 +44,14 @@ public class IndirizzoServiceJPA implements IndirizzoService {
     }
 
     @Override
-    public List<Indirizzo> getAll() {
-        return repo.findAllByIsDefaultIsFalse();
-    }
-
-    @Override
     public Indirizzo getById(long id) {
         return repo.findByIdAndIsDisattivatoIsFalse(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public List<Indirizzo> getAll() {
+        return repo.findAllByIsDefaultIsFalse();
     }
 
     @Override

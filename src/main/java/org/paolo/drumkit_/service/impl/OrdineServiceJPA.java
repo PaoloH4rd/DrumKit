@@ -54,14 +54,15 @@ public class OrdineServiceJPA implements OrdineService {
     }
 
     @Override
+    public Ordine getById(long id) {
+        return repo.findByIdAndIsDisattivatoIsFalse(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Override
     public List<Ordine> getAll() {
         return repo.findAllByIsDisattivatoIsFalse();
     }
 
-    @Override
-    public Ordine getById(long id) {
-        return repo.findByIdAndIsDisattivatoIsFalse(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
 
     @Override
     public void setDisattivatoTrue(long id) {

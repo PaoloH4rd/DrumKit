@@ -30,13 +30,13 @@ public class FotoServiceJPA implements FotoService {
     }
 
     @Override
-    public List<Foto> getAll() {
-        return repo.findAllByIsDisattivatoIsFalse();
+    public Foto getById(long id) {
+        return repo.findByIdAndIsDisattivatoIsFalse(id);
     }
 
     @Override
-    public Foto getById(long id) {
-        return repo.findByIdAndIsDisattivatoIsFalse(id);
+    public List<Foto> getAll() {
+        return repo.findAllByIsDisattivatoIsFalse();
     }
 
     @Override

@@ -39,13 +39,13 @@ public class ProdottoServiceJPA implements ProdottoService {
     }
 
     @Override
-    public List<Prodotto> getAll() {
-        return repo.findAllByIsDisattivatoIsFalse();
+    public Prodotto getById(long id) {
+        return repo.findByIdAndIsDisattivatoIsFalse(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public Prodotto getById(long id) {
-        return repo.findByIdAndIsDisattivatoIsFalse(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public List<Prodotto> getAll() {
+        return repo.findAllByIsDisattivatoIsFalse();
     }
 
     @Override

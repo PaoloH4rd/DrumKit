@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CartaDiCreditoRepository extends JpaRepository<CartaDiCredito, Long> {
-//    List<CartaDiCredito>findAllByUtente_IdAndDisattivatoIsFalse(long idUtente);
+    List<CartaDiCredito>findAllByUtente_IdAndIsDisattivatoIsFalse(long idUtente);
 
 }

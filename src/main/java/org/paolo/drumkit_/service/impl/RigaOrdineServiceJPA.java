@@ -35,14 +35,15 @@ public class RigaOrdineServiceJPA implements RigaOrdineService {
     }
 
     @Override
+    public RigaOrdine getById(long id) {
+        return repo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Override
     public List<RigaOrdine> getAll() {
         return repo.findAll();
     }
 
-    @Override
-    public RigaOrdine getById(long id) {
-        return repo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
 
     @Override
     public void setDisattivatoTrue(long id) {
