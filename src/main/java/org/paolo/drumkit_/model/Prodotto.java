@@ -33,7 +33,10 @@ public class Prodotto {
 
     @OneToMany(mappedBy = "prodotto")
     private List<Foto> foto;
+
     //categoria
+
+    //il mio prodotto puo essere in piu riche di ordine
     @OneToMany(mappedBy = "prodotto")
     private List<RigaOrdine> rigaOrdine;
 
