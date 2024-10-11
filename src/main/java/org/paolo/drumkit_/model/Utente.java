@@ -4,15 +4,19 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Utente  {
+public class Utente implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,6 +65,15 @@ public class Utente  {
         this.dataNascita = LocalDate.parse(dataNascita);
         this.ruolo = ruolo;
     }
-    ///////////
+
     // vuole ruolo -> sarebbe un get ruolo con spring security
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_"+ruolo.toString()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 }

@@ -7,21 +7,16 @@ import lombok.Data;
 
 @Data
 public class RegistrazioneResponseDTO {
-
-    @NotBlank(message = "tutte le persone hanno un nome")
     private String nome;
-
-    @NotBlank(message = "tutte le persone hanno un cognome")
     private String cognome;
-
-    @NotBlank(message = "devi inserire una email")
     private String email;
+
     public RegistrazioneResponseDTO(String nome, String cognome, String email) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
     }
-
+    //serve un buikder per ogni response dto
     public static class UtenteBuilderDTO {
         private String nome;
         private String cognome;

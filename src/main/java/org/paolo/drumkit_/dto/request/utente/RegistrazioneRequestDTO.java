@@ -1,4 +1,4 @@
-package org.paolo.drumkit_.dto.request;
+package org.paolo.drumkit_.dto.request.utente;
 
 
 import jakarta.validation.constraints.*;

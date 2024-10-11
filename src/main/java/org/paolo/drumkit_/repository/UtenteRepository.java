@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UtenteRepository extends JpaRepository<Utente, Long> {
-
     Optional<Utente> findByEmailAndPasswordAndIsDisattivatoIsFalse(String email , String password);
     List<Utente> findAllByIsDisattivatoIsFalse();
 

@@ -18,6 +18,11 @@ import java.util.Optional;
 public class UtenteServiceJPA implements UtenteService {
 
     private final UtenteRepository Urepo;
+
+    @Override
+    public Utente getByEmail(String email) {
+        return Urepo.findByEmailAndIsDisattivatoIsFalse(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
     //sql init properties
 
     @Override

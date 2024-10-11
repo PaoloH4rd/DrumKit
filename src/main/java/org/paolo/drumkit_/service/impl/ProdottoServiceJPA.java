@@ -29,7 +29,7 @@ public class ProdottoServiceJPA implements ProdottoService {
         p.setNome(prodotto.getNome());
         p.setFoto(prodotto.getFoto());
         p.setDescrizione(prodotto.getDescrizione());
-        //TODO carìcare categoria
+        p.setCategoria(prodotto.getCategoria());
         p.setChats(prodotto.getChats());
         p.setPrezzo(prodotto.getPrezzo());
         p.setQuantita(prodotto.getQuantita());

@@ -1,7 +1,7 @@
 package org.paolo.drumkit_.mapper;
 
 
-import org.paolo.drumkit_.dto.request.RegistrazioneRequestDTO;
+import org.paolo.drumkit_.dto.request.utente.RegistrazioneRequestDTO;
 import org.paolo.drumkit_.dto.response.RegistrazioneResponseDTO;
 import org.paolo.drumkit_.model.Ruolo;
 import org.paolo.drumkit_.model.Utente;
