@@ -31,7 +31,7 @@
           <h2>Account Creation</h2>
         </div>
         <div class="card-body">
-          <form id="registerForm">
+          <form action="/all/utente/registraCliente" method="post" th:object="${utente}">
             <div class="form-group">
               <label for="nome">Nome:</label>
               <input type="text" class="form-control" id="nome" name="nome" required>
@@ -42,77 +42,27 @@
             </div>
             <div class="form-group">
               <label for="email">Email:</label>
-              <input type="text" class="form-control" id="email" name="email" required>
+              <input type="email" class="form-control" id="email" name="email" required>
             </div>
             <div class="form-group">
               <label for="password">Password:</label>
               <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <div class="form-group">
-              <label for="passwordRipetuta">Ripeti Password: </label>
+              <label for="passwordRipetuta">Ripeti Password:</label>
               <input type="password" class="form-control" id="passwordRipetuta" name="passwordRipetuta" required>
             </div>
-            <div class="form-group">
-              <label for="dataNascita">Date of Birth:</label>
-              <input type="date" class="form-control" id="dataNascita" name="dataNascita" required>
-            </div>
-
             <button type="submit" class="btn btn-primary btn-block">Register now</button>
           </form>
+
         </div>
         <div class="card-footer text-center">
-          <h5>If you already have an account, <a href="/login">click here!</a></h5>
+          <h5>If you already have an account, <a th:href="@{/login}">click here!</a></h5>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<script>
-  // Aggiungi listener per l'invio del form
-  document.getElementById('registerForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita che il form venga inviato in modo tradizionale
-
-    // Ottieni i dati dal form
-    let nome = document.getElementById('nome').value;
-    let cognome = document.getElementById('cognome').value;
-    let email = document.getElementById('email').value;
-    let password = document.getElementById('password').value;
-    let passwordRipetuta = document.getElementById('passwordRipetuta').value;
-    let dataNascita = document.getElementById('dataNascita').value;
-
-    // Crea un oggetto con i dati del form
-    let dati = {
-      nome: nome,
-      cognome: cognome,
-      email: email,
-      password: password,
-      passwordRipetuta: passwordRipetuta,
-      dataNascita: dataNascita
-    };
-
-    // Crea un nuovo oggetto XMLHttpRequest
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', '/all/utente/registraCliente', true); // Specifica il metodo POST e l'URL di destinazione
-    xhr.setRequestHeader('Content-Type', 'application/json'); // Imposta il tipo di contenuto come JSON
-
-    // Definisci cosa fare al termine della richiesta
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        //redirect to login page
-        window.location.href = '/login';
-        console.log('Risposta del server:', xhr.responseText);
-      } else {
-        //redirect a registrazione fallita
-        window.location.href = '/registration_failed';
-        console.error('Errore:', xhr.status, xhr.statusText);
-      }
-    };
-
-    // Invia i dati JSON al server
-    xhr.send(JSON.stringify(dati));
-  });
-</script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>

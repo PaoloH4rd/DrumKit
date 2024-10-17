@@ -8,7 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,8 +31,6 @@ public class Utente implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private LocalDate dataNascita;
 
     @Column(nullable = false)
     private Ruolo ruolo;
@@ -41,13 +38,7 @@ public class Utente implements UserDetails {
     private boolean isDisattivato;
 
     @OneToMany(mappedBy = "utente")
-    private List<CartaDiCredito> carte;
-
-    @OneToMany(mappedBy = "utente")
     private List<Indirizzo> indirizzo;
-
-    @OneToMany(mappedBy = "utente")
-    private List<Recensione> recensioni;
 
     @OneToMany(mappedBy = "utente")
     private List<Ordine> ordini;
@@ -55,12 +46,11 @@ public class Utente implements UserDetails {
     @OneToMany(mappedBy = "cliente")
     private List<Chat> chats;
 
-    public Utente(String nome, String cognome, String email, String password, String dataNascita, Ruolo ruolo) {
+    public Utente(String nome, String cognome, String email, String password, Ruolo ruolo) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.password = password;
-        this.dataNascita = LocalDate.parse(dataNascita);
         this.ruolo = ruolo;
     }
 

@@ -27,14 +27,11 @@ public class ProdottoServiceJPA implements ProdottoService {
         Prodotto p = new Prodotto();
         p.setId(prodotto.getId());
         p.setNome(prodotto.getNome());
-        p.setFoto(prodotto.getFoto());
         p.setDescrizione(prodotto.getDescrizione());
-        p.setCategoria(prodotto.getCategoria());
         p.setChats(prodotto.getChats());
         p.setPrezzo(prodotto.getPrezzo());
         p.setQuantita(prodotto.getQuantita());
         p.setRigaOrdine(prodotto.getRigaOrdine());
-        p.setRecensioni(prodotto.getRecensioni());
         repo.save(p);
     }
 

@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,8 +29,6 @@ public class GestoreFilterChain {
 					.requestMatchers("/authorized/**").authenticated()
 					.anyRequest().permitAll()
 					)
-			.cors(AbstractHttpConfigurer::disable)
-			.sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authenticationProvider(provider)
 			.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();

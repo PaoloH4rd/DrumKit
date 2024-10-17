@@ -32,7 +32,7 @@
                 </div>
                 <div class="card-body text-center">
                     <p id="errorMessage" class="text-danger"></p>
-                    <a href="/home" class="btn btn-danger">Try again</a>
+                    <a href="/welcome" class="btn btn-danger">Go to welcome page</a>
                     <a href="/login" class="btn btn-outline-danger">Sign in</a>
                 </div>
             </div>
@@ -41,15 +41,5 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Extract the error message from the URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const message = urlParams.get('message');
-    if (message) {
-        document.getElementById('errorMessage').textContent = message;
-    } else {
-        document.getElementById('errorMessage').textContent = 'The credentials are already in use!';
-    }
-</script>
 </body>
 </html>

@@ -8,6 +8,7 @@ import org.paolo.drumkit_.service.def.UtenteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,14 +27,16 @@ public class UtenteServiceJPA implements UtenteService {
     //sql init properties
 
     @Override
-    public Utente login(String email, String password) {
-        return Urepo.findByEmailAndPasswordAndIsDisattivatoIsFalse(email , password).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public boolean loginCheck(String email, String password) {
+        //viene criptata la password usata
+        //si controlla se esiste un utente con determinati username e password criptata
+        Optional<Utente> u = Urepo.findByEmailAndPasswordAndIsDisattivatoIsFalse(email, password);
+        //se è presebte lo ritorna
+        return u.isPresent();
     }
 
     @Override
     public void add(Utente u) {
-        if(u.getId() != 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         Optional<Utente> optionalUtente = Urepo.findByEmailAndIsDisattivatoIsFalse(u.getEmail());
         if (optionalUtente.isPresent()) throw new ResponseStatusException(HttpStatus.CONFLICT);
         Urepo.save(u);
@@ -45,7 +48,6 @@ public class UtenteServiceJPA implements UtenteService {
         Utente utente = new Utente();
         utente.setCognome(u.getCognome());
         utente.setNome(u.getNome());
-        utente.setDataNascita(u.getDataNascita());
         utente.setEmail(u.getEmail());
         utente.setPassword(u.getPassword());
         utente.setId(u.getId());
