@@ -1,7 +1,9 @@
 package org.paolo.drumkit_.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.paolo.drumkit_.model.Utente;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller  // Use @Controller instead of @RestController
@@ -36,12 +38,13 @@ public class HomeController {
     }
 
     @GetMapping("/register")
-    public String defaultPage() {
+    public String showRegisterForm(Model model) {
+        model.addAttribute("utente", new Utente());
         return "register_login_logout_profile/register";
     }
 
     //get dashboard
-    @GetMapping("/authorized/dashboard")
+    @GetMapping("/dashboard")
     public String dashboard() {
         return "dashboard/dashboard";
     }

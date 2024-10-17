@@ -15,20 +15,16 @@ public class UtenteController {
 
     private final UtenteFacade facade;
 
+
     // /chi puo chiama l'api/cosa sto gestendo/ nome dell'api
     @PostMapping("/all/utente/registraCliente")
-    public String registraCliente ( @RequestParam("nome")String nome,
-                                    @RequestParam("cognome") String cognome,
-                                    @RequestParam("email") String email,
-                                    @RequestParam("password") String password,
-                                    @RequestParam("passwordRipetuta")String passwordRipetuta, HttpSession session) {
+    public String registraCliente ( @ModelAttribute Utente u,
+                                    @RequestParam("passwordRipetuta") String passwordRipetuta, HttpSession session) {
         //si controlla che l'utente non esita già
-        if (!facade.login(email, password) || !password.equals(passwordRipetuta)){
-            System.out.println("registrazione sta avvenendo");
+        if (!facade.login(u.getEmail(), u.getPassword()) || u.getPassword().equals(passwordRipetuta)){
             //viene creato un nuovo account
-            facade.registraCliente(nome,cognome,email,password);
+            facade.registraCliente(u.getNome(),u.getCognome(),u.getEmail(),u.getPassword());
             //viene settato lo username dell'utente nella sessione
-            System.out.println("registrazione avvenuta con successo");
             return "home_page";
         }
         else {
@@ -41,10 +37,12 @@ public class UtenteController {
         if (facade.login(email, password)){
             //viene settato lo username dell'utente nella sessione
             session.setAttribute("email", email);
-            return "dashboard/dashboard";
+            System.out.println(email);
+            return "redirect:/dashboard";
         }
         return "register_login_logout_profile/login_failed";
     }
+
     @PostMapping( "/logout")
     public String logoutPage(HttpSession session){
         session.invalidate();
