@@ -92,5 +92,4 @@ public class GestoreTokenService {
 		Utente u=service.getByEmail(email);
 		return u;
 	}
-
 }

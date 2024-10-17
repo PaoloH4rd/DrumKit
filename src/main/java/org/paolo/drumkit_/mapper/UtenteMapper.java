@@ -1,6 +1,7 @@
 package org.paolo.drumkit_.mapper;
 
 
+import org.paolo.drumkit_.dto.request.utente.RegistrazioneAdminRequestDTO;
 import org.paolo.drumkit_.dto.request.utente.RegistrazioneRequestDTO;
 import org.paolo.drumkit_.dto.response.RegistrazioneResponseDTO;
 import org.paolo.drumkit_.model.Ruolo;
@@ -26,5 +27,15 @@ public class UtenteMapper {
                 .setCognome(utente.getCognome())
                 .setEmail(utente.getEmail())
                 .build();
+    }
+    //mapper per utente admin
+    public Utente fromRegistrazioneAdminRequestDTO(RegistrazioneAdminRequestDTO dto) {
+        Utente u = new Utente();
+        u.setNome(null);
+        u.setCognome(null);
+        u.setEmail(dto.getEmailAdmin());
+        u.setPassword(dto.getPasswordAdmin());
+        u.setRuolo(Ruolo.ADMIN);
+        return u;
     }
 }

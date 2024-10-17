@@ -49,6 +49,7 @@ public class UtenteServiceJPA implements UtenteService {
         utente.setEmail(u.getEmail());
         utente.setPassword(u.getPassword());
         utente.setId(u.getId());
+        utente.setRuolo(u.getRuolo());
 
         Urepo.save(utente);
     }

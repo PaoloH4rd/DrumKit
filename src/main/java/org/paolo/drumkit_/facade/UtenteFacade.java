@@ -3,6 +3,7 @@ package org.paolo.drumkit_.facade;
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.dto.request.utente.CambiaPasswordRequestDTO;
 import org.paolo.drumkit_.dto.request.utente.LoginRequestDTO;
+import org.paolo.drumkit_.dto.request.utente.RegistrazioneAdminRequestDTO;
 import org.paolo.drumkit_.dto.request.utente.RegistrazioneRequestDTO;
 import org.paolo.drumkit_.dto.response.RegistrazioneResponseDTO;
 import org.paolo.drumkit_.mapper.UtenteMapper;
@@ -28,17 +29,27 @@ public class UtenteFacade {
 
         return mapper.toRegistrazioneResponseDTO(u);
     }
+    public Void registraAdmin(RegistrazioneAdminRequestDTO request){
+        if (!request.getPasswordAdmin().equals(request.getPasswordAdminRipetuta())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        Utente u = mapper.fromRegistrazioneAdminRequestDTO(request);
+        utenteService.add(u);
+        return null;
+    }
     //controllare che l'utente con eemail e pasword esista
     //verra richiamato nel controller
     public Utente login(LoginRequestDTO request) {
         Utente u=utenteService.login(request.getEmail(), request.getPassword());
         return u;
     }
-    public void cambiaPassword(CambiaPasswordRequestDTO request) {
-        Utente u=utenteService.getById(request.getId());
+    public void cambiaPassword(CambiaPasswordRequestDTO request, Utente u) {
+        System.out.println("Authenticated user: " + u.getEmail());
         if(u.isDisattivato()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
+//        se la vecchia password dell'utente non è uguale alla password -> non sai la tua password
+//        se la vecchia password non è la password dell'utente
         if(!u.getPassword().equals(request.getVecchiaPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
@@ -51,6 +62,4 @@ public class UtenteFacade {
     public void disattivaUtente(long id) {
         utenteService.setDisattivatoTrue(id);
     }
-
-
 }

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Home</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5e6cc; /* Background color beige */
+            font-family: 'Arial', sans-serif; /* Font family */
+        }
+        .navbar {
+            background-color: #8b4513; /* Dark brown navbar */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow */
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #ffffff; /* Navbar text color */
+        }
+        .navbar-brand:hover, .navbar-nav .nav-link:hover {
+            color: #ffffff; /* Hover text color */
+        }
+        .logout-btn {
+            color: #ffffff; /* Logout button text color */
+            background-color: #ff4500; /* Orange-red button color */
+            border-color: #ff4500; /* Border color matching button */
+        }
+        .logout-btn:hover {
+            background-color: #d03b00; /* Darker color on hover */
+            border-color: #d03b00; /* Darker border on hover */
+        }
+        .container {
+            margin-top: 50px; /* Top margin */
+        }
+        .jumbotron {
+            background-color: #ff7f0e; /* Dark orange background */
+            color: #ffffff; /* White text */
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/event/allEvents">Home: Events</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/group/groups">Groups</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/event/myEvents">My events</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/profile">Profile</a>
+                </li>
+            </ul>
+            <form class="form-inline">
+                <a class="logout-btn btn" href="#" onclick="logout()">Logout</a>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to our site!</h1>
+        <p class="lead">Discover and join exciting events.</p>
+        <hr class="my-4">
+        <p>Start exploring now!</p>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+<script>
+    function logout() {
+        // Remove JWT from localStorage
+        localStorage.removeItem('Authorization'); // Adjust 'jwtToken' to your actual token key
+
+        // Redirect to home or login page
+        window.location.href = '/login'; // Or wherever you want to redirect after logout
+    }
+
+</script>

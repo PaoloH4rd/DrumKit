@@ -1,7 +1,5 @@
 package org.paolo.drumkit_.dto.response;
 
-
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 
@@ -16,7 +14,7 @@ public class RegistrazioneResponseDTO {
         this.cognome = cognome;
         this.email = email;
     }
-    //serve un buikder per ogni response dto
+    //serve un builder per ogni response dto
     public static class UtenteBuilderDTO {
         private String nome;
         private String cognome;

@@ -22,10 +22,8 @@ public class Utente implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false)
     private String cognome;
 
     @Column(nullable = false , unique = true)

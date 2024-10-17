@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Login Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Account Login</h2>
+                </div>
+                <div class="card-body">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <h5>Don't have an account? <a href="/home">Register here</a>!</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add a listener for form submission
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent traditional form submission
+
+        // Get data from form fields
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Create an object with form data
+        const data = {
+            email: username,
+            password: password
+        };
+
+        // Create an XMLHttpRequest for login
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/all/utente/login', true); // POST method, login URL
+        xhr.setRequestHeader('Content-Type', 'application/json'); // Send data as JSON
+
+        // Define what to do when the request is completed
+        xhr.onreadystatechange = function () {
+            console.log(xhr.status);
+            if (xhr.status === 200) {
+                const token = xhr.getResponseHeader('Authorization');
+                if (token) {
+                    localStorage.setItem('Authorization', token); // Store the token in localStorage
+                    // After storing the token, make the authenticated GET request
+                    makeAuthenticatedRequest();
+                }
+            } else if (xhr.readyState === 4) {
+                window.location.href = '/login_failed';
+            }
+        };
+        //print json before send
+        // Send the login request with form data as JSON string
+        // Example usage
+        const parsedData = JSON.stringify(data);
+
+        /*if (parsedData) {
+            console.log('Parsed JSON:', parsedData);
+        } else {
+            console.log('Failed to parse JSON.');
+        }*/
+
+        xhr.send(parsedData);
+    });
+    // Function to parse JSON safely
+    /*function parseJSONSafely(jsonString) {
+        try {
+            return JSON.parse(jsonString);
+        } catch (error) {
+            console.error('JSON parse error:', error);
+            return null; // Return null or handle the error as needed
+        }
+    }*/
+
+
+    // Function to make an authenticated GET request
+    function makeAuthenticatedRequest() {
+        // Retrieve the JWT token from localStorage
+        const token = localStorage.getItem('Authorization');
+
+        if (!token) {
+            // If no token is found, redirect to the login page
+            //send console advice
+            console.log('Token not found');
+            window.location.href = '/login';
+            return;
+        }
+
+        // Create an XMLHttpRequest for the GET request
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/authorized/utente/dashboard', true); // GET request to the protected route
+
+        // Set the Authorization header with the Bearer token
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+        // Define the callback function to handle the response
+        xhr.onreadystatechange = function () {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
+                // Successfully authenticated, handle the response
+                //const response = JSON.parse(xhr.responseText);
+                window.location.href = '/authorized/utente/dashboard';
+            } else if (xhr.readyState === 4) {
+                // If the request failed (e.g., token is invalid or expired), redirect to login failed page
+                window.location.href = '/login_failed';
+            }
+        };
+
+        // Send the GET request
+        xhr.send();
+    }
+</script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

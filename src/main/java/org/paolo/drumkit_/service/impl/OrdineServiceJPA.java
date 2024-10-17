@@ -5,7 +5,6 @@ import org.paolo.drumkit_.model.Ordine;
 import org.paolo.drumkit_.model.StatoOrdine;
 import org.paolo.drumkit_.repository.OrdineRepository;
 import org.paolo.drumkit_.service.def.OrdineService;
-import org.paolo.drumkit_.service.def.SecurityService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,7 +17,6 @@ import java.util.List;
 public class OrdineServiceJPA implements OrdineService {
 
     private final OrdineRepository repo;
-    private final SecurityService security;
 
     @Override
     public List<Ordine> getByIdUtente(long id) {
@@ -27,7 +25,6 @@ public class OrdineServiceJPA implements OrdineService {
 
     @Override
     public List<Ordine> getOrdineGiornalieri(long id_admin) {
-        security.isAdmin(id_admin);
         LocalDate date = LocalDate.now();
         return repo.findAllByDataConfermaAndIsDisattivatoIsFalse(date);
     }

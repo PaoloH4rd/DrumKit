@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Failed Registration</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8d7da; /* Light red background color to indicate an error */
+        }
+        .card {
+            border-color: #dc3545;
+        }
+        .card-header, .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Failed Registration</h2>
+                </div>
+                <div class="card-body text-center">
+                    <p id="errorMessage" class="text-danger"></p>
+                    <a href="/home" class="btn btn-danger">Try again</a>
+                    <a href="/login" class="btn btn-outline-danger">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Extract the error message from the URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+    if (message) {
+        document.getElementById('errorMessage').textContent = message;
+    } else {
+        document.getElementById('errorMessage').textContent = 'The credentials are already in use!';
+    }
+</script>
+</body>
+</html>
