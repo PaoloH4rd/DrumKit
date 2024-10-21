@@ -27,21 +27,23 @@ public class FilterDiAutenticazione extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		HttpSession session= request.getSession();
 		String email=(String)session.getAttribute("email");
-
-		String loginUrl = request.getContextPath() + "/login"; // URL della pagina di login
-		String registerUrl = request.getContextPath() + "/register"; // URL della pagina di registrazione
-		String welcomeUrl = request.getContextPath() + "/welcome"; // URL della pagina di registrazione
 		String rootUrl = request.getContextPath() + "/"; // URL della pagina di registrazione
-		String dashUrl = request.getContextPath() + "/dashboard"; // URL della pagina di registrazione
+		String loginUrl = request.getContextPath() + "/login"; // URL della pagina di login
+
+		System.out.println("request uri");
+		System.out.println(request.getRequestURI());
+		System.out.println("contextpath");
+		System.out.println(request.getContextPath());
+
 
 		// Controllo se la richiesta corrente è per la pagina di login
 		if (
-				request.getRequestURI().equals(loginUrl)
+				request.getRequestURI().contains("login")
 				|| request.getRequestURI().contains("all")
-				|| request.getRequestURI().equals(registerUrl)
+				|| request.getRequestURI().contains("register")
 				|| request.getRequestURI().equals(rootUrl)
-				|| request.getRequestURI().equals(welcomeUrl)
-				|| request.getRequestURI().equals(dashUrl)
+				|| request.getRequestURI().contains("welcome")
+				|| request.getRequestURI().contains("favicon")
 				) {
 				//vai avanti con la richiesta
 			filterChain.doFilter(request,response);
@@ -51,8 +53,9 @@ public class FilterDiAutenticazione extends OncePerRequestFilter {
 		//se sono in una pagina dove serve il controllo dell'utente
 		//se non c'è un utente in sessione lo porta direttamente alla login
 		// non lo blocca e setta lo user-details
+
 		if (email == null ) {
-			response.sendRedirect(loginUrl);
+			response.sendRedirect(request.getContextPath() + "/login?notLogged=true");
 		} else {
 			// Se l'utente è autenticato, setta lo user-details nel SecurityContext
 			UserDetails user = userDetailsService.loadUserByUsername(email);
@@ -60,7 +63,6 @@ public class FilterDiAutenticazione extends OncePerRequestFilter {
 			upat.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			SecurityContextHolder.getContext().setAuthentication(upat);
 			filterChain.doFilter(request, response);
-			System.out.println(user.getAuthorities());
 		}
 
 	}

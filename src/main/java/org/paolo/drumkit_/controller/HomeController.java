@@ -5,6 +5,7 @@ import org.paolo.drumkit_.model.Utente;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller  // Use @Controller instead of @RestController
 public class HomeController {
@@ -20,22 +21,14 @@ public class HomeController {
     }
     //gets
 
-    @GetMapping(path = "/login")
-    public String loginPage(){
+    @GetMapping("/login")
+    public String showLoginForm(@RequestParam(value = "logout", required = false) String logout,
+                                @RequestParam(value = "error", required = false) String error,
+                                @RequestParam(value = "notLogged", required = false) String notLogged) {
+
         return "register_login_logout_profile/login";
     }
 
-    //redirect a login failed
-    @GetMapping("/login_failed")
-    public String loginFailed() {
-        return "register_login_logout_profile/login_failed";
-    }
-
-    //redirect a registrazione fallita
-    @GetMapping("/registration_failed")
-    public String registrazioneFallita() {
-        return "register_login_logout_profile/registration_failed";
-    }
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {

@@ -1,13 +1,12 @@
 package org.paolo.drumkit_.controller;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.facade.UtenteFacade;
 import org.paolo.drumkit_.model.Utente;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,41 +18,61 @@ public class UtenteController {
     // /chi puo chiama l'api/cosa sto gestendo/ nome dell'api
     @PostMapping("/all/utente/registraCliente")
     public String registraCliente ( @ModelAttribute Utente u,
-                                    @RequestParam("passwordRipetuta") String passwordRipetuta, HttpSession session) {
+                                    @RequestParam("passwordRipetuta") String passwordRipetuta,
+                                    RedirectAttributes redirectAttributes) {
         //si controlla che l'utente non esita già
-        if (!facade.login(u.getEmail(), u.getPassword()) || u.getPassword().equals(passwordRipetuta)){
+        if (!facade.login(u.getEmail(), u.getPassword()) && u.getPassword().equals(passwordRipetuta)){
             //viene creato un nuovo account
             facade.registraCliente(u.getNome(),u.getCognome(),u.getEmail(),u.getPassword());
-            //viene settato lo username dell'utente nella sessione
-            return "home_page";
+            //registrazione successo, aggiungo parametro success
+            redirectAttributes.addFlashAttribute("success", true);
+            return "redirect:/register?success=true";
         }
         else {
-            return "register_login_logout_profile/registration_failed";
+            // registreazione fallita, pass error
+            redirectAttributes.addFlashAttribute("error", true);
+            return "redirect:/register?error=true";
         }
     }
     @PostMapping(path = "/all/utente/login")
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session){
-        //viene fatto il login
-        if (facade.login(email, password)){
-            //viene settato lo username dell'utente nella sessione
+    public String login(@RequestParam("email") String email,
+                        @RequestParam("password") String password,
+                        HttpSession session,
+                        RedirectAttributes redirectAttributes) {
+
+        // provo login
+        if (facade.login(email, password)) {
+            // Set the user email in the session upon successful login
             session.setAttribute("email", email);
-            System.out.println(email);
+            //redirect to dashboard
             return "redirect:/dashboard";
+        } else {
+            // Login failed, pass error parameter
+            redirectAttributes.addFlashAttribute("error", true);
+            return "redirect:/login?error=true";
         }
-        return "register_login_logout_profile/login_failed";
     }
 
     @PostMapping( "/logout")
     public String logoutPage(HttpSession session){
         session.invalidate();
-        return "register_login_logout_profile/logout";
+        return "redirect:/login?logout=true";
     }
 
-//    @PostMapping("/superAdmin/utente/registraAdmin")
-//    public ResponseEntity<Void> registraAdmin (@Valid ) {
-//        facade.registraAdmin(request);
-//        return ResponseEntity.ok().build();
-//    }
+
+    @PostMapping("/superAdmin/utente/registraAdmin")
+    public String registraAdmin (@ModelAttribute Utente u,
+                                 @RequestParam ("nome") String nome,
+                                 @RequestParam ("cognome") String cognome,
+                                 @RequestParam ("email") String email,
+                                 @RequestParam ("password") String password,
+                                 @RequestParam("passwordSuperAdmin") String passwordSuperAdmin){
+        //controllo password dell'admin
+        if (!facade.login(u.getEmail(), u.getPassword()) && u.getPassword().equals(passwordSuperAdmin))
+            facade.registraAdmin(nome,cognome,email, password);
+
+        return "redirect:/welcome";
+    }
 
 //    @PutMapping("/authorized/utente/cambiaPassword")
 //    //quando uso lo usernamePasswordAuthenticationToken (UPAT) devo passare il token nell'header

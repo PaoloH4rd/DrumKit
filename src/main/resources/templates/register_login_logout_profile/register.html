@@ -5,20 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Register</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/styles/style.css" rel="stylesheet">
   <style>
-    body {
-      background-color: #f0f8ff; /* Azzurro chiaro per differenziare dalla pagina di login */
+    .container {
+      width: 80%; /* Adjust the width as needed */
+      height: 76vh; /* Adjust the height as needed */
+      margin: auto; /* Center the container */
     }
+
     .card {
-      border-color: #007bff;
+      border-color: #47e2d1; /* Teal border */
     }
+
     .card-header, .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
+      background-color: #3bc1b4; /* Teal header and button */
+      border-color: #00796b;
     }
+
     .btn-primary:hover {
-      background-color: #0056b3;
-      border-color: #004085;
+      background-color: #2ac41f; /* Darker teal on hover */
+      border-color: #39f379;
+    }
+
+    .card-footer a {
+      color: #010200; /* Dark teal for footer link */
+    }
+
+    .alert-danger {
+      color: #721c24;
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
     }
   </style>
 </head>
@@ -31,6 +47,14 @@
           <h2>Account Creation</h2>
         </div>
         <div class="card-body">
+          <!-- Error message -->
+          <div class="alert alert-danger" th:if="${param.error}">
+            Login or password incorrect.
+          </div>
+          <div class="alert alert-info" th:if="${param.success}">
+            Account created successfully.
+          </div>
+
           <form action="/all/utente/registraCliente" method="post" th:object="${utente}">
             <div class="form-group">
               <label for="nome">Nome:</label>
@@ -55,11 +79,10 @@
 
             <button type="submit" class="btn btn-primary btn-block">Register now</button>
           </form>
-
-
         </div>
         <div class="card-footer text-center">
           <h5>If you already have an account, <a th:href="@{/login}">click here!</a></h5>
+          <h5>Return to the home <a th:href="@{/welcome}">click here!</a></h5>
         </div>
       </div>
     </div>

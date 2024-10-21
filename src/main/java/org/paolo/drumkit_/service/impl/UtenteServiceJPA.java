@@ -28,15 +28,15 @@ public class UtenteServiceJPA implements UtenteService {
 
     @Override
     public boolean loginCheck(String email, String password) {
-        //viene criptata la password usata
-        //si controlla se esiste un utente con determinati username e password criptata
+        //si controlla se esiste un utente con determinati username e password
         Optional<Utente> u = Urepo.findByEmailAndPasswordAndIsDisattivatoIsFalse(email, password);
-        //se è presebte lo ritorna
+        //se è presente lo ritorna
         return u.isPresent();
     }
 
     @Override
     public void add(Utente u) {
+        //controllo se c'è gia un utente con la stessa email
         Optional<Utente> optionalUtente = Urepo.findByEmailAndIsDisattivatoIsFalse(u.getEmail());
         if (optionalUtente.isPresent()) throw new ResponseStatusException(HttpStatus.CONFLICT);
         Urepo.save(u);

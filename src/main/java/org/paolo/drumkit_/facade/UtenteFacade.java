@@ -15,7 +15,6 @@ public class UtenteFacade {
 
     //chiama metodo come l'api
     public Void registraCliente( String nome,String cognome, String email, String password) {
-        System.out.println("sono in registraCliente facade");
         Utente u = new Utente();
         u.setNome(nome);
         u.setCognome(cognome);
@@ -33,12 +32,16 @@ public class UtenteFacade {
         return utenteService.loginCheck(email, password);
     }
 
-//    public Void registraAdmin( String nome,String cognome, String email, String password) {
-//        Utente u = new Utente();
-//
-//        utenteService.add(u);
-//        return null;
-//    }
+    public Void registraAdmin( String nome,String cognome, String email, String password) {
+        Utente u = new Utente();
+        u.setNome(nome);
+        u.setCognome(cognome);
+        u.setEmail(email);
+        u.setPassword(password);
+        u.setRuolo(Ruolo.ADMIN);
+        utenteService.add(u);
+        return null;
+    }
 
 
 
