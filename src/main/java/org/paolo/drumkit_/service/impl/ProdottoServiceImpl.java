@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProdottoServiceJPA implements ProdottoService {
+public class ProdottoServiceImpl implements ProdottoService {
 
     private final ProdottoRepository repo;
 

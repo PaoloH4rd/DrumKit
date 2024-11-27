@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ChatServiceJPA implements ChatService {
+public class ChatServiceImpl implements ChatService {
 
     private final ChatRepository repo;
 

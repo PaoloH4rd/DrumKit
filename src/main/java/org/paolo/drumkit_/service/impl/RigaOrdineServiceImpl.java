@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RigaOrdineServiceJPA implements RigaOrdineService {
+public class RigaOrdineServiceImpl implements RigaOrdineService {
 
     private final RigaOrdineRepository repo;
 

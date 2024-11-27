@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class IndirizzoServiceJPA implements IndirizzoService {
+public class IndirizzoServiceImpl implements IndirizzoService {
 
     private final IndirizzoRepository repo;
 

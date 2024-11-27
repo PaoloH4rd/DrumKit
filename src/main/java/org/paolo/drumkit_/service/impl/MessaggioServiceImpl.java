@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
-public class MessaggioServiceJPA implements MessaggioService {
+public class MessaggioServiceImpl implements MessaggioService {
 
     private final MessaggioRepository repo;
 

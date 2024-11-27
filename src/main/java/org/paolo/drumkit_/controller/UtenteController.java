@@ -1,10 +1,14 @@
 package org.paolo.drumkit_.controller;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.paolo.drumkit_.dto.response.UtenteDTO;
 import org.paolo.drumkit_.facade.UtenteFacade;
 import org.paolo.drumkit_.model.Utente;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -13,27 +17,39 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UtenteController {
 
     private final UtenteFacade facade;
+    private final UtenteFacade utenteFacade;
 
 
     // /chi puo chiama l'api/cosa sto gestendo/ nome dell'api
     @PostMapping("/all/utente/registraCliente")
-    public String registraCliente ( @ModelAttribute Utente u,
+    public String registraCliente ( @Valid @ModelAttribute Utente u,BindingResult theBindingResult,
                                     @RequestParam("passwordRipetuta") String passwordRipetuta,
                                     RedirectAttributes redirectAttributes) {
         //si controlla che l'utente non esita già
-        if (!facade.login(u.getEmail(), u.getPassword()) && u.getPassword().equals(passwordRipetuta)){
-            //viene creato un nuovo account
-            facade.registraCliente(u.getNome(),u.getCognome(),u.getEmail(),u.getPassword());
-            //registrazione successo, aggiungo parametro success
-            redirectAttributes.addFlashAttribute("success", true);
-            return "redirect:/register?success=true";
+        if (theBindingResult.hasErrors()) {
+            return "register_login_logout_profile/register";
+
         }
-        else {
-            // registreazione fallita, pass error
+        if (!facade.login(u.getEmail(), u.getPassword())) {
+            // Attempt to register
+            boolean registrationSuccess = facade.registraCliente(
+                    u.getNome(), u.getCognome(), u.getEmail(), u.getPassword(), passwordRipetuta);
+            if (registrationSuccess) {
+                // Registration succeeded
+                redirectAttributes.addFlashAttribute("success", true);
+                return "redirect:/register?success=true";
+            } else {
+                // Registration failed
+                redirectAttributes.addFlashAttribute("error", true);
+                return "redirect:/register?error=true";
+            }
+        } else {
+            // Registration failed
             redirectAttributes.addFlashAttribute("error", true);
             return "redirect:/register?error=true";
         }
     }
+
     @PostMapping(path = "/all/utente/login")
     public String login(@RequestParam("email") String email,
                         @RequestParam("password") String password,
@@ -59,7 +75,6 @@ public class UtenteController {
         return "redirect:/login?logout=true";
     }
 
-
     @PostMapping("/superAdmin/utente/registraAdmin")
     public String registraAdmin (@ModelAttribute Utente u,
                                  @RequestParam ("nome") String nome,
@@ -72,6 +87,18 @@ public class UtenteController {
             facade.registraAdmin(nome,cognome,email, password);
 
         return "redirect:/welcome";
+    }
+
+    //si indirizza alla pagina di profilo
+    @GetMapping(path = "/profile")
+    public String profile(Model model, Authentication authentication){
+        //si prende lo user dalla sessione e lo si converte in DTO
+        Utente Utente = (Utente) authentication.getPrincipal();
+        //si prendono le informazioni necessarie dl profilo
+        UtenteDTO user = utenteFacade.getProfile(Utente);
+        model.addAttribute("user", user);
+        return "register_login_logout_profile/profile";
+
     }
 
 //    @PutMapping("/authorized/utente/cambiaPassword")

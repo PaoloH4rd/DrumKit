@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OrdineServiceJPA implements OrdineService {
+public class OrdineServiceImpl implements OrdineService {
 
     private final OrdineRepository repo;
 

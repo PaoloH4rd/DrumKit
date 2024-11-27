@@ -1,6 +1,8 @@
 package org.paolo.drumkit_.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,8 @@ public class Utente implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull(message = "required field!")
+    @Size(min = 5, message = "Name should contain at least 1 character.")
     private String nome;
 
     private String cognome;

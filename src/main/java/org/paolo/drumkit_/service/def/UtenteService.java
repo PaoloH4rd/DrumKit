@@ -8,4 +8,6 @@ public interface UtenteService extends GeneralService<Utente> {
     //non sto registrando sto salvando nel db l'utente
     //il nome del metodo non rispecchia la query che viene fatta nella repo (findBy...Is disattivato)
     Utente getByEmail(String email);
+    void cambiaPassword(String password, String nuovaPassword);
+    boolean creaCliente(String nome,String cognome,String email, String password,String passwordRipetuta);
 }

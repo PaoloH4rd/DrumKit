@@ -25,11 +25,16 @@ public class UtenteDTO {
             this.nome = nome;
             return this;
         }
+        public Builder setCognome(String cognome) {
+            this.nome = nome;
+            return this;
+        }
 
         public Builder setEmail(String email) {
             this.email = email;
             return this;
         }
+
         public UtenteDTO build(){
             if(email!=null)return new UtenteDTO(nome,cognome,email);
             else throw new DatoNonValidoException("non tutti i dati sono accettabili");
