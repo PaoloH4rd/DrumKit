@@ -1,6 +1,7 @@
 package org.paolo.drumkit_.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -23,18 +24,19 @@ public class Utente implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull(message = "required field!")
-    @Size(min = 5, message = "Name should contain at least 1 character.")
     private String nome;
 
     private String cognome;
 
+    @NotNull(message = "L'email non può essere vuota")
+    @Email(message = "Inserisci un'email valida")
     @Column(nullable = false , unique = true)
     private String email;
 
+
+    @Size(min = 8, message = "La password deve contenere almeno 8 caratteri")
     @Column(nullable = false)
     private String password;
-
 
     @Column(nullable = false)
     private Ruolo ruolo;

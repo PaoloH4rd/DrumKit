@@ -30,11 +30,6 @@ public class FilterDiAutenticazione extends OncePerRequestFilter {
 		String rootUrl = request.getContextPath() + "/"; // URL della pagina di registrazione
 		String loginUrl = request.getContextPath() + "/login"; // URL della pagina di login
 
-		System.out.println("request uri");
-		System.out.println(request.getRequestURI());
-		System.out.println("contextpath");
-		System.out.println(request.getContextPath());
-
 
 		// Controllo se la richiesta corrente è per la pagina di login
 		if (

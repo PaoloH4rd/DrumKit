@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dati Non Validi</title>
+    <title>Errore </title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,26 +38,10 @@
 </head>
 <body>
 <div class="container">
-    <h1>Dati Non Validi</h1>
-    <p>I dati inseriti non sono validi. Per favore, controlla e riprova.</p>
-    <p><strong>Dettaglio errore:</strong></p>
-    <p th:text="${errore}">Errore non disponibile</p>
-    <p>Se hai bisogno di assistenza, contatta il supporto tecnico.</p>
-    <button onclick="goBack()">Torna alla pagina precedente</button>
-
-    <script>
-        function goBack() {
-            if (document.referrer) {
-                // Redirect to the referrer without parameters
-                let referrer = new URL(document.referrer);
-                window.location.href = referrer.origin + referrer.pathname; // Navigate to the referrer without parameters
-            } else {
-                window.location.href = '/'; // Fallback to home page if no referrer
-            }
-        }
-    </script>
-
+    <h1>Errore </h1>
+    <p>Si è verificato un problema durante l'elaborazione della richiesta.</p>
+    <p>Se il problema persiste, contatta il supporto tecnico.</p>
+    <p><a href="/">Torna alla pagina principale</a></p>
 </div>
-
 </body>
 </html>

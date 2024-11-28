@@ -3,7 +3,6 @@ package org.paolo.drumkit_.facade;
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.dto.response.UtenteDTO;
 import org.paolo.drumkit_.mapper.UtenteMapper;
-import org.paolo.drumkit_.model.Ruolo;
 import org.paolo.drumkit_.model.Utente;
 import org.paolo.drumkit_.service.def.UtenteService;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,8 @@ public class UtenteFacade {
     private final UtenteMapper mapper;
 
     //chiama metodo come l'api
-    public boolean registraCliente( String nome,String cognome, String email, String password,String passwordRipetuta) {
-        return utenteService.creaCliente(nome,cognome,email,password,passwordRipetuta);
+    public void registraCliente( String nome,String cognome, String email, String password,String passwordRipetuta) {
+         utenteService.creaCliente(nome,cognome,email,password,passwordRipetuta);
     }
 
     //controllare che l'utente con eemail e pasword esista
@@ -25,18 +24,9 @@ public class UtenteFacade {
         return utenteService.loginCheck(email, password);
     }
 
-    public Void registraAdmin( String nome,String cognome, String email, String password) {
-        Utente u = new Utente();
-        u.setNome(nome);
-        u.setCognome(cognome);
-        u.setEmail(email);
-        u.setPassword(password);
-        u.setRuolo(Ruolo.ADMIN);
-        utenteService.add(u);
-        return null;
+    public void registraAdmin( String nome,String cognome, String email, String password, String passwordSuperAdmin) {
+         utenteService.creaAdmin(nome,cognome,email,password,passwordSuperAdmin);
     }
-
-
 
     public UtenteDTO getProfile(Utente Utente) {
         //converte il user in DTO

@@ -21,14 +21,14 @@ public class HomeController {
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "register_login_logout_profile/login";
+        return "utente_actions/login";
     }
 
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("utente", new Utente());
-        return "register_login_logout_profile/register";
+        return "utente_actions/register";
     }
 
     //get dashboard
@@ -36,4 +36,6 @@ public class HomeController {
     public String dashboard() {
         return "dashboard/dashboard";
     }
+
+
 }

@@ -2,6 +2,7 @@ package org.paolo.drumkit_.security;
 
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.model.Ruolo;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,7 +19,6 @@ public class GestoreFilterChain {
 	
 	private final FilterDiAutenticazione filter;
 	private final AuthenticationProvider provider;
-	
 	@Bean
 	protected SecurityFilterChain getFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
@@ -33,5 +33,4 @@ public class GestoreFilterChain {
 			.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
-
 }

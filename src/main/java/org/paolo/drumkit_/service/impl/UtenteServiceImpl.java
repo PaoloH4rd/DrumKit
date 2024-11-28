@@ -4,6 +4,7 @@ package org.paolo.drumkit_.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.paolo.drumkit_.exception.DatoNonValidoException;
+import org.paolo.drumkit_.model.Ruolo;
 import org.paolo.drumkit_.model.Utente;
 import org.paolo.drumkit_.repository.UtenteRepository;
 import org.paolo.drumkit_.service.def.UtenteService;
@@ -22,7 +23,6 @@ import static org.paolo.drumkit_.model.Ruolo.CLIENTE;
 public class UtenteServiceImpl implements UtenteService {
 
     private final UtenteRepository Urepo;
-    private final UtenteRepository utenteRepository;
 
     @Override
     public Utente getByEmail(String email) {
@@ -61,7 +61,6 @@ public class UtenteServiceImpl implements UtenteService {
         utente.setPassword(u.getPassword());
         utente.setId(u.getId());
         utente.setRuolo(u.getRuolo());
-
         Urepo.save(utente);
     }
 
@@ -83,9 +82,10 @@ public class UtenteServiceImpl implements UtenteService {
         Urepo.save(utente);
     }
     @Override
-    public boolean creaCliente(String nome, String cognome, String email, String password, String passwordRipetuta) {
-    //si crea un nuovo utente
-        if (!password.equals(passwordRipetuta)) throw new DatoNonValidoException("Le password non coincidono");
+    public void creaCliente(String nome, String cognome, String email, String password, String passwordRipetuta) {
+        if (!password.equals(passwordRipetuta))
+            throw new DatoNonValidoException("Le password non coincidono");
+        //si controlla che l'utente non esita già
         Utente user = new Utente();
         //si setta il suo username
         user.setNome(nome);
@@ -97,7 +97,22 @@ public class UtenteServiceImpl implements UtenteService {
         user.setPassword(encryptedPassword);
         //si salva nel database il nuovo utente
         user.setRuolo(CLIENTE);
-        utenteRepository.save(user);
-        return true;
+        add(user);
+    }
+    public void creaAdmin(String nome, String cognome, String email, String password, String passwordSuperAdmin) {
+        //si crea un nuovo utente
+        if (!loginCheck(email, passwordSuperAdmin))throw new DatoNonValidoException("Password Super Admin non corretta");
+        Utente user = new Utente();
+        //si setta il suo username
+        user.setNome(nome);
+        user.setCognome(cognome);
+        user.setEmail(email);
+        //si cripta la password che ha utilizzato
+        String encryptedPassword = DigestUtils.sha256Hex(password);
+        //si setta la sua password criptata
+        user.setPassword(encryptedPassword);
+        //si salva nel database il nuovo utente
+        user.setRuolo(Ruolo.ADMIN);
+        add(user);
     }
 }
