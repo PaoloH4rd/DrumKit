@@ -1,10 +1,11 @@
 package org.paolo.drumkit_.exception;
 
-public class DatoNonValidoException extends RuntimeException {
+import lombok.Data;
 
+@Data
+public class DatoNonValidoException extends RuntimeException {
     //caso di DTO con valori non consentiti
-    public DatoNonValidoException(String message){
+    public DatoNonValidoException(String message) {
         super(message);
     }
-
 }

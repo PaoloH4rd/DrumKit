@@ -1,6 +1,7 @@
 package org.paolo.drumkit_.service.impl;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.paolo.drumkit_.exception.DatoNonValidoException;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,14 +26,10 @@ public class UtenteServiceImpl implements UtenteService {
 
     private final UtenteRepository Urepo;
 
+
     @Override
     public Utente getByEmail(String email) {
         return Urepo.findByEmailAndIsDisattivatoIsFalse(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
-    @Override
-    public void cambiaPassword(String password, String nuovaPassword) {
-        // TOD0 : implementare il cambio password
     }
 
     @Override
@@ -39,7 +37,11 @@ public class UtenteServiceImpl implements UtenteService {
         //si controlla se esiste un utente con determinati username e password
         String encryptedPassword = DigestUtils.sha256Hex(password);
         Optional<Utente> u = Urepo.findByEmailAndPasswordAndIsDisattivatoIsFalse(email, encryptedPassword);
-        //se è presente lo ritorna
+        System.out.println(u.isPresent());
+        System.out.println(u.isPresent());
+        System.out.println(u.isPresent());
+        System.out.println(u.isPresent());
+        System.out.println(u.isPresent());
         return u.isPresent();
     }
 
@@ -52,16 +54,47 @@ public class UtenteServiceImpl implements UtenteService {
     }
 
     @Override
+    @Transactional
     public void update(Utente u) {
-        if (u.getId() < 1)throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        Utente utente = new Utente();
-        utente.setCognome(u.getCognome());
-        utente.setNome(u.getNome());
-        utente.setEmail(u.getEmail());
-        utente.setPassword(u.getPassword());
-        utente.setId(u.getId());
-        utente.setRuolo(u.getRuolo());
-        Urepo.save(utente);
+        if (u.getId() < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID utente non valido");
+        }
+        // Recupera l'utente dal database
+        Utente existingUtente = Urepo.findById(u.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utente non trovato"));
+        //aggiorna i campi
+        existingUtente.setNome(u.getNome());
+        existingUtente.setCognome(u.getCognome());
+        existingUtente.setEmail(u.getEmail());
+        existingUtente.setPassword(u.getPassword());
+        existingUtente.setRuolo(u.getRuolo());
+        Urepo.save(u);
+    }
+
+    @Override
+    public void cambiaPassword(Utente u) {
+        if (u.getId() < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID utente non valido");
+        }
+        // Recupera l'utente dal database
+        Utente vecchioUtente = Urepo.findById(u.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utente non trovato"));
+//        System.out.println("password vecchia codificata "+ vecchioUtente.getPassword());
+
+        //codifico la password nuova
+        String encryptedPassword = DigestUtils.sha256Hex(u.getPassword());
+
+        if (!encryptedPassword.equals(vecchioUtente.getPassword())) {
+            //la password è diversa-> la cambio
+            vecchioUtente.setPassword(encryptedPassword);
+        }else {
+            //la password non è stata cambiata
+            throw new DatoNonValidoException("la password deve essere diversa da quella attuale");
+        }
+//        System.out.println("password nuova codificata: "+ encryptedPassword);
+//        System.out.println(vecchioUtente.getEmail());
+//        System.out.println(vecchioUtente.getPassword());
+        Urepo.save(vecchioUtente);
     }
 
     @Override
@@ -95,7 +128,6 @@ public class UtenteServiceImpl implements UtenteService {
         String encryptedPassword = DigestUtils.sha256Hex(password);
         //si setta la sua password criptata
         user.setPassword(encryptedPassword);
-        //si salva nel database il nuovo utente
         user.setRuolo(CLIENTE);
         add(user);
     }
@@ -115,4 +147,5 @@ public class UtenteServiceImpl implements UtenteService {
         user.setRuolo(Ruolo.ADMIN);
         add(user);
     }
+
 }

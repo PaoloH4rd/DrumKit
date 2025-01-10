@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Login Page</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles/style.css">
+    <link rel="stylesheet" href="/styles/style.css">
 
 </head>
 <body>
@@ -20,15 +20,15 @@
 
                     <!-- Error message -->
                     <div class="alert alert-danger" th:if="${param.error}">
-                        Login or password incorrect.
+                        Errore nei dati inseriti
                     </div>
 
                     <!-- Logout message -->
                     <div class="alert alert-info" th:if="${param.logout}">
-                        You've been logged out.
+                        Sei stato disconnesso con successo.
                     </div>
                     <div class="alert alert-danger" th:if="${param.notLogged}">
-                        You must be logged in to access this page.
+                        Devi essere loggato per accedere a questa pagina.
                     </div>
 
                     <!-- Login form -->

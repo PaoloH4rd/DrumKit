@@ -24,8 +24,9 @@ public class Utente implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
     private String nome;
-
+    @NotNull
     private String cognome;
 
     @NotNull(message = "L'email non può essere vuota")

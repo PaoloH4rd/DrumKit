@@ -1,12 +1,16 @@
 package org.paolo.drumkit_.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.paolo.drumkit_.facade.UtenteFacade;
 import org.paolo.drumkit_.model.Utente;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller  // Use @Controller instead of @RestController
+@RequiredArgsConstructor
+@Controller
 public class HomeController {
+    private final UtenteFacade utenteFacade;
 
     @GetMapping("/")  // Use @GetMapping instead of @RequestMapping
     public String getHomePage() {
@@ -21,21 +25,13 @@ public class HomeController {
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "utente_actions/login";
+        return "/login";
     }
 
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("utente", new Utente());
-        return "utente_actions/register";
+        return "/register";
     }
-
-    //get dashboard
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "dashboard/dashboard";
-    }
-
-
 }
