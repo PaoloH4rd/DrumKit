@@ -3,11 +3,11 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.dto.request.CambiaPasswordRequestDTO;
+import org.paolo.drumkit_.dto.request.RegistrazioneUtenteDTO;
 import org.paolo.drumkit_.exception.DatoNonValidoException;
 import org.paolo.drumkit_.facade.UtenteFacade;
 import org.paolo.drumkit_.model.Utente;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -20,33 +20,41 @@ public class UtenteController {
 
     // /chi puo chiama l'api/cosa sto gestendo/ nome dell'api
     @PostMapping("/all/utente/registraCliente")
-    public String registraCliente ( @Valid @ModelAttribute Utente u,BindingResult theBindingResult,
-                                    @RequestParam("passwordRipetuta") String passwordRipetuta,
-                                    RedirectAttributes redirectAttributes) {
+    public String registraCliente (@ModelAttribute ("registrazioneUtenteDTO") @Valid RegistrazioneUtenteDTO registrazioneUtenteDTO, BindingResult theBindingResult,
+                                   RedirectAttributes redirectAttributes) {
         if (theBindingResult.hasErrors()) {
-            return "/register";
+            return "redirect:/register";
         }
-
-        utenteFacade.registraCliente(u.getNome(), u.getCognome(), u.getEmail(), u.getPassword(), passwordRipetuta);
+        try {
+            utenteFacade.registraCliente(registrazioneUtenteDTO.getNome(), registrazioneUtenteDTO.getCognome(), registrazioneUtenteDTO.getEmail(),
+                    registrazioneUtenteDTO.getPassword(), registrazioneUtenteDTO.getPasswordRipetuta(), registrazioneUtenteDTO.getDataNascita());
             // Registration succeeded
-            redirectAttributes.addFlashAttribute("success", true);
-        return "redirect:/register?success=true";
+            redirectAttributes.addFlashAttribute("successMessage", "Registrazione avvenuta con successo");
+            return "redirect:/register?successMessage=true";
+        }catch (DatoNonValidoException e){
+            // Gestione errori personalizzati
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/register?errorMessage=true";
+        }
     }
 
     @PostMapping(path = "/all/utente/login")
     public String login(@RequestParam("email") String email,
                         @RequestParam("password") String password,
                         RedirectAttributes redirectAttributes, HttpSession session) {
-        // provo login
-        if (utenteFacade.login(email, password)) {
-            // Set the user email in the session upon successful login
-            session.setAttribute("email", email);
-            return "/vedi_dashboard";
-        } else {
-            // Login failed, pass error parameter
-            redirectAttributes.addFlashAttribute("error", true);
+        try {
+            // provo login
+            if (utenteFacade.login(email, password)) {
+                // Set the user email in the session upon successful login
+                session.setAttribute("email", email);
+                return "redirect:/dashboard";
+            }
+        } catch (DatoNonValidoException e) {
+            // Gestione errori personalizzati
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/login?error=true";
         }
+        return "redirect:/login?error=true";
     }
     @PostMapping("/all/utente/cambiaPassword")
     public String cambiaPassword(
@@ -55,7 +63,7 @@ public class UtenteController {
         try {
             // Verifica errori di validazione
             if (thebindingresult.hasErrors()) {
-                return "/dashboard/profilo/cambia_password";
+                return "redirect:/dashboard/profilo/cambia_password";
             }
             utenteFacade.cambiaPassword((String) session.getAttribute("email"), request.getVecchiaPassword(),
                     request.getNuovaPassword(),request.getNuovaPasswordRipetuta());
@@ -70,16 +78,16 @@ public class UtenteController {
         }
     }
 
-    @PostMapping("/superAdmin/utente/registraAdmin")
-    public String registraAdmin (@Valid @ModelAttribute Utente u,BindingResult theBindingResult,
-                                 @RequestParam("passwordSuperAdmin") String passwordSuperAdmin){
-        //controllo password dell'admin
-        if (theBindingResult.hasErrors()) {
-            return "/register";
-        }
-        utenteFacade.registraAdmin(u.getNome(), u.getCognome(),u.getEmail(), u.getPassword(), passwordSuperAdmin);
-        return "redirect:/welcome";
-    }
+//    @PostMapping("/superAdmin/utente/registraAdmin")
+//    public String registraAdmin (@Valid @ModelAttribute Utente u,BindingResult theBindingResult,
+//                                 @RequestParam("passwordSuperAdmin") String passwordSuperAdmin){
+//        //controllo password dell'admin
+//        if (theBindingResult.hasErrors()) {
+//            return "redirect:/register";
+//        }
+//        utenteFacade.registraAdmin(u.getNome(), u.getCognome(),u.getEmail(), u.getPassword(), passwordSuperAdmin);
+//        return "redirect:/welcome";
+//    }
 
     @PostMapping( "/logout")
     public String logoutPage(HttpSession session){

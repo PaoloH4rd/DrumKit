@@ -1,9 +1,7 @@
 package org.paolo.drumkit_.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,20 +28,21 @@ public class Utente implements UserDetails {
     @NotNull
     private String cognome;
 
-    @NotNull(message = "L'email non può essere vuota")
-    @Email(message = "Inserisci un'email valida")
+    @NotNull
     @Column(nullable = false , unique = true)
     private String email;
 
-
-    @Size(min = 8, message = "La password deve contenere almeno 8 caratteri")
     @Column(nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Ruolo ruolo;
 
     private boolean isDisattivato;
+
+    @Column(nullable = false)
+    private LocalDate dataNascita;
 
     @OneToMany(mappedBy = "utente")
     private List<Indirizzo> indirizzo;

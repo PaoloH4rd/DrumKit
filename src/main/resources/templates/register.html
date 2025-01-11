@@ -47,14 +47,15 @@
           <h2>Account Creation</h2>
         </div>
         <div class="card-body">
-          <div class="alert alert-danger" th:if="${param.error}">
-            Login or password incorrect.
+          <!-- Alert per errori o successo -->
+          <div class="alert alert-danger" th:if="${errorMessage}">
+            <span th:text="${errorMessage}"></span>
           </div>
-          <div class="alert alert-info" th:if="${param.success}">
-            Account created successfully.
+          <div class="alert alert-info" th:if="${successMessage}">
+            <span th:text="${successMessage}"></span>
           </div>
 
-          <form th:action="@{/all/utente/registraCliente}" method="post" th:object="${utente}">
+          <form th:action="@{/all/utente/registraCliente}" method="post" th:object="${registrazioneUtenteDTO}">
             <div class="form-group">
               <label for="nome">Nome:</label>
               <input type="text" class="form-control" id="nome" th:field="*{nome}" required>
@@ -78,7 +79,15 @@
             </div>
             <div class="form-group">
               <label for="passwordRipetuta">Ripeti Password:</label>
-              <input type="password" class="form-control" id="passwordRipetuta" name="passwordRipetuta" required>
+              <input type="password" class="form-control" id="passwordRipetuta" th:field="*{passwordRipetuta}"  required>
+              <span th:if="${#fields.hasErrors('passwordRipetuta')}" th:errors="*{passwordRipetuta}" class="error"></span>
+
+            </div>
+            <div class="form-group">
+              <label for="dataNascita">Data di Nascita:</label>
+              <input type="date" class="form-control" id="dataNascita" th:field="*{dataNascita}" required>
+              <span th:if="${#fields.hasErrors('dataNascita')}" th:errors="*{dataNascita}" class="error"></span>
+
             </div>
 
             <button type="submit" class="btn btn-primary btn-block">Register now</button>

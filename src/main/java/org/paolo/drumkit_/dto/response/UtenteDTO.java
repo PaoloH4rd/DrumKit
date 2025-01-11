@@ -6,23 +6,28 @@ import org.paolo.drumkit_.exception.DatoNonValidoException;
 import java.util.List;
 
 @Data
+
+//sarebbe l'utente che mostro nel profilo
 public class UtenteDTO {
     private String nome;
     private String cognome;
     private String email;
+    private String dataNascita;
     private List<String> ruoli; // Lista dei ruoli dell'utente
 
-    private UtenteDTO(String nome, String cognome, String email, List<String> ruoli) {
+    private UtenteDTO(String nome, String cognome, String email, String dataNascita,List<String> ruoli) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.ruoli = ruoli;
+        this.dataNascita = dataNascita;
     }
 
     public static class Builder {
         private String nome;
         private String cognome;
         private String email;
+        private String dataNascita;
         private List<String> ruoli; // Lista dei ruoli
 
         public Builder setNome(String nome) {
@@ -45,17 +50,33 @@ public class UtenteDTO {
             return this;
         }
 
+        public Builder setDataNascita(String dataNascita) {
+            this.dataNascita = dataNascita;
+            return this;
+        }
+
         public UtenteDTO build() {
             if (email != null && !email.isBlank()) {
-                return new UtenteDTO(nome, cognome, email, ruoli != null ? ruoli : List.of("NESSUN_RUOLO"));
+                return new UtenteDTO(nome, cognome, email,dataNascita ,ruoli != null ? ruoli : List.of("NESSUN_RUOLO"));
             } else {
                 throw new DatoNonValidoException("L'email non è valida o mancante");
             }
         }
     }
+    public String getDataNascita() {
+        //formatta la data di nascita in modo che sia leggibile e in ordine giorno/mese/anno
+        String[] data = dataNascita.split("-");
+        System.out.println(data[2] + "/" + data[1] + "/" + data[0]);
+        return data[2] + "/" + data[1] + "/" + data[0];
+    }
 
     public String getRuoloPrincipale() {
         // Restituisce il primo ruolo o "NESSUN_RUOLO" se la lista è vuota
-        return ruoli != null && !ruoli.isEmpty() ? ruoli.get(0) : "NESSUN_RUOLO";
+        //restituisce il primo ruolo senza trattino basso E SENZA ROLE_
+        if (ruoli != null && !ruoli.isEmpty()) {
+            return ruoli.get(0).replace("ROLE_", "").replace("_", " ");
+        } else {
+            return "NESSUN_RUOLO";
+        }
     }
 }

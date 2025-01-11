@@ -2,7 +2,6 @@ package org.paolo.drumkit_.security;
 
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.model.Ruolo;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -23,14 +22,14 @@ public class GestoreFilterChain {
 	protected SecurityFilterChain getFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(req->req
-					.requestMatchers("/cliente/**").hasRole(Ruolo.CLIENTE.toString())
-					.requestMatchers("/admin/**").hasAnyRole(Ruolo.ADMIN.toString(), Ruolo.SUPER_ADMIN.toString())
-					.requestMatchers("/superAdmin/**").hasRole(Ruolo.SUPER_ADMIN.toString())
-					.requestMatchers("/authorized/**").authenticated()
+					.requestMatchers("/dashboard/pannelloAdmin/**").hasAnyRole(Ruolo.ADMIN.toString(), Ruolo.SUPER_ADMIN.toString())
+					.requestMatchers("/dashboard/pannelloSuperAdmin/**").hasRole(Ruolo.SUPER_ADMIN.toString())
+					.requestMatchers("/dashboard/**").authenticated()
 					.anyRequest().permitAll()
 					)
 			.authenticationProvider(provider)
 			.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
 		return http.build();
 	}
 }

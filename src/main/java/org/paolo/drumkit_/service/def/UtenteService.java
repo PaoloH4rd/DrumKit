@@ -2,6 +2,9 @@ package org.paolo.drumkit_.service.def;
 
 
 import org.paolo.drumkit_.model.Utente;
+
+import java.util.Date;
+
 public interface UtenteService extends GeneralService<Utente> {
     boolean loginCheck(String email, String password);
     //registro l'utente non il dto
@@ -9,6 +12,7 @@ public interface UtenteService extends GeneralService<Utente> {
     //il nome del metodo non rispecchia la query che viene fatta nella repo (findBy...Is disattivato)
     Utente getByEmail(String email);
     void cambiaPassword(Utente u);
-    void creaCliente(String nome,String cognome,String email, String password,String passwordRipetuta);
-    void creaAdmin(String nome,String cognome,String email, String password,String passwordSuperAdmin);
+    void creaCliente(String nome, String cognome, String email, String password, String passwordRipetuta, String dataNascita);
+//    void creaAdmin(String nome,String cognome,String email, String password,String passwordSuperAdmin);
+    void setDisattivatoTrue(String email);
 }

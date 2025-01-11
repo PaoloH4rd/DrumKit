@@ -17,8 +17,10 @@ public class UtenteFacade {
     private final UtenteMapper mapper;
 
     //chiama metodo come l'api
-    public void registraCliente( String nome,String cognome, String email, String password,String passwordRipetuta) {
-         utenteService.creaCliente(nome,cognome,email,password,passwordRipetuta);
+    public void registraCliente(String nome, String cognome, String email, String password, String passwordRipetuta, String dataNascita) {
+        if (!password.equals(passwordRipetuta))
+            throw new DatoNonValidoException("Le password non coincidono");
+         utenteService.creaCliente(nome,cognome,email,password,passwordRipetuta,dataNascita);
     }
 
     //controllare che l'utente con eemail e pasword esista
@@ -27,17 +29,14 @@ public class UtenteFacade {
         return utenteService.loginCheck(email, password);
     }
 
-    public void registraAdmin( String nome,String cognome, String email, String password, String passwordSuperAdmin) {
-         utenteService.creaAdmin(nome,cognome,email,password,passwordSuperAdmin);
-    }
+//    public void registraAdmin( String nome,String cognome, String email, String password, String passwordSuperAdmin) {
+//         utenteService.creaAdmin(nome,cognome,email,password,passwordSuperAdmin);
+//    }
 
     public UtenteDTO getProfile(Utente utente) {
-        //converte il user in DTO
-
-        // Aggiungi al modello
+        //converte l'utente in DTO
         return mapper.toUtenteDTO(utente);
     }
-
 
 
     public void cambiaPassword(String  email,String vecchiaPassword, String nuovaPassword, String nuovaPasswordRipetuta) {
@@ -47,7 +46,7 @@ public class UtenteFacade {
         }
         //se la password vecchia non corrisponde a quella dell'utente
         if(!u.getPassword().equals(DigestUtils.sha256Hex(vecchiaPassword))) {
-            throw new DatoNonValidoException("Password sbagliata");
+            throw new DatoNonValidoException("Password errata");
         }
         //se la password nuova e la password ripetuta non corrispondono
         if(!nuovaPassword.equals(nuovaPasswordRipetuta)) {
@@ -61,7 +60,11 @@ public class UtenteFacade {
         utenteService.cambiaPassword(u);
     }
 
-    public void disattivaUtente(long id) {
+//    public void disattivaUtente(long id) {
+//        utenteService.setDisattivatoTrue(id);
+//    }
+    public void disattivaUtente(String email) {
+        long id = utenteService.getByEmail(email).getId();
         utenteService.setDisattivatoTrue(id);
     }
 }

@@ -31,4 +31,15 @@ public class Handler {
         modelAndView.addObject("errore", errorMessage);
         return modelAndView;
     }
+    //TODO
+//    // Intercetta qualsiasi errore 403, non solo AccessDeniedException
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.FORBIDDEN) // Imposta il codice di stato 403
+//    public ModelAndView handleForbiddenError(Exception ex, Model model) {
+//        ModelAndView modelAndView = new ModelAndView("Exceptions/dati_non_validi");
+//
+//        modelAndView.addObject("error", "Accesso negato! Non hai i permessi per accedere a questa risorsa.");
+//        //TODO crea la vista per il forbidden
+//        return modelAndView;
+//    }
 }

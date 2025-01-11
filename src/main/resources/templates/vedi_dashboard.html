@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Home</title>
@@ -47,13 +49,20 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
+                <li class="nav-item" sec:authorize="hasRole('SUPER_ADMIN')">
+                    <a th:href="@{/dashboard/pannelloSuperAdmin}" class="nav-link">Amministrazione Avanzata</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('SUPER_ADMIN') or hasRole('ADMIN')">
+                    <a th:href="@{/dashboard/pannelloAdmin}" class="nav-link">Amministrazione Avanzata</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('CLIENTE')">
+                    <a th:href="@{/dashboard/pannelloAdmin}" class="nav-link">Area clienti</a>
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/event/allEvents">Home: Events</a>
-
-                <li class="nav-item">
-                    <a th:href="@{/dashboard/profilo}" class="btn btn-secondary btn-block">Profilo</a>
+                    <a th:href="@{/dashboard/profilo}" class="nav-link">Profilo</a>
                 </li>
             </ul>
+
             <form class="form-inline" action="/logout" method="post">
                 <button type="submit" class="logout-btn btn">Logout</button>
             </form>

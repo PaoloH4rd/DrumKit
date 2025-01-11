@@ -1,6 +1,7 @@
 package org.paolo.drumkit_.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.paolo.drumkit_.dto.request.RegistrazioneUtenteDTO;
 import org.paolo.drumkit_.facade.UtenteFacade;
 import org.paolo.drumkit_.model.Utente;
 import org.springframework.stereotype.Controller;
@@ -25,13 +26,13 @@ public class HomeController {
 
     @GetMapping("/login")
     public String showLoginForm() {
-        return "/login";
+        return "login";
     }
 
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
-        model.addAttribute("utente", new Utente());
-        return "/register";
+        model.addAttribute("registrazioneUtenteDTO", new RegistrazioneUtenteDTO());
+        return "register";
     }
 }
