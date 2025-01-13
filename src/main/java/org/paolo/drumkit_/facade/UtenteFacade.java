@@ -2,13 +2,17 @@ package org.paolo.drumkit_.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.paolo.drumkit_.dto.response.UtenteDTO;
+import org.paolo.drumkit_.dto.response.AdminDisattivaSelectResponseDTO;
+import org.paolo.drumkit_.dto.response.UtenteResponseDTO;
 import org.paolo.drumkit_.exception.DatoNonValidoException;
 import org.paolo.drumkit_.exception.UtenteDisattivatoException;
 import org.paolo.drumkit_.mapper.UtenteMapper;
 import org.paolo.drumkit_.model.Utente;
 import org.paolo.drumkit_.service.def.UtenteService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +37,7 @@ public class UtenteFacade {
 //         utenteService.creaAdmin(nome,cognome,email,password,passwordSuperAdmin);
 //    }
 
-    public UtenteDTO getProfile(Utente utente) {
+    public UtenteResponseDTO getProfile(Utente utente) {
         //converte l'utente in DTO
         return mapper.toUtenteDTO(utente);
     }
@@ -59,12 +63,20 @@ public class UtenteFacade {
         u.setPassword(DigestUtils.sha256Hex(nuovaPassword));
         utenteService.cambiaPassword(u);
     }
+    public List<AdminDisattivaSelectResponseDTO> getAllActiveAdmins() {
+        List<Utente> admins = utenteService.getAllActiveAdmins();
+        return admins.stream().map(mapper::toAdminDTO).collect(Collectors.toList());
+    }
 
-//    public void disattivaUtente(long id) {
-//        utenteService.setDisattivatoTrue(id);
-//    }
-    public void disattivaUtente(String email) {
-        long id = utenteService.getByEmail(email).getId();
-        utenteService.setDisattivatoTrue(id);
+
+    public void disattivaUtente(Long id) {
+        utenteService.setIsDisattivatoTrue(id);
+    }
+    //registrare un admin
+    public void registraAdmin(String nome, String cognome, String email, String password, String passwordRipetuta,String dataNascita) {
+        if(!password.equals(passwordRipetuta)) {
+            throw new DatoNonValidoException("Password non corrispondenti");
+        }
+        utenteService.creaAdmin(nome,cognome,email,password,passwordRipetuta,dataNascita);
     }
 }

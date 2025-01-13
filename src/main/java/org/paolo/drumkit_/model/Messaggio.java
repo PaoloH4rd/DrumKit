@@ -19,8 +19,7 @@ public class Messaggio {
 
     private boolean isCliente;
 
-    @CreationTimestamp
-    @Column(columnDefinition = "default current_timestamp")
+    @Column(nullable = false)
     private Timestamp data;
     @Column(nullable = false)
     private String testo;
@@ -28,7 +27,7 @@ public class Messaggio {
     private boolean isDisattivato;
 
     @ManyToOne
-    @JoinColumn(nullable = false , updatable = false , name = "id_chat")
+    @JoinColumn(nullable = false, updatable = false, name = "id_chat")
     private Chat chat;
 
 

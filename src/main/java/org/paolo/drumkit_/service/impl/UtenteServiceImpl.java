@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.paolo.drumkit_.exception.DatoNonValidoException;
+import org.paolo.drumkit_.model.Ruolo;
 import org.paolo.drumkit_.model.Utente;
 import org.paolo.drumkit_.repository.UtenteRepository;
 import org.paolo.drumkit_.service.def.UtenteService;
@@ -80,7 +81,10 @@ public class UtenteServiceImpl implements UtenteService {
     }
 
     @Override
-    public void setDisattivatoTrue(long id) {
+    public void setIsDisattivatoTrue(long id) {
+        Utente utente = getById(id);
+        utente.setDisattivato(true);
+        Urepo.save(utente);
 
     }
 
@@ -98,6 +102,8 @@ public class UtenteServiceImpl implements UtenteService {
     @Override
     public void creaCliente(String nome, String cognome, String email, String password, String passwordRipetuta, String dataNascita) {
         //si controlla che l'utente non esita già
+        Optional<Utente> optionalUtente = Urepo.findByEmail(email);
+        if (optionalUtente.isPresent()) throw new DatoNonValidoException("Utente già esistente");
         Utente utente = new Utente();
         LocalDate data_Nascita;
         try {
@@ -116,28 +122,32 @@ public class UtenteServiceImpl implements UtenteService {
         utente.setDataNascita(data_Nascita);
         add(utente);
     }
-//    public void creaAdmin(String nome, String cognome, String email, String password, String passwordSuperAdmin,String dataNascita) {
-//        //si crea un nuovo utente
-//        if (!loginCheck(email, passwordSuperAdmin))throw new DatoNonValidoException("Password Super Admin non corretta");
-//        Utente utente = new Utente();
-//        LocalDate data_Nascita;
-//        try {
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Adatta il formato al tuo caso
-//            data_Nascita = LocalDate.parse(dataNascita, formatter);
-//        } catch (DateTimeParseException e) {
-//            throw new DatoNonValidoException("Formato data non valido. Usa il formato AAAA-MM-GG.");
-//        }
-//        //si setta il suo utentename
-//        utente.setNome(nome);
-//        utente.setCognome(cognome);
-//        utente.setEmail(email);
-//        //si cripta la password che ha utilizzato
-//        String encryptedPassword = DigestUtils.sha256Hex(password);
-//        //si setta la sua password criptata
-//        utente.setPassword(encryptedPassword);
-//        //si salva nel database il nuovo utente
-//        utente.setRuolo(Ruolo.ADMIN);
-//        add(utente);
-//    }
 
+    public void creaAdmin(String nome, String cognome, String email, String password, String passwordRipetuta, String dataNascita) {
+        //controllo che l'utente non esista già
+        Optional<Utente> optionalUtente = Urepo.findByEmail(email);
+        if (optionalUtente.isPresent()) throw new DatoNonValidoException("Utente già esistente");
+        Utente utente = new Utente();
+        LocalDate data_Nascita;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Adatta il formato al tuo caso
+            data_Nascita = LocalDate.parse(dataNascita, formatter);
+        } catch (DateTimeParseException e) {
+            throw new DatoNonValidoException("Formato data non valido. Usa il formato AAAA-MM-GG.");
+        }
+        utente.setNome(nome);
+        utente.setCognome(cognome);
+        utente.setEmail(email);
+        //si cripta la password che ha utilizzato
+        String encryptedPassword = DigestUtils.sha256Hex(password);
+        //si setta la sua password criptata
+        utente.setPassword(encryptedPassword);
+        //si salva nel database il nuovo utente
+        utente.setDataNascita(data_Nascita);
+        utente.setRuolo(Ruolo.ADMIN);
+        add(utente);
+    }
+    public List<Utente> getAllActiveAdmins() {
+        return Urepo.findAllByRuoloAndIsDisattivatoIsFalse(Ruolo.ADMIN);
+    }
 }

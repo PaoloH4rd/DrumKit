@@ -8,14 +8,16 @@ import java.util.List;
 @Data
 
 //sarebbe l'utente che mostro nel profilo
-public class UtenteDTO {
+public class UtenteResponseDTO {
+    private Long id;
     private String nome;
     private String cognome;
     private String email;
     private String dataNascita;
     private List<String> ruoli; // Lista dei ruoli dell'utente
 
-    private UtenteDTO(String nome, String cognome, String email, String dataNascita,List<String> ruoli) {
+    private UtenteResponseDTO(Long id, String nome, String cognome, String email, String dataNascita, List<String> ruoli) {
+        this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
@@ -24,11 +26,17 @@ public class UtenteDTO {
     }
 
     public static class Builder {
+        private Long id;
         private String nome;
         private String cognome;
         private String email;
         private String dataNascita;
         private List<String> ruoli; // Lista dei ruoli
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder setNome(String nome) {
             this.nome = nome;
@@ -55,9 +63,9 @@ public class UtenteDTO {
             return this;
         }
 
-        public UtenteDTO build() {
+        public UtenteResponseDTO build() {
             if (email != null && !email.isBlank()) {
-                return new UtenteDTO(nome, cognome, email,dataNascita ,ruoli != null ? ruoli : List.of("NESSUN_RUOLO"));
+                return new UtenteResponseDTO(id, nome, cognome, email,dataNascita ,ruoli != null ? ruoli : List.of("NESSUN_RUOLO"));
             } else {
                 throw new DatoNonValidoException("L'email non è valida o mancante");
             }

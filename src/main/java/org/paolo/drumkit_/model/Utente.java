@@ -53,6 +53,10 @@ public class Utente implements UserDetails {
     @OneToMany(mappedBy = "cliente")
     private List<Chat> chats;
 
+    @OneToMany(mappedBy = "proprietario")
+    private List<Prodotto> prodotti; // Rappresenta i prodotti posseduti dall'utente
+
+
     public Utente(String nome, String cognome, String email, String password, Ruolo ruolo) {
         this.nome = nome;
         this.cognome = cognome;

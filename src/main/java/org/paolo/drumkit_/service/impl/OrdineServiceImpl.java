@@ -62,7 +62,7 @@ public class OrdineServiceImpl implements OrdineService {
 
 
     @Override
-    public void setDisattivatoTrue(long id) {
+    public void setIsDisattivatoTrue(long id) {
         Ordine o = getById(id);
         o.setDisattivato(true);
         repo.save(o);

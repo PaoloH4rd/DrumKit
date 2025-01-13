@@ -3,7 +3,7 @@ package org.paolo.drumkit_.service.def;
 
 import org.paolo.drumkit_.model.Utente;
 
-import java.util.Date;
+import java.util.List;
 
 public interface UtenteService extends GeneralService<Utente> {
     boolean loginCheck(String email, String password);
@@ -13,6 +13,7 @@ public interface UtenteService extends GeneralService<Utente> {
     Utente getByEmail(String email);
     void cambiaPassword(Utente u);
     void creaCliente(String nome, String cognome, String email, String password, String passwordRipetuta, String dataNascita);
-//    void creaAdmin(String nome,String cognome,String email, String password,String passwordSuperAdmin);
+    void creaAdmin(String nome, String cognome, String email, String password, String passwordRipetuta, String dataNascita);
     void setDisattivatoTrue(String email);
+    List<Utente> getAllActiveAdmins();
 }

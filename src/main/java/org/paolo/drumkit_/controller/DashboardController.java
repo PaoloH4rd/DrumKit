@@ -2,7 +2,7 @@ package org.paolo.drumkit_.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.dto.request.CambiaPasswordRequestDTO;
-import org.paolo.drumkit_.dto.response.UtenteDTO;
+import org.paolo.drumkit_.dto.response.UtenteResponseDTO;
 import org.paolo.drumkit_.facade.UtenteFacade;
 import org.paolo.drumkit_.model.Utente;
 import org.springframework.security.core.Authentication;
@@ -19,13 +19,6 @@ public class DashboardController {
     private final UtenteFacade utenteFacade;
     @GetMapping("")
     public String dashboard() {
-        System.out.println("sono in dashboard");
-        System.out.println("sono in dashboard");
-        System.out.println("sono in dashboard");
-        System.out.println("sono in dashboard");
-        System.out.println("sono in dashboard");
-        System.out.println("sono in dashboard");
-        System.out.println("sono in dashboard");
         return "vedi_dashboard";
     }
 
@@ -34,8 +27,8 @@ public class DashboardController {
         // Ottieni l'utente autenticato
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Utente utente = (Utente)authentication.getPrincipal();
-        UtenteDTO utenteDTO = utenteFacade.getProfile(utente);
-        model.addAttribute("utenteDTO",utenteDTO );
+        UtenteResponseDTO utenteResponseDTO = utenteFacade.getProfile(utente);
+        model.addAttribute("utenteResponseDTO", utenteResponseDTO);
         return "dashboard/vedi_profilo";
     }
     @GetMapping("/profilo/cambiaPassword")

@@ -7,5 +7,5 @@ public interface GeneralService<T> {
     void update(T t);
     List<T> getAll();
     T getById(long id);
-    void setDisattivatoTrue(long id);
+    void setIsDisattivatoTrue(long id);
 }

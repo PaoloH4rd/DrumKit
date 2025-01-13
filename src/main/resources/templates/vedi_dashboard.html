@@ -50,13 +50,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item" sec:authorize="hasRole('SUPER_ADMIN')">
-                    <a th:href="@{/dashboard/pannelloSuperAdmin}" class="nav-link">Amministrazione Avanzata</a>
+                    <a th:href="@{/pannelloSuperAdmin}" class="nav-link">Amministrazione Avanzata</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('SUPER_ADMIN') or hasRole('ADMIN')">
-                    <a th:href="@{/dashboard/pannelloAdmin}" class="nav-link">Amministrazione Avanzata</a>
+                    <a th:href="@{/pannelloAdmin}" class="nav-link">Pannello Admin</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('CLIENTE')">
-                    <a th:href="@{/dashboard/pannelloAdmin}" class="nav-link">Area clienti</a>
+                    <a th:href="@{/areaCliente}" class="nav-link">Area clienti</a>
                 </li>
                 <li class="nav-item">
                     <a th:href="@{/dashboard/profilo}" class="nav-link">Profilo</a>

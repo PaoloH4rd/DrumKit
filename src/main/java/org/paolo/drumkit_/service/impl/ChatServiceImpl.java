@@ -34,10 +34,11 @@ public class ChatServiceImpl implements ChatService {
         Chat c = new Chat();
         c.setId(chat.getId());
         c.setProdotto(chat.getProdotto());
-        c.setAdmin(chat.getAdmin());
+        c.setCliente(chat.getCliente());
         c.setCliente(chat.getCliente());
         c.setMessaggi(chat.getMessaggi());
         repo.save(c);
+        //sarwe
     }
 
     @Override
@@ -52,7 +53,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void setDisattivatoTrue(long id) {
+    public void setIsDisattivatoTrue(long id) {
         Chat c = getById(id);
         c.setChiusa(true);
         repo.save(c);

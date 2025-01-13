@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profilo Venditore</title>
+  <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+<header>
+  <h1>Profilo del Venditore</h1>
+</header>
+<main>
+  <!-- Sezione informazioni venditore -->
+  <section id="seller-info">
+    <!-- Immagine del venditore -->
+    <img src="styles/images/placeholder.png" alt="Foto del venditore" id="seller-photo">
+    <div>
+      <h2 th:text="${venditore.nome}">Nome del Venditore</h2>
+      <p th:text="${venditore.descrizione}">Descrizione breve del venditore.</p>
+      <p>
+        <strong>Valutazione:</strong>
+        <span th:text="${venditore.valutazione}">4.5/5</span>
+      </p>
+      <a th:href="@{/contatta/{idVenditore}(idVenditore=${venditore.id})}" class="btn">
+        Contatta il Venditore
+      </a>
+    </div>
+  </section>
+
+  <!-- Sezione prodotti del venditore -->
+  <section id="seller-products">
+    <h3>Prodotti del Venditore</h3>
+    <div id="product-list">
+      <div th:each="prodotto : ${venditore.prodotti}" class="product-card">
+        <a th:href="@{/prodotto/{id}(id=${prodotto.id})}">
+          <img th:src="@{/styles/images/{fileName}(fileName=${prodotto.immagine})}"
+               alt="Immagine prodotto" class="product-image">
+          <h4 th:text="${prodotto.nome}">Nome Prodotto</h4>
+          <p th:text="${prodotto.prezzo} + ' €'">10.00 €</p>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <p>&copy; 2025 La Mia Applicazione</p>
+</footer>
+</body>
+</html>

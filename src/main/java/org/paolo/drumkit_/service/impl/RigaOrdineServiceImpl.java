@@ -46,7 +46,7 @@ public class RigaOrdineServiceImpl implements RigaOrdineService {
 
 
     @Override
-    public void setDisattivatoTrue(long id) {
+    public void setIsDisattivatoTrue(long id) {
         RigaOrdine r = getById(id);
         r.setDisattivato(true);
         repo.save(r);

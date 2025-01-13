@@ -43,7 +43,7 @@ public class MessaggioServiceImpl implements MessaggioService {
 
 
     @Override
-    public void setDisattivatoTrue(long id) {
+    public void setIsDisattivatoTrue(long id) {
         Messaggio m = getById(id);
         m.setDisattivato(true);
         repo.save(m);

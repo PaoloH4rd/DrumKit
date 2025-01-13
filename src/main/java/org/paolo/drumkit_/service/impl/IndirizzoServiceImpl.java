@@ -55,7 +55,7 @@ public class IndirizzoServiceImpl implements IndirizzoService {
     }
 
     @Override
-    public void setDisattivatoTrue(long id) {
+    public void setIsDisattivatoTrue(long id) {
         Indirizzo i = getById(id);
         i.setDisattivato(true);
 

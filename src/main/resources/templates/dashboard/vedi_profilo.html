@@ -15,11 +15,11 @@
       <div class="card">
         <div class="card-body">
           <h1 class="text-center">Benvenuto nel tuo profilo</h1>
-          <p><strong>Nome:</strong> <span th:text="${utenteDTO.nome}"></span></p>
-          <p><strong>Cognome:</strong> <span th:text="${utenteDTO.cognome}"></span></p>
-          <p><strong>Email:</strong> <span th:text="${utenteDTO.email}"></span></p>
-          <p><strong>Ruolo principale:</strong> <span th:text="${utenteDTO.getRuoloPrincipale()}"></span></p>
-          <p><strong>Data di nascita:</strong> <span th:text="${utenteDTO.dataNascita}"></span></p>
+          <p><strong>Nome:</strong> <span th:text="${utenteResponseDTO.nome}"></span></p>
+          <p><strong>Cognome:</strong> <span th:text="${utenteResponseDTO.cognome}"></span></p>
+          <p><strong>Email:</strong> <span th:text="${utenteResponseDTO.email}"></span></p>
+          <p><strong>Ruolo principale:</strong> <span th:text="${utenteResponseDTO.getRuoloPrincipale()}"></span></p>
+          <p><strong>Data di nascita:</strong> <span th:text="${utenteResponseDTO.dataNascita}"></span></p>
 
           <div class="text-center mt-4">
             <a th:href="@{/dashboard/profilo/cambiaPassword}" class="btn btn-primary">Modifica Password</a>

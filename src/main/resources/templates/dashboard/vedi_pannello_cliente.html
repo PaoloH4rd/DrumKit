@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area Cliente</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+        }
+        .navbar {
+            background-color: #343a40; /* Dark navbar */
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #ffffff;
+        }
+        .navbar-brand:hover, .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+        .sidebar {
+            height: 100vh; /* Full height */
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #394c5f; /* Blue sidebar */
+            padding: 20px;
+            width: 250px;
+            color: #ffffff; /* White text */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #ffffff; /* White title */
+            text-align: center;
+        }
+        .sidebar a {
+            color: #ffffff; /* White text for links */
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .sidebar a:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+        .content {
+            margin-left: 260px; /* Account for sidebar width + spacing */
+            padding: 20px;
+        }
+        .btn-custom {
+            background-color: #28a745; /* Green button */
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" th:href="@{/dashboard}">Home</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/dashboard}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/areaCliente/carrello}">
+                    <i class="fas fa-shopping-cart"></i> Carrello
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/logout}">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="sidebar">
+    <h3>Menu Cliente</h3>
+    <a th:href="@{/areaCliente/aggiungiProdotto}">
+        <i class="fas fa-plus"></i> Aggiungi Prodotto
+    </a>
+    <a th:href="@{/areaCliente/chat}">
+        <i class="fas fa-comments"></i> Chat
+    </a>
+</div>
+
+<div class="content">
+    <h1 class="mb-4">Benvenuto nella tua area cliente</h1>
+    <h2 class="mb-3">Prodotti degli altri clienti</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <form th:action="@{/areaCliente/aggiungiProdottoAlCarrello}" method="post" class="card">
+                <img th:src="@{/styles/images/placeholder.png}" class="card-img-top" alt="Prodotto">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${prodotti.nome}">Nome Prodotto</h5>
+                    <p class="card-text" th:text="${prodotti.des}">Descrizione breve del prodotto.</p>
+                    <div class="form-group">
+                        <label for="productSelect_${prodotti.id}">Seleziona quantità</label>
+                        <select class="form-control" id="productSelect_${prodotti.id}" name="quantity" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="productId" th:value="${prodotti.id}">
+                    <button type="submit" class="btn btn-custom">Aggiungi al carrello</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

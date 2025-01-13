@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,19 +21,13 @@
         .navbar-brand:hover, .navbar-nav .nav-link:hover {
             color: #ffc107;
         }
-        .btn-custom {
-            background-color: #28a745; /* Green button */
-            color: white;
-        }
-        .btn-custom:hover {
-            background-color: #218838;
-        }
+
     </style>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" th:href="@{/dashboard}">Admin Panel</a>
+    <a class="navbar-brand" >Admin Panel</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -55,19 +49,54 @@
     <!-- Add Admin Section -->
     <div class="card">
         <div class="card-header bg-primary text-white">
-            Add a New Admin
+            Aggiungi Admin
         </div>
         <div class="card-body">
-            <form th:action="@{/superAdmin/add}" method="post">
+            <!-- Alert per errori o successo -->
+            <div class="alert alert-danger" th:if="${errorMessage}">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <div class="alert alert-info" th:if="${successMessage}">
+                <span th:text="${successMessage}"></span>
+            </div>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/dashboard/pannelloSuperAdmin/aggiungiAdmin}" method="post" th:object="${registrazioneUtenteDTO}">
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter admin email" required>
+                    <label for="nome">Nome:</label>
+                    <input type="text" class="form-control" id="nome" th:field="*{nome}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cognome">Cognome:</label>
+                    <input type="text" class="form-control" id="cognome" th:field="*{cognome}" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
+
                 </div>
-                <button type="submit" class="btn btn-custom">Add Admin</button>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" th:field="*{password}" required>
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></span>
+
+                </div>
+                <div class="form-group">
+                    <label for="passwordRipetuta">Ripeti Password:</label>
+                    <input type="password" class="form-control" id="passwordRipetuta" th:field="*{passwordRipetuta}"  required>
+                    <span th:if="${#fields.hasErrors('passwordRipetuta')}" th:errors="*{passwordRipetuta}" class="error"></span>
+
+                </div>
+                <div class="form-group">
+                    <label for="dataNascita">Data di Nascita:</label>
+                    <input type="date" class="form-control" id="dataNascita" th:field="*{dataNascita}" required>
+                    <span th:if="${#fields.hasErrors('dataNascita')}" th:errors="*{dataNascita}" class="error"></span>
+
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Aggiungi Admin</button>
             </form>
         </div>
     </div>
@@ -75,18 +104,18 @@
     <!-- Disable Admin Section -->
     <div class="card">
         <div class="card-header bg-danger text-white">
-            Disable an Admin
+            Disattiva Admin
         </div>
         <div class="card-body">
             <form th:action="@{/dashboard/pannelloSuperAdmin/disattivaAdmin}" method="post">
                 <div class="form-group">
                     <label for="adminSelect">Select Admin</label>
                     <select class="form-control" id="adminSelect" name="adminId" required>
-                        <!-- Example options (to be dynamically generated from the backend) -->
-                        <option th:each="admin : ${admins}" th:value="${admin.id}" th:text="${admin.name}"></option>
+                        <option th:each="admin : ${admins}" th:value="${admin.id}" th:text="${admin.nome + ' (' + admin.email + ')'}"></option>
                     </select>
+
                 </div>
-                <button type="submit" class="btn btn-danger">Disable Admin</button>
+                <button type="submit" class="btn btn-danger">Disattiva Admin</button>
             </form>
         </div>
     </div>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggiungi Prodotto</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+        }
+        .card {
+            margin: 20px 0;
+        }
+        .navbar {
+            background-color: #343a40; /* Dark navbar */
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #ffffff;
+        }
+        .navbar-brand:hover, .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" th:text="'Benvenuto, ' + ${nomeUtente}"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/dashboard}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/logout}">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h1 class="text-center">Aggiungi Nuovo Prodotto</h1>
+
+    <!-- Add Product Section -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            Aggiungi Prodotto
+        </div>
+        <div class="card-body">
+            <!-- Alert per errori o successo -->
+            <div class="alert alert-danger" th:if="${errorMessage}">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <div class="alert alert-info" th:if="${successMessage}">
+                <span th:text="${successMessage}"></span>
+            </div>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/dashboard/prodotto/aggiungi}" method="post" th:object="${prodottoRequestDTO}">
+                <div class="form-group">
+                    <label for="nome">Nome Prodotto:</label>
+                    <input type="text" class="form-control" id="nome" th:field="*{nome}" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descrizione">Descrizione:</label>
+                    <textarea class="form-control" id="descrizione" th:field="*{descrizione}" required></textarea>
+                    <div class="text-danger" th:if="${#fields.hasErrors('descrizione')}" th:errors="*{descrizione}"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="prezzo">Prezzo:</label>
+                    <input type="number" step="0.01" class="form-control" id="prezzo" th:field="*{prezzo}" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('prezzo')}" th:errors="*{prezzo}"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantita">Quantità:</label>
+                    <input type="number" class="form-control" id="quantita" th:field="*{quantita}" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('quantita')}" th:errors="*{quantita}"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Aggiungi Prodotto</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
