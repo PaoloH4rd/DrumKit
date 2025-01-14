@@ -31,7 +31,7 @@
             border-color: #d03b00; /* Darker border on hover */
         }
         .container {
-            margin-top: 50px; /* Top margin */
+            margin-top: 30px; /* Top margin */
         }
         .jumbotron {
             background-color: #647f6c; /* Dark orange background */
@@ -41,6 +41,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" th:text="'Benvenuto, ' + ${nome}"></a>
     <div class="container">
         <a class="navbar-brand" href="#"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"

@@ -39,6 +39,7 @@ public class FilterDiAutenticazione extends OncePerRequestFilter {
 				|| request.getRequestURI().equals(rootUrl)
 				|| request.getRequestURI().contains("welcome")
 				|| request.getRequestURI().contains("favicon")
+				|| request.getRequestURI().contains(".css")
 				) {
 				//vai avanti con la richiesta
 			filterChain.doFilter(request,response);

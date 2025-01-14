@@ -18,8 +18,7 @@ public class ProdottoRequestDTO {
 
     @NotNull(message = "La quantità è obbligatoria.")
     @Positive(message = "La quantità non può essere negativa o zero.")
-    @Digits(integer = 2, fraction = 0, message = "La quantità deve essere un numero intero.")
+    @Digits(integer = 1, fraction = 0, message = "La quantità deve essere un numero intero tra 1 e 9.")
     private int quantita;
-
 
 }

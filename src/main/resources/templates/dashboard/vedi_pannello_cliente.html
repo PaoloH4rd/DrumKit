@@ -1,14 +1,12 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>-->
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Area Cliente</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles/style.css">
     <style>
-        body {
-            background-color: #f8f9fa; /* Light gray background */
-        }
         .navbar {
             background-color: #343a40; /* Dark navbar */
         }
@@ -88,7 +86,7 @@
 
 <div class="sidebar">
     <h3>Menu Cliente</h3>
-    <a th:href="@{/areaCliente/aggiungiProdotto}">
+    <a th:href="@{/areaCliente/aggiungiProdottoVendita}">
         <i class="fas fa-plus"></i> Aggiungi Prodotto
     </a>
     <a th:href="@{/areaCliente/chat}">
@@ -106,6 +104,11 @@
                 <div class="card-body">
                     <h5 class="card-title" th:text="${prodotto.nome}">Nome Prodotto</h5>
                     <p class="card-text" th:text="${prodotto.descrizione}">Descrizione breve del prodotto.</p>
+                    <p>
+                        Venduto da:
+                        <a th:href="@{/areaCliente/profiloVenditore/{id}(id=${prodotto.venditore.id})}"
+                           th:text="${prodotto.venditore.getNome()}">Nome Venditore</a>
+                    </p>
                     <div class="form-group">
                         <label th:for="'productSelect_' + ${prodotto.id}">Seleziona quantità</label>
                         <label>

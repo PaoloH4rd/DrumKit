@@ -55,12 +55,14 @@ public class ProdottoServiceImpl implements ProdottoService {
     }
 
     @Override
-    public void creaProdotto(String nome, String descrizione, double prezzo, int quantita) {
+    public void creaProdotto(String nome, String descrizione, double prezzo, int quantita, Utente venditore) {
         Prodotto p = new Prodotto();
         p.setNome(nome);
         p.setDescrizione(descrizione);
         p.setPrezzo(prezzo);
         p.setQuantita(quantita);
+        p.setProprietario(venditore);
+        p.setStato(StatoProdotto.DA_APPROVARE);
         repo.save(p);
     }
     public Utente getProprietario(Long idProdotto) {

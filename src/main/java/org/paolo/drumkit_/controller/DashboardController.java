@@ -17,26 +17,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/dashboard")
 public class DashboardController {
     private final UtenteFacade utenteFacade;
+
     @GetMapping("")
-    public String dashboard() {
-        return "vedi_dashboard";
-    }
+    public String dashboard(Model model) {
+            // Ottieni l'utente autenticato
+            Utente utente = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("nome", utente.getNome());
+            return "vedi_dashboard";
+        }
 
-    @GetMapping("/profilo")
-    public String getUserProfile(Model model){
-        // Ottieni l'utente autenticato
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Utente utente = (Utente)authentication.getPrincipal();
-        UtenteResponseDTO utenteResponseDTO = utenteFacade.getProfile(utente);
-        model.addAttribute("utenteResponseDTO", utenteResponseDTO);
-        return "dashboard/vedi_profilo";
-    }
-    @GetMapping("/profilo/cambiaPassword")
-    public String mostraForm(Model model) {
-        model.addAttribute("cambiaPasswordRequest", new CambiaPasswordRequestDTO());
-        return "dashboard/profilo/cambia_password";
-    }
-
-
-
+        @GetMapping("/profilo")
+        public String getUserProfile (Model model){
+            // Ottieni l'utente autenticato
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Utente utente = (Utente) authentication.getPrincipal();
+            UtenteResponseDTO utenteResponseDTO = utenteFacade.getProfile(utente);
+            model.addAttribute("utenteResponseDTO", utenteResponseDTO);
+            return "dashboard/vedi_profilo";
+        }
+        @GetMapping("/profilo/cambiaPassword")
+        public String mostraForm (Model model){
+            model.addAttribute("cambiaPasswordRequest", new CambiaPasswordRequestDTO());
+            return "dashboard/profilo/cambia_password";
+        }
 }

@@ -1,11 +1,6 @@
 /* Base styles */
 body {
-    background-color: #f8f9fa; /* Light gray background for readability */
-    color: #212529; /* Standard text color */
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    overflow-y: auto; /* Enable vertical scrolling */
+    background-color: #f5e6cc !important;
 }
 
 html {
@@ -16,48 +11,6 @@ html::-webkit-scrollbar {
     display: none; /* Nasconde le scrollbar sui browser basati su WebKit (Chrome, Safari) */
 }
 
-body {
-    overflow: hidden; /* Impedisce l'aspetto della scrollbar visibile */
-    overflow-y: auto; /* Consente lo scrolling verticale nascosto */
-}
-
-
-html::-webkit-scrollbar-thumb:hover {
-    background-color: #868e96; /* Darker thumb on hover */
-}
-
-/* Utility classes */
-.container {
-    padding-top: 20px; /* Add spacing for consistency */
-    padding-bottom: 20px;
-}
-
-.card {
-    border: 1px solid #dee2e6; /* Subtle border for definition */
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow */
-}
-
-.card-header {
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.navbar {
-    border-bottom: 1px solid #dee2e6; /* Subtle border for separation */
-}
-
-/* Buttons */
-.btn-custom {
-    background-color: #28a745; /* Green button */
-    color: white;
-    border: none;
-    transition: background-color 0.3s ease;
-}
-
-.btn-custom:hover {
-    background-color: #218838;
-}
 
 .btn-danger {
     background-color: #dc3545;

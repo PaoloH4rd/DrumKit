@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CarrelloController {
     @GetMapping("")
     public String mostraCarrello() {
-        return "vedi_carrello";
+        return "dashboard/cliente/vedi_carrello";
     }
 }

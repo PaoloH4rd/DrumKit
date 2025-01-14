@@ -35,6 +35,11 @@ public class UtenteServiceImpl implements UtenteService {
     }
 
     @Override
+    public Utente getById(Long id) {
+        return Urepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utente non trovato"));
+    }
+
+    @Override
     public boolean loginCheck(String email, String password) {
         //si controlla se esiste un utente con determinati utentename e password
         String encryptedPassword = DigestUtils.sha256Hex(password);

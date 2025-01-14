@@ -1,5 +1,6 @@
 package org.paolo.drumkit_.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.dto.request.ProdottoRequestDTO;
 import org.paolo.drumkit_.dto.response.ProdottoInVenditaResponseDTO;
@@ -40,18 +41,19 @@ public class ClienteController {
     public String aggiungiProdottoVendita(Model model) {
         Utente utente = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("prodottoRequestDTO", new ProdottoRequestDTO());
-        model.addAttribute(utente.getNome());
+        model.addAttribute("nome", utente.getNome());
         return "dashboard/cliente/aggiungi_prodotto_vendita";
     }
 
     @PostMapping("/aggiungiProdottoVendita")
-    public String aggiungiProdottoVendita(@ModelAttribute("prodottoRequestDTO") ProdottoRequestDTO prodotto,
+    public String aggiungiProdottoVendita(@ModelAttribute("prodottoRequestDTO") @Valid ProdottoRequestDTO prodotto,
                                           BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        Utente utenteLoggato = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (bindingResult.hasErrors()) {
-            return "redirect:/areaCliente/aggiungiProdottoVendita";
+            return "dashboard/cliente/aggiungi_prodotto_vendita";
         }
         try {
-            prodottoFacade.aggiungiProdottoVendita(prodotto.getNome(), prodotto.getDescrizione(), prodotto.getPrezzo(), prodotto.getQuantita());
+            prodottoFacade.aggiungiProdottoVendita(prodotto.getNome(), prodotto.getDescrizione(), prodotto.getPrezzo(), prodotto.getQuantita(), utenteLoggato.getId() );
             redirectAttributes.addFlashAttribute("successMessage", "Prodotto aggiunto con successo");
             return "redirect:/areaCliente/aggiungiProdottoVendita?successMessage=true";
         } catch (DatoNonValidoException e) {
@@ -66,10 +68,5 @@ public class ClienteController {
 //        prodottoService.aggiungiProdottoAlCarrello(prodottoId);
         return "redirect:/areaCliente";
     }
-    @GetMapping("/chat")
-    public String chats(Model model) {
-//        Utente u = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        model.addAttribute("chats", prodottoFacade.getChats(u.getId()));
-        return "dashboard/cliente/vedi_chats";
-    }
+
 }

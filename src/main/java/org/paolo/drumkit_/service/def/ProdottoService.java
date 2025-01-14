@@ -6,7 +6,7 @@ import org.paolo.drumkit_.model.Utente;
 import java.util.List;
 
 public interface ProdottoService extends GeneralService<Prodotto> {
-    void creaProdotto(String nome, String descrizione, double prezzo, int quantita);
+    void creaProdotto(String nome, String descrizione, double prezzo, int quantita, Utente venditore);
     Utente getProprietario(Long id);
     void setStatoProdottoRifiutato(Long idProdotto);
     List<Prodotto> getAllProdottiDaApprovare();
