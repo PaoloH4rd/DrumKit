@@ -2,6 +2,7 @@ package org.paolo.drumkit_.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
+import org.paolo.drumkit_.model.Prodotto;
 import org.paolo.drumkit_.model.RigaOrdine;
 import org.paolo.drumkit_.repository.RigaOrdineRepository;
 import org.paolo.drumkit_.service.def.RigaOrdineService;
@@ -51,4 +52,19 @@ public class RigaOrdineServiceImpl implements RigaOrdineService {
         r.setDisattivato(true);
         repo.save(r);
     }
+
+    @Override
+    public void aggiungiProdottoAlCarrello(Prodotto prodotto, int quantita) {
+        // crea una riga ordine con il prodotto scelto da mettere nel carrello
+        // se il prodotto è già presente nel carrello, incrementa la quantità
+        RigaOrdine rigaOrdine = new RigaOrdine();
+        rigaOrdine.setProdotto(prodotto);
+        rigaOrdine.setQuantita(quantita);
+        rigaOrdine.setPrezzoTot(prodotto.getPrezzo() * quantita);
+        repo.save(rigaOrdine);
+    }
+    public List<RigaOrdine> getAllRigheOrdine(Long idUtenteLoggato){
+        return repo.findAllByUtenteId(idUtenteLoggato);
+    }
+
 }

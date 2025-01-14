@@ -62,11 +62,5 @@ public class ClienteController {
         }
     }
 
-    @PostMapping("/aggiungiProdottoAlCarrello")
-    public String aggiungiProdottoAlCarrello(@ModelAttribute("prodottoId") Long prodottoId) {
-
-//        prodottoService.aggiungiProdottoAlCarrello(prodottoId);
-        return "redirect:/areaCliente";
-    }
 
 }

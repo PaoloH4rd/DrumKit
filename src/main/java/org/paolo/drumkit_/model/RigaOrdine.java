@@ -22,8 +22,11 @@ public class RigaOrdine {
 
     private boolean isDisattivato;
 
+
+    //ogniriga d'ordine prima di avere un ordine associato devo fare il checkout.
+    //avra un ordine null fino a quando non viene fatto il checkout
     @ManyToOne
-    @JoinColumn(nullable = false , updatable = false , name = "id_ordine")
+    @JoinColumn(/*nullable = false , updatable = false ,*/ name = "id_ordine")
     private Ordine ordine;
 
     @ManyToOne

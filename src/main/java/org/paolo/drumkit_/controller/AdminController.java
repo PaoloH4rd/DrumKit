@@ -3,8 +3,6 @@ package org.paolo.drumkit_.controller;
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.dto.response.ProdottoInVenditaResponseDTO;
 import org.paolo.drumkit_.facade.ProdottoFacade;
-import org.paolo.drumkit_.model.Utente;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
