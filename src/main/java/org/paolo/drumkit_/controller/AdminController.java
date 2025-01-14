@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -20,22 +21,23 @@ public class AdminController {
     //dashboard admin
     @GetMapping("")
     public String pannelloAdmin(Model model){
-        Utente utenteLoggato = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<ProdottoInVenditaResponseDTO> prodotti = prodottoFacade.getProdotti(utenteLoggato.getId());
+        List<ProdottoInVenditaResponseDTO> prodotti = prodottoFacade.getAllProdottiDaApprovare();
         model.addAttribute("prodotti", prodotti);
         return "/dashboard/vedi_pannello_admin";
     }
 
-//    @PutMapping("/approvaProdotto")
-//    public String approvaProdotto(@RequestParam Long idProdotto){
-//        prodottoFacade.approvaProdotto(idProdotto);
-//        return "redirect:/dashboard/pannelloAdmin";
-//    }
+    @PostMapping("/approvaProdotto")
+    public String approvaProdotto(@RequestParam Long idProdotto, RedirectAttributes redirectAttributes){
+        prodottoFacade.approvaProdotto(idProdotto);
+        redirectAttributes.addFlashAttribute("successMessage", "Prodotto approvato con successo");
+        return "redirect:/pannelloAdmin?successMessage=true";
+    }
 
-    @PutMapping("/rifiutaProdotto")
-    public String rifiutaProdotto(@RequestParam Long idProdotto,@RequestParam String motivoRifiuto){
+    @PostMapping("/rifiutaProdotto")
+    public String rifiutaProdotto(@RequestParam Long idProdotto, RedirectAttributes redirectAttributes){
         prodottoFacade.rifiutaProdotto(idProdotto);
-        return "redirect:/dashboard/pannelloAdmin";
+        redirectAttributes.addFlashAttribute("successMessage", "Prodotto rifiutato con successo");
+        return "redirect:/pannelloAdmin?successMessage=true";
     }
 
 }

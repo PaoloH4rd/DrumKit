@@ -21,8 +21,8 @@ public class ProdottoFacade {
     }
 
 
-    public List<ProdottoInVenditaResponseDTO> getProdotti(Long idProprietario) {
-        return prodottoService.getAllProdottiAltriClienti(idProprietario).stream()
+    public List<ProdottoInVenditaResponseDTO> getAllProdottiDaApprovare() {
+        return prodottoService.getAllProdottiDaApprovare().stream()
                 .map(mapper::toProdottoInVenditaResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -30,7 +30,15 @@ public class ProdottoFacade {
         return mapper.toUtenteVenditoreResponseDTO(prodottoService.getProprietario(idProdotto));
     }
     public void rifiutaProdotto(Long idProdotto) {
-        prodottoService.setStatoProdotto(idProdotto);
+        prodottoService.setStatoProdottoRifiutato(idProdotto);
     }
 
+    public List<ProdottoInVenditaResponseDTO> getAllProdottiApprovatiNonDiUtenteLoggato(Long idUtente) {
+        return prodottoService.getAllProdottiApprovatiNonDiUtenteLoggato(idUtente).stream()
+                .map(mapper::toProdottoInVenditaResponseDTO)
+                .collect(Collectors.toList());
+    }
+    public void approvaProdotto(Long idProdotto) {
+        prodottoService.setStatoProdottoApprovato(idProdotto);
+    }
 }

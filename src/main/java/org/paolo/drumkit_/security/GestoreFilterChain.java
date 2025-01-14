@@ -22,8 +22,8 @@ public class GestoreFilterChain {
 	protected SecurityFilterChain getFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(req->req
-					.requestMatchers("/dashboard/pannelloAdmin/**").hasAnyRole(Ruolo.ADMIN.toString(), Ruolo.SUPER_ADMIN.toString())
-					.requestMatchers("/dashboard/pannelloSuperAdmin/**").hasRole(Ruolo.SUPER_ADMIN.toString())
+					.requestMatchers("/pannelloAdmin/**").hasAnyRole(Ruolo.ADMIN.toString(), Ruolo.SUPER_ADMIN.toString())
+					.requestMatchers("/pannelloSuperAdmin/**").hasRole(Ruolo.SUPER_ADMIN.toString())
 					.requestMatchers("/dashboard/**").authenticated()
 					.anyRequest().permitAll()
 					)

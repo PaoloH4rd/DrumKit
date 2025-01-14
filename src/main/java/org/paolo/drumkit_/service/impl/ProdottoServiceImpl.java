@@ -53,11 +53,6 @@ public class ProdottoServiceImpl implements ProdottoService {
         p.setDisattivato(true);
         repo.save(p);
     }
-    // Implementazione del metodo per recuperare i prodotti degli altri clienti
-    @Override
-    public List<Prodotto> getAllProdottiAltriClienti(Long idProprietario) {
-        return repo.findAllByProprietarioIdIsNot(idProprietario);
-    }
 
     @Override
     public void creaProdotto(String nome, String descrizione, double prezzo, int quantita) {
@@ -78,10 +73,25 @@ public class ProdottoServiceImpl implements ProdottoService {
     }
 
     @Override
-    public void setStatoProdotto(Long idProdotto) {
+    public void setStatoProdottoRifiutato(Long idProdotto) {
         Prodotto p = getById(idProdotto);
         p.setStato(StatoProdotto.RIFIUTATO);
         repo.save(p);
-
     }
+    @Override
+    public List<Prodotto> getAllProdottiDaApprovare() {
+        return repo.findAllByStato(StatoProdotto.DA_APPROVARE);
+    }
+
+    @Override
+    public List<Prodotto> getAllProdottiApprovatiNonDiUtenteLoggato(Long idUtente) {
+        return repo.findAllByStatoAndProprietarioIdNot(StatoProdotto.APPROVATO, idUtente);
+    }
+    @Override
+    public void setStatoProdottoApprovato(Long idProdotto) {
+        Prodotto p = getById(idProdotto);
+        p.setStato(StatoProdotto.APPROVATO);
+        repo.save(p);
+    }
+
 }

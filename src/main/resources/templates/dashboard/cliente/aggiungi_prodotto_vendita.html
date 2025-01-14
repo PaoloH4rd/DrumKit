@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="card-body">
-            <form th:action="@{/dashboard/prodotto/aggiungi}" method="post" th:object="${prodottoRequestDTO}">
+            <form th:action="@{/areaCliente/aggiungiProdottoVendita}" method="post" th:object="${prodottoRequestDTO}">
                 <div class="form-group">
                     <label for="nome">Nome Prodotto:</label>
                     <input type="text" class="form-control" id="nome" th:field="*{nome}" required>

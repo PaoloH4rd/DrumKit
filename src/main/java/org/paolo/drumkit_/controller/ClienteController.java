@@ -24,8 +24,8 @@ public class ClienteController {
 
     @GetMapping("")
     public String pannelloCliente(Model model) {
-        Utente u = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<ProdottoInVenditaResponseDTO> prodotti = prodottoFacade.getProdotti(u.getId());
+        Utente u = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<ProdottoInVenditaResponseDTO> prodotti = prodottoFacade.getAllProdottiApprovatiNonDiUtenteLoggato(u.getId());
         model.addAttribute("prodotti", prodotti);
         return "dashboard/vedi_pannello_cliente";
     }
@@ -65,5 +65,11 @@ public class ClienteController {
 
 //        prodottoService.aggiungiProdottoAlCarrello(prodottoId);
         return "redirect:/areaCliente";
+    }
+    @GetMapping("/chat")
+    public String chats(Model model) {
+//        Utente u = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        model.addAttribute("chats", prodottoFacade.getChats(u.getId()));
+        return "dashboard/cliente/vedi_chats";
     }
 }

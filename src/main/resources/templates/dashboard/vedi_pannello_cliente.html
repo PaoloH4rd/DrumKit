@@ -57,6 +57,9 @@
         .btn-custom:hover {
             background-color: #218838;
         }
+        .card {
+            margin-bottom: 20px; /* Space between cards */
+        }
     </style>
 </head>
 <body>
@@ -95,32 +98,31 @@
 
 <div class="content">
     <h1 class="mb-4">Benvenuto nella tua area cliente</h1>
-    <h2 class="mb-3">Prodotti degli altri clienti</h2>
+    <h2 class="mb-3">Prodotti in Vendita</h2>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" th:each="prodotto : ${prodotti}">
             <form th:action="@{/areaCliente/aggiungiProdottoAlCarrello}" method="post" class="card">
                 <img th:src="@{/styles/images/placeholder.png}" class="card-img-top" alt="Prodotto">
                 <div class="card-body">
-                    <h5 class="card-title" th:text="${prodotti.nome}">Nome Prodotto</h5>
-                    <p class="card-text" th:text="${prodotti.des}">Descrizione breve del prodotto.</p>
+                    <h5 class="card-title" th:text="${prodotto.nome}">Nome Prodotto</h5>
+                    <p class="card-text" th:text="${prodotto.descrizione}">Descrizione breve del prodotto.</p>
                     <div class="form-group">
-                        <label for="productSelect_${prodotti.id}">Seleziona quantità</label>
-                        <select class="form-control" id="productSelect_${prodotti.id}" name="quantity" required>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
+                        <label th:for="'productSelect_' + ${prodotto.id}">Seleziona quantità</label>
+                        <label>
+                            <select class="form-control" th:id="'productSelect_' + ${prodotto.id}" name="quantity" required>
+                                <option th:each="i : ${#numbers.sequence(1, prodotto.quantita)}"
+                                        th:value="${i}"
+                                        th:text="${i}">1</option>
+                            </select>
+                        </label>
                     </div>
-                    <input type="hidden" name="productId" th:value="${prodotti.id}">
+                    <input type="hidden" name="productId" th:value="${prodotto.id}">
                     <button type="submit" class="btn btn-custom">Aggiungi al carrello</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

@@ -8,13 +8,13 @@
     <link href="/styles/style.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa; /* Light gray background */
+            background-color: #f8f9fa;
         }
         .card {
             margin: 20px 0;
         }
         .navbar {
-            background-color: #343a40; /* Dark navbar */
+            background-color: #343a40;
         }
         .navbar-brand, .navbar-nav .nav-link {
             color: #ffffff;
@@ -23,14 +23,14 @@
             color: #ffc107;
         }
         .btn-custom {
-            background-color: #28a745; /* Green button */
+            background-color: #28a745;
             color: white;
         }
         .btn-custom:hover {
             background-color: #218838;
         }
         .btn-danger-custom {
-            background-color: #dc3545; /* Red button */
+            background-color: #dc3545;
             color: white;
         }
         .btn-danger-custom:hover {
@@ -76,62 +76,19 @@
                             <input type="hidden" name="idProdotto" th:value="${prodotto.id}" />
                             <button type="submit" class="btn btn-custom">Approva</button>
                         </form>
-                        <!-- Pulsante per aprire il modale -->
-                        <button type="button" class="btn btn-danger-custom" data-toggle="modal" data-target="#rifiutoModal" th:data-id="${prodotto.id}">
-                            Rifiuta
-                        </button>
+                        <form th:action="@{/pannelloAdmin/rifiutaProdotto}" method="post" style="display:inline;">
+                            <input type="hidden" name="idProdotto" th:value="${prodotto.id}" />
+                            <button type="submit" class="btn btn-danger-custom">Rimuovi</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-<!-- Modale per il motivo di rifiuto -->
-<div class="modal fade" id="rifiutoModal" tabindex="-1" role="dialog" aria-labelledby="rifiutoModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="rifiutoModalLabel">Motivo del Rifiuto</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formRifiuto" th:action="@{/pannelloAdmin/rifiutaProdotto}" method="post">
-                    <input type="hidden" name="_method" value="PUT">
-                    <div class="form-group">
-                        <label for="motivoRifiuto">Inserisci il motivo del rifiuto:</label>
-                        <input type="text" class="form-control" id="motivoRifiuto" name="motivoRifiuto" required>
-                        <input type="hidden" name="idProdotto" class="idProdotto" /> <!-- Cambiato a classe -->
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-                <button type="submit" class="btn btn-danger" form="formRifiuto">Rifiuta</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(document).ready(function() {
-        // Quando il pulsante Rifiuta viene cliccato, salva l'ID del prodotto
-        $('#rifiutoModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Pulsante che ha aperto il modale
-            var idProdotto = button.data('id'); // Estrai l'ID del prodotto dal pulsante
-            var modal = $(this);
-            modal.find('.idProdotto').val(idProdotto); // Imposta l'ID nel campo nascosto del modulo
-        });
-    });
-</script>
-
-
+</body>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-</body>
 </html>

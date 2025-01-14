@@ -61,7 +61,7 @@
             </div>
         </div>
         <div class="card-body">
-            <form th:action="@{/dashboard/pannelloSuperAdmin/aggiungiAdmin}" method="post" th:object="${registrazioneUtenteDTO}">
+            <form th:action="@{/pannelloSuperAdmin/aggiungiAdmin}" method="post" th:object="${registrazioneUtenteDTO}">
                 <div class="form-group">
                     <label for="nome">Nome:</label>
                     <input type="text" class="form-control" id="nome" th:field="*{nome}" required>
@@ -107,7 +107,7 @@
             Disattiva Admin
         </div>
         <div class="card-body">
-            <form th:action="@{/dashboard/pannelloSuperAdmin/disattivaAdmin}" method="post">
+            <form th:action="@{/pannelloSuperAdmin/disattivaAdmin}" method="post">
                 <div class="form-group">
                     <label for="adminSelect">Select Admin</label>
                     <select class="form-control" id="adminSelect" name="adminId" required>

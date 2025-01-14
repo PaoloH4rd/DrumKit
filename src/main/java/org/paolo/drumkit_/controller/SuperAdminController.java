@@ -17,7 +17,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/dashboard/pannelloSuperAdmin")
+@RequestMapping("/pannelloSuperAdmin")
 public class SuperAdminController {
     private final UtenteFacade utenteFacade;
     //dashboard admin
@@ -39,26 +39,26 @@ public class SuperAdminController {
         try {
             utenteFacade.disattivaUtente(adminId);
             redirectAttributes.addFlashAttribute("successMessage", "Admin disattivato con successo");
-            return "redirect:/dashboard/pannelloSuperAdmin?succesMessage=true";
+            return "redirect:/pannelloSuperAdmin?succesMessage=true";
         }catch (HttpStatusCodeException e){
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/dashboard/pannelloSuperAdmin?errorMessage=true";
+            return "redirect:/pannelloSuperAdmin?errorMessage=true";
         }
     }
     @PostMapping("/aggiungiAdmin")
       public String aggiungiAdmin(@ModelAttribute ("registrazioneUtenteDTO") @Valid RegistrazioneUtenteDTO registrazioneUtenteDTO,
                                   BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "redirect:/dashboard/pannelloSuperAdmin";
+            return "redirect:/pannelloSuperAdmin";
         }
         try {
             utenteFacade.registraAdmin(registrazioneUtenteDTO.getNome(), registrazioneUtenteDTO.getCognome(), registrazioneUtenteDTO.getEmail(),
                     registrazioneUtenteDTO.getPassword(), registrazioneUtenteDTO.getPasswordRipetuta(), registrazioneUtenteDTO.getDataNascita());
             redirectAttributes.addFlashAttribute("successMessage", "Admin aggiunto con successo");
-            return "redirect:/dashboard/pannelloSuperAdmin?successMessage=true";
+            return "redirect:/pannelloSuperAdmin?successMessage=true";
         }catch (DatoNonValidoException e){
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/dashboard/pannelloSuperAdmin?errorMessage=true";
+            return "redirect:/pannelloSuperAdmin?errorMessage=true";
         }
     }
 }
