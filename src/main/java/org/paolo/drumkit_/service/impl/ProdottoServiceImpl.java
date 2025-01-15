@@ -31,7 +31,6 @@ public class ProdottoServiceImpl implements ProdottoService {
         p.setId(prodotto.getId());
         p.setNome(prodotto.getNome());
         p.setDescrizione(prodotto.getDescrizione());
-        p.setChats(prodotto.getChats());
         p.setPrezzo(prodotto.getPrezzo());
         p.setQuantita(prodotto.getQuantita());
         p.setRigaOrdine(prodotto.getRigaOrdine());

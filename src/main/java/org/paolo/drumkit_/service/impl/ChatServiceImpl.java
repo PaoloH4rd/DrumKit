@@ -18,44 +18,36 @@ import java.util.List;
 public class ChatServiceImpl implements ChatService {
 
     private final ChatRepository repo;
-
     @Override
-    public List<Chat> getByCliente_IdAndIsChiusaIsfalse(Utente u) {
-        return repo.findAllByCliente_IdAndIsChiusaIsFalse(u.getId());
+    public List<Chat> getAllByUsername(String username) {
+        return repo.findAllByUsername(username);
     }
 
     @Override
-    public void add(Chat chat) {
-        repo.save(chat);
+    public Chat getByUsernameAndAltroNome(String username, String secondoUsername) {
+        Chat c=repo.findAllByUsername(username, secondoUsername).orElse(null);
+        return c;
     }
 
     @Override
-    public void update(Chat chat) {
-        Chat c = new Chat();
-        c.setId(chat.getId());
-        c.setProdotto(chat.getProdotto());
-        c.setCliente(chat.getCliente());
-        c.setCliente(chat.getCliente());
-        c.setMessaggi(chat.getMessaggi());
+    public void creaChat(Utente utenteUno, Utente utenteDue) {
+        Chat c=getByUsernameAndAltroNome(utenteUno.getUsername(), utenteDue.getUsername());
+        if(c!=null) throw new ResponseStatusException(HttpStatus.CONFLICT);
+        c=new Chat();
+        c.setUtenteDue(utenteDue);
+        c.setUtenteUno(utenteUno);
         repo.save(c);
-        //sarwe
+
     }
 
     @Override
-    public Chat getById(long id) {
-        return repo.findByIdAndIsChiusaIsFalse(id).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
-    @Override
-    public List<Chat> getAll() {
-        return repo.findAllByIsChiusaIsFalse();
-    }
-
-    @Override
-    public void setIsDisattivatoTrue(long id) {
-        Chat c = getById(id);
-        c.setChiusa(true);
-        repo.save(c);
+    public Chat salva(Chat c) {
+        if(c.getId()!=0||c.getUtenteUno()==null||c.getUtenteDue()==null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if(getByUsernameAndAltroNome(c.getUtenteUno().getUsername(), c.getUtenteDue().getUsername())!=null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        return repo.save(c);
     }
 }

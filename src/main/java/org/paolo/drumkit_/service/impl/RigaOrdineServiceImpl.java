@@ -64,7 +64,8 @@ public class RigaOrdineServiceImpl implements RigaOrdineService {
         repo.save(rigaOrdine);
     }
     public List<RigaOrdine> getAllRigheOrdine(Long idUtenteLoggato){
-        return repo.findAllByUtenteId(idUtenteLoggato);
+//        return repo.findAllByUtenteId(idUtenteLoggato);
+        return List.of();
     }
 
 }

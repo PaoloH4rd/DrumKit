@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="text-center">Chat con <span th:text="${destinatario}"></span></h1>
+  <!-- Elenco dei messaggi -->
+  <div class="list-group mt-4">
+    <div th:each="messaggio : ${messaggi}" class="list-group-item list-group-item-action">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1" th:text="${messaggio.testo}"></h5>
+        <small th:text="${messaggio.data}"></small>
+      </div>
+      <p class="mb-1" th:text="${messaggio.testo}"></p>
+    </div>
+  </div>
+
+
+  <form th:action="@{/areaCliente/chatDashboard/invia}" method="post" th:object="${inviaMessaggioRequestDTO}" class="shadow p-4 rounded bg-light">
+    <!-- Campo nascosto per l'email del destinatario -->
+    <input type="hidden" name="emailDestinatario" th:field="*{emailDestinatario}" th:value="${destinatario}" />
+    <div class="invalid-feedback" th:if="${#fields.hasErrors('emailDestinatario')}"
+         th:errors="*{emailDestinatario}">il destinatario è sbagliatp.</div>
+
+    <div class="form-group">
+      <label for="testo">Testo del Messaggio</label>
+      <textarea id="testo" name="testo" rows="5" th:field="*{testo}"
+                class="form-control" required
+                placeholder="Scrivi il tuo messaggio qui..."></textarea>
+      <!-- Mostra errore se presente -->
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('testo')}"
+           th:errors="*{testo}">Il messaggio non può essere vuoto.</div>
+    </div>
+
+    <div class="text-right">
+      <button type="submit" class="btn btn-primary">Invia</button>
+    </div>
+  </form>
+  <div class="alert alert-success mt-4" th:if="${successMessage}">
+    Messaggio inviato con successo!
+  </div>
+  <div class="alert alert-danger" th:if="${errorMessage}">
+    <span th:text="${errorMessage}"></span>
+  </div>
+
+</div>
+</body>
+</html>

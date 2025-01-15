@@ -33,11 +33,11 @@ public class UtenteServiceImpl implements UtenteService {
     public Utente getByEmail(String email) {
         return Urepo.findByEmailAndIsDisattivatoIsFalse(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utente non trovato"));
     }
-
     @Override
-    public Utente getById(Long id) {
-        return Urepo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utente non trovato"));
+    public Utente getByEmailforChat(String email) {
+        return Urepo.findByEmail(email).orElse(null);
     }
+
 
     @Override
     public boolean loginCheck(String email, String password) {

@@ -50,9 +50,6 @@ public class Utente implements UserDetails {
     @OneToMany(mappedBy = "utente")
     private List<Ordine> ordini;
 
-    @OneToMany(mappedBy = "cliente")
-    private List<Chat> chats;
-
     @OneToMany(mappedBy = "proprietario")
     private List<Prodotto> prodotti; // Rappresenta i prodotti posseduti dall'utente
 

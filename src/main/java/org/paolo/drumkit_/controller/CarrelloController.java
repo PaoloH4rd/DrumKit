@@ -20,8 +20,8 @@ public class CarrelloController {
     @GetMapping("")
     public String pannelloCarrello(Model model) {
         Utente utente = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<ProdottoInVenditaResponseDTO> prodotti = rigaOrdineFacade.getProdottiCarrello(utente.getId());
-        model.addAttribute("prodotti", prodotti);
+//        List<ProdottoInVenditaResponseDTO> prodotti = rigaOrdineFacade.getProdottiCarrello(utente.getId());
+//        model.addAttribute("prodotti", prodotti);
         return "dashboard/cliente/vedi_carrello";
     }
 

@@ -5,6 +5,9 @@ import org.paolo.drumkit_.model.Utente;
 
 import java.util.List;
 
-public interface ChatService extends GeneralService<Chat> {
-    List<Chat> getByCliente_IdAndIsChiusaIsfalse(Utente cliente);
+public interface ChatService  {
+    List<Chat> getAllByUsername(String username);
+    Chat getByUsernameAndAltroNome(String username,String secondoUsername);
+    void creaChat(Utente utenteUno, Utente utenteDue);
+    Chat salva(Chat c);
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -17,17 +17,20 @@ public class Messaggio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private boolean isCliente;
-
-    @Column(nullable = false)
-    private Timestamp data;
-    @Column(nullable = false)
+    @Lob
+    @Column(length = 512)
     private String testo;
+
+    @CreationTimestamp
+    @Column(nullable = false,insertable = false,updatable = false,columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
+    private LocalDateTime dataOra;
+
+    private boolean primoUtente;
 
     private boolean isDisattivato;
 
     @ManyToOne
-    @JoinColumn(nullable = false, updatable = false, name = "id_chat")
+    @JoinColumn(name = "id_chat")
     private Chat chat;
 
 

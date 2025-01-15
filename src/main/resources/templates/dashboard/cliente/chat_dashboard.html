@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .sidebar {
+            height: 100vh; /* Full height */
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #394c5f; /* Blue sidebar */
+            padding: 20px;
+            width: 250px;
+            color: #ffffff; /* White text */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #ffffff; /* White title */
+            text-align: center;
+        }
+
+        .sidebar a {
+            color: #ffffff; /* White text for links */
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .content {
+            margin-left: 260px; /* Account for sidebar width */
+            padding: 20px;
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>Le Tue Chat</h3>
+    <!-- Elenco delle chat -->
+    <a th:each="chat : ${chats}"
+       th:href="@{/areaCliente/chatDashboard/apriChat(email=${chat.utenteDue.email})}"
+       th:text="${chat.utenteDue.nome}"
+       class="btn btn-link"></a>
+</div>
+
+<!-- Colonna destra: form per inviare messaggi -->
+<div class="content">
+    <div class="container mt-5">
+        <header class="text-center mb-4">
+            <h1>Invia un Messaggio</h1>
+            <p class="text-muted">Compila il modulo per inviare un messaggio a un altro utente.</p>
+        </header>
+
+        <!-- Form per inviare un messaggio -->
+        <form th:action="@{/areaCliente/chatDashboard/invia}" method="post" th:object="${inviaMessaggioRequestDTO}" class="shadow p-4 rounded bg-light">
+            <!-- Campo per l'email del destinatario -->
+            <div class="form-group">
+                <label for="emailDestinatario">Email del Destinatario</label>
+                <input type="email" id="emailDestinatario" name="emailDestinatario"
+                       th:field="*{emailDestinatario}" class="form-control" required
+                       placeholder="Inserisci l'email del destinatario">
+                <!-- Mostra errore se presente -->
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('emailDestinatario')}"
+                     th:errors="*{emailDestinatario}">Email non valida.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="testo">Testo del Messaggio</label>
+                <textarea id="testo" name="testo" rows="5" th:field="*{testo}"
+                          class="form-control" required
+                          placeholder="Scrivi il tuo messaggio qui..."></textarea>
+                <!-- Mostra errore se presente -->
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('testo')}"
+                     th:errors="*{testo}">Il messaggio non può essere vuoto.</div>
+            </div>
+
+            <div class="text-right">
+                <button type="submit" class="btn btn-primary">Invia</button>
+            </div>
+        </form>
+
+        <div class="alert alert-success mt-4" th:if="${successMessage}">
+            Messaggio inviato con successo!
+        </div>
+        <div class="alert alert-danger" th:if="${errorMessage}">
+            <span th:text="${errorMessage}"></span>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

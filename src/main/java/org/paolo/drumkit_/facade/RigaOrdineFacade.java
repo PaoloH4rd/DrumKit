@@ -19,6 +19,6 @@ public class RigaOrdineFacade {
     }
     //,eglio tornare una lista di righe ordine
     public void getProdottiCarrello(Long idUtenteLoggato) {
-        return rigaOrdineService.getAllRigheOrdine(idUtenteLoggato);
+//        return rigaOrdineService.getAllRigheOrdine(idUtenteLoggato);
     }
 }

@@ -45,8 +45,8 @@ public class Prodotto {
     private List<RigaOrdine> rigaOrdine;
 
 
-    @OneToMany(mappedBy = "prodotto")
-    private List<Chat> chats;
+//    @OneToMany(mappedBy = "prodotto")
+//    private List<Chat> chats;
 
     @ManyToOne
     @JoinColumn(nullable = false , updatable = false , name = "id_utente")
