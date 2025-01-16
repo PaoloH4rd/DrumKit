@@ -7,10 +7,8 @@ import lombok.Data;
 
 @Data
 public class InviaMessaggioRequestDTO {
-//    @NotBlank
-    @Email(message = "Inserisci un indirizzo email valido")
+    private String emailMittente;
     private String emailDestinatario;
-    @NotBlank
-    @Size(min = 1, max = 500, message = "Il messaggio deve essere lungo almeno 1 carattere e massimo 500")
     private String testo;
+    private String data;
 }

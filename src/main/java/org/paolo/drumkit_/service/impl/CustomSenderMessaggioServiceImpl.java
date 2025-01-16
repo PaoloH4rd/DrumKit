@@ -24,6 +24,8 @@ public class CustomSenderMessaggioServiceImpl implements CustomSenderMessaggioSe
 
             template.convertAndSend("ExchangeDurable", topic, json);
             System.out.println("Messaggio inviato con successo");
+            //mostra  il json inviato
+            System.out.println(json);
         } catch (JsonProcessingException e) {
             // Gestisce errori nella serializzazione del JSON
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Errore nella conversione del messaggio in JSON", e);
