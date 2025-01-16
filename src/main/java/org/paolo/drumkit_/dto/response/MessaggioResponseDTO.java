@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class MessaggioResponseDTO {
-	private String mittente;
+	private String emailMittente;
 	private String testo;
 	private String data;
 }

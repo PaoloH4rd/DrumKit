@@ -11,12 +11,14 @@
 </head>
 <body>
 <div class="container mt-5">
-  <h1 class="text-center">Chat con <span th:text="${destinatario}"></span></h1>
+  <h1 class="text-center">Chat con <span th:text="${emailDestinatario}"></span></h1>
   <!-- Elenco dei messaggi -->
   <div class="list-group mt-4">
-    <div th:each="messaggio : ${messaggi}" class="list-group-item list-group-item-action">
+    <div th:each="messaggio : ${messaggi}"
+         class="list-group-item"
+         th:classappend="${messaggio.emailMittente == utenteLoggatoEmail} ? 'list-group-item-primary' : 'list-group-item-secondary'">
       <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1" th:text="${messaggio.testo}"></h5>
+        <h5 class="mb-1" th:text="${messaggio.emailMittente == utenteLoggatoEmail} ? 'Tu' : ${nomeDestinatario}"></h5>
         <small th:text="${messaggio.data}"></small>
       </div>
       <p class="mb-1" th:text="${messaggio.testo}"></p>
@@ -24,33 +26,31 @@
   </div>
 
 
+
   <form th:action="@{/areaCliente/chatDashboard/invia}" method="post" th:object="${inviaMessaggioRequestDTO}" class="shadow p-4 rounded bg-light">
     <!-- Campo nascosto per l'email del destinatario -->
-    <input type="hidden" name="emailDestinatario" th:field="*{emailDestinatario}" th:value="${destinatario}" />
-    <div class="invalid-feedback" th:if="${#fields.hasErrors('emailDestinatario')}"
-         th:errors="*{emailDestinatario}">il destinatario è sbagliatp.</div>
+    <input type="hidden" name="emailDestinatario" th:value="${emailDestinatario}" />
 
     <div class="form-group">
       <label for="testo">Testo del Messaggio</label>
-      <textarea id="testo" name="testo" rows="5" th:field="*{testo}"
-                class="form-control" required
+      <textarea id="testo" name="testo" rows="5" th:field="*{testo}" class="form-control" required
                 placeholder="Scrivi il tuo messaggio qui..."></textarea>
       <!-- Mostra errore se presente -->
-      <div class="invalid-feedback" th:if="${#fields.hasErrors('testo')}"
-           th:errors="*{testo}">Il messaggio non può essere vuoto.</div>
+      <div class="invalid-feedback" th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}">
+        Il messaggio non può essere vuoto.
+      </div>
     </div>
 
-    <div class="text-right">
-      <button type="submit" class="btn btn-primary">Invia</button>
-    </div>
+    <button type="submit" class="btn btn-primary">Invia Messaggio</button>
   </form>
+
   <div class="alert alert-success mt-4" th:if="${successMessage}">
     Messaggio inviato con successo!
   </div>
   <div class="alert alert-danger" th:if="${errorMessage}">
     <span th:text="${errorMessage}"></span>
   </div>
-
+  <p th:text="${inviaMessaggioRequestDTO.emailDestinatario}">DTO non valorizzato</p>
 </div>
 </body>
 </html>

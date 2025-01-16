@@ -17,4 +17,5 @@ public interface UtenteService extends GeneralService<Utente> {
     void setDisattivatoTrue(String email);
     List<Utente> getAllActiveAdmins();
     Utente getByEmailforChat(String email);
+    String getNomeByEmail(String email);
 }

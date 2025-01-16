@@ -13,8 +13,8 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     List<Chat> findAllByIdUtente(long id);
 
     @Query("select c from Chat c where c.utenteUno.email= :email or c.utenteDue.email= :email")
-    List<Chat> findAllByUsername(String email);
+    List<Chat> findAllByEmail(String email);
 
     @Query("select c from Chat c where (c.utenteUno.email= :emailUno and c.utenteDue.email= :emailDue) or (c.utenteUno.email= :emailDue and c.utenteDue.email= :emailUno)")
-    Optional<Chat> findAllByUsername(String emailUno, String emailDue);
+    Optional<Chat> findAllByEmail(String emailUno, String emailDue);
 }

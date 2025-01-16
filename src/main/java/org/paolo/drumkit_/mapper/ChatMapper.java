@@ -34,7 +34,7 @@ public class ChatMapper {
     public MessaggioResponseDTO toMessaggioResponseDTO(Utente u1, Utente u2, Messaggio m) {
         MessaggioResponseDTO messaggioResponseDTO=new MessaggioResponseDTO();
         messaggioResponseDTO.setData(m.getDataOra().format(DateTimeFormatter.ofPattern("EEEE dd MMM yyyy hh:mm:ss")));
-        messaggioResponseDTO.setMittente(m.isPrimoUtente()?u1.getUsername():u2.getUsername());
+        messaggioResponseDTO.setEmailMittente(m.isPrimoUtente()?u1.getUsername():u2.getUsername());
         messaggioResponseDTO.setTesto(m.getTesto());
         return messaggioResponseDTO;
     }

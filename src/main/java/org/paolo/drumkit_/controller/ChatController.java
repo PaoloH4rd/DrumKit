@@ -6,6 +6,7 @@ import org.paolo.drumkit_.dto.request.InviaMessaggioRequestDTO;
 import org.paolo.drumkit_.dto.response.MessaggioResponseDTO;
 import org.paolo.drumkit_.exception.DatoNonValidoException;
 import org.paolo.drumkit_.facade.ChatFacade;
+import org.paolo.drumkit_.facade.UtenteFacade;
 import org.paolo.drumkit_.model.Chat;
 import org.paolo.drumkit_.model.Utente;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,7 @@ import java.util.List;
 public class ChatController {
 
     private final ChatFacade chatFacade;
+    private final UtenteFacade utenteFacade;
 
 
     @GetMapping("")
@@ -39,27 +41,24 @@ public class ChatController {
     public String inviaMessaggio(@Valid @ModelAttribute InviaMessaggioRequestDTO inviaMessaggioRequestDTO,
                                   RedirectAttributes redirectAttributes, BindingResult bindingResult,
                                   @RequestHeader(value = "referer", required = false) final String referer){
-//        String newReferer =referer.replace("?errorMessage=true", "").replace("?successMessage=true", "");
-
         if (bindingResult.hasErrors()) {
-            return "dashboard/cliente/chat_dashboard";
-        }
+            // Aggiungi un messaggio di errore per i problemi di validazione
+            redirectAttributes.addFlashAttribute("errorMessage", "Errore di validazione. Controlla i dati inseriti.");
+            return "redirect:" + referer;        }
         try {
             Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             long idUser = uLoggato.getId();
             chatFacade.inviaMessaggio(idUser, inviaMessaggioRequestDTO);
-//            redirectAttributes.addFlashAttribute("successMessage", "Messaggio inviato con successo");
-            //redirect  alla stessa pagina
-//            return "redirect:" + newReferer + "?successMessage=true";
+
+            // Aggiungi un messaggio di successo
+            redirectAttributes.addFlashAttribute("successMessage", "Messaggio inviato con successo.");
             return "redirect:" + referer;
 
         } catch (DatoNonValidoException e) {
-//            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            //redirect  alla stessa pagina
-//            return "redirect:" + newReferer + "?errorMessage=true";
+            // Aggiungi un messaggio di errore specifico
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:" + referer;
         }
-
     }
 
     //apri chat con utente email passato come parametro
@@ -69,14 +68,17 @@ public class ChatController {
 //        if (email.contains("?successMessage=true") || email.contains("?errorMessage=true")) {
 //            email = email.replace("?successMessage=true", "").replace("?errorMessage=true", "");
 //        }
+        String nomeDestinatario = utenteFacade.getNomeByEmail(email);
 
         // Ottieni i messaggi tra l'utente loggato e il destinatario
         List<MessaggioResponseDTO> messaggi = chatFacade.getChat(uLoggato.getId(), email);
         model.addAttribute("messaggi", messaggi);
-        model.addAttribute("destinatario", email);
-        model.addAttribute("utenteLoggato", uLoggato.getUsername());
+        model.addAttribute("emailDestinatario", email);
+        model.addAttribute("nomeDestinatario", nomeDestinatario);
+        model.addAttribute("utenteLoggatoEmail", uLoggato.getUsername());
         model.addAttribute("inviaMessaggioRequestDTO", new InviaMessaggioRequestDTO());
         return "dashboard/cliente/chats/mostra_chat";
     }
+
 
 }

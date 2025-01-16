@@ -27,6 +27,10 @@ public class ChatFacade {
     private final ChatMapper chatMapper;
     public void inviaMessaggio(long idUser, InviaMessaggioRequestDTO inviaMessaggioRequestDTO) {
         Utente u1=utenteService.getById(idUser);
+        System.out.println(inviaMessaggioRequestDTO.getEmailDestinatario());
+        System.out.println(inviaMessaggioRequestDTO.getEmailDestinatario());
+        System.out.println(inviaMessaggioRequestDTO.getEmailDestinatario());
+        System.out.println(inviaMessaggioRequestDTO.getEmailDestinatario());
         Utente u2=utenteService.getByEmailforChat(inviaMessaggioRequestDTO.getEmailDestinatario());
 
         //controllo che l'email corrissponda ad un utente esistente
@@ -45,6 +49,10 @@ public class ChatFacade {
         m.setChat(c);
         m.setTesto(inviaMessaggioRequestDTO.getTesto());
         m.setPrimoUtente(c.getUtenteUno().getUsername().equals(u1.getUsername()));
+        System.out.println(m.isPrimoUtente());
+        System.out.println(m.isPrimoUtente());
+        System.out.println(m.isPrimoUtente());
+        System.out.println(m.isPrimoUtente());
         messaggioService.aggiungiMessaggio(m);
         MessaggioResponseDTO mDTO=chatMapper.toMessaggioResponseDTO(u1, u2, m);
         customSenderMessaggioService.inviaNotifica(mDTO, "email");
@@ -58,5 +66,5 @@ public class ChatFacade {
         Utente u= utenteService.getById(id);
         return chatService.getAllByUsername(u.getUsername());
     }
-    
+
 }

@@ -20,12 +20,12 @@ public class ChatServiceImpl implements ChatService {
     private final ChatRepository repo;
     @Override
     public List<Chat> getAllByUsername(String username) {
-        return repo.findAllByUsername(username);
+        return repo.findAllByEmail(username);
     }
 
     @Override
     public Chat getByUsernameAndAltroNome(String username, String secondoUsername) {
-        Chat c=repo.findAllByUsername(username, secondoUsername).orElse(null);
+        Chat c=repo.findAllByEmail(username, secondoUsername).orElse(null);
         return c;
     }
 

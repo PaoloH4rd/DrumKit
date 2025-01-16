@@ -79,4 +79,8 @@ public class UtenteFacade {
         }
         utenteService.creaAdmin(nome,cognome,email,password,passwordRipetuta,dataNascita);
     }
+    //get nome by email
+    public String getNomeByEmail(String email) {
+        return utenteService.getNomeByEmail(email);
+    }
 }

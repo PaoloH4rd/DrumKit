@@ -152,7 +152,13 @@ public class UtenteServiceImpl implements UtenteService {
         utente.setRuolo(Ruolo.ADMIN);
         add(utente);
     }
+    @Override
     public List<Utente> getAllActiveAdmins() {
         return Urepo.findAllByRuoloAndIsDisattivatoIsFalse(Ruolo.ADMIN);
+    }
+
+    @Override
+    public String getNomeByEmail(String email) {
+        return Urepo.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)).getNome();
     }
 }

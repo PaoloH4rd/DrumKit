@@ -1,14 +1,28 @@
 package org.paolo.drumkit_.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class Util {
-    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    // Metodo per estrarre la view dal referer
+    private String extractViewFromReferer(String referer) {
+        if (referer == null || referer.isEmpty()) {
+            return null; // Se il referer non è disponibile, restituisci null
+        }
 
-    public static String hashPassword(String plainPassword) {
-        return passwordEncoder.encode(plainPassword);
-    }
+        // Supponendo che il referer contenga un URL completo del tipo "http://localhost:8080/viewName"
+        try {
+            // Estrai il path dal referer
+            URI uri = new URI(referer);
+            String path = uri.getPath();
 
-    public static boolean matchPassword(String plainPassword, String hashedPassword) {
-        return passwordEncoder.matches(plainPassword, hashedPassword);
+            // Rimuovi il prefisso iniziale "/" e restituisci il nome della view
+            return path.startsWith("/") ? path.substring(1) : path;
+
+        } catch (URISyntaxException e) {
+            return null; // Se il referer non è valido, restituisci null
+        }
     }
 }
