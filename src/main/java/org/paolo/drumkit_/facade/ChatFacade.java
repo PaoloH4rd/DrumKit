@@ -58,5 +58,11 @@ public class ChatFacade {
         Utente u= utenteService.getById(id);
         return chatService.getAllByUsername(u.getUsername());
     }
+    //get id from chat
+    public long getChatId(long id, String email) {
+        Utente u= utenteService.getById(id);
+        Chat c=chatService.getByUsernameAndAltroNome(u.getUsername(), email);
+        return c.getId();
+    }
 
 }

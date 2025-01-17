@@ -17,9 +17,6 @@ public class ListenerMessaggi implements MessageListener {
     @Override
     public void onMessage(Message message) {
         //mi prendo il json dalla notifica
-        System.out.println("E ARRIVATO UN JSONNNNNNNNN");
-        System.out.println("E ARRIVATO UN JSONNNNNNNNN");
-        System.out.println("E ARRIVATO UN JSONNNNNNNNN");
 
         byte[] risposta = message.getBody();
 

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat con <span th:text="${nomeDestinatario}"></span></title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js"></script>
+
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    const socket = new SockJS('/ws');
+    const stompClient = Stomp.over(socket);
+
+    // Recupera dinamicamente l'ID della chat
+    const chatId = /*[[${chatId}]]*/ 0;  // Usa 0 come valore di fallback
+    stompClient.connect({}, function (frame) {
+      console.log('Connected: ' + frame);
+
+      // Sottoscrizione al canale della chat specifica
+      stompClient.subscribe('/topic/chat/' + chatId, function (message) {
+        const msg = JSON.parse(message.body);
+        const chatDiv = document.getElementById('chat');
+        chatDiv.innerHTML += '<p><strong>' + msg.emailDestinatario + ':</strong> ' + msg.testo + '</p>';
+        chatDiv.scrollTop = chatDiv.scrollHeight; // Scrolla automaticamente in basso
+      });
+    });
+    /*]]>*/
+  </script>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+      <h1 class="text-center mb-4">Chat con <span th:text="${nomeDestinatario}"></span></h1>
+
+      <!-- Chat Box -->
+      <div id="chat" class="border rounded p-3 mb-4 bg-white" style="height: 400px; overflow-y: auto;">
+        <div th:each="messaggio : ${messaggi}">
+          <p><strong th:text="${messaggio.emailMittente}"></strong>: <span th:text="${messaggio.testo}"></span></p>
+        </div>
+      </div>
+
+      <!-- Form di invio messaggi -->
+      <form th:action="@{/areaCliente/chatDashboard/invia}" method="post" th:object="${inviaMessaggioRequestDTO}" class="shadow p-4 rounded bg-light">
+        <!-- Campo nascosto per l'email del destinatario -->
+        <input type="hidden" name="emailDestinatario" th:value="${emailDestinatario}" />
+
+        <div class="form-group">
+          <label for="testo">Testo del Messaggio</label>
+          <textarea id="testo" name="testo" rows="5" th:field="*{testo}" class="form-control" required
+                    placeholder="Scrivi il tuo messaggio qui..."></textarea>
+          <!-- Mostra errore se presente -->
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}">
+            Il messaggio non può essere vuoto.
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Invia Messaggio</button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS (opzionale) -->
+</body>
+</html>

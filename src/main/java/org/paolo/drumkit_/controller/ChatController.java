@@ -62,23 +62,38 @@ public class ChatController {
     }
 
     //apri chat con utente email passato come parametro
-    @GetMapping("/apriChat")
-    public String getChat(@RequestParam("email") String email, Model model) {
-        Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (email.contains("?successMessage=true") || email.contains("?errorMessage=true")) {
-//            email = email.replace("?successMessage=true", "").replace("?errorMessage=true", "");
-//        }
-        String nomeDestinatario = utenteFacade.getNomeByEmail(email);
+//    @GetMapping("/apriChat")
+//    public String getChat(@RequestParam("email") String email, Model model) {
+//        Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String nomeDestinatario = utenteFacade.getNomeByEmail(email);
+//        Long chatId = chatFacade.getChatId(uLoggato.getId(), email);
+//        // Ottieni i messaggi tra l'utente loggato e il destinatario
+//        List<MessaggioResponseDTO> messaggi = chatFacade.getChat(uLoggato.getId(), email);
+//        model.addAttribute("messaggi", messaggi);
+//        model.addAttribute("emailDestinatario", email);
+//        model.addAttribute("nomeDestinatario", nomeDestinatario);
+//        model.addAttribute("utenteLoggatoEmail", uLoggato.getUsername());
+//        model.addAttribute("inviaMessaggioRequestDTO", new InviaMessaggioRequestDTO());
+//        model.addAttribute("chatId", chatId); // Aggiungi l'ID della chat al modello
+//        return "dashboard/cliente/chats/mostra_chat";
+//    }
 
-        // Ottieni i messaggi tra l'utente loggato e il destinatario
+    @GetMapping("/apriChatRabbit")
+    public String getChatRabbit(@RequestParam("chatId") Long chatId, @RequestParam("email") String email, Model model) {
+        Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String nomeDestinatario = utenteFacade.getNomeByEmail(email);
         List<MessaggioResponseDTO> messaggi = chatFacade.getChat(uLoggato.getId(), email);
         model.addAttribute("messaggi", messaggi);
         model.addAttribute("emailDestinatario", email);
         model.addAttribute("nomeDestinatario", nomeDestinatario);
         model.addAttribute("utenteLoggatoEmail", uLoggato.getUsername());
         model.addAttribute("inviaMessaggioRequestDTO", new InviaMessaggioRequestDTO());
-        return "dashboard/cliente/chats/mostra_chat";
+        model.addAttribute("chatId", chatId);
+        return "dashboard/cliente/chats/mostra_chat_rabbit";
     }
+
+
 
 
 }

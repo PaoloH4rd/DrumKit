@@ -43,15 +43,22 @@
 </head>
 <body>
 
+<!--<div class="sidebar">-->
+<!--    <h3>Le Tue Chat</h3>-->
+<!--    &lt;!&ndash; Elenco delle chat &ndash;&gt;-->
+<!--    <a th:each="chat : ${chats}"-->
+<!--       th:href="@{/areaCliente/chatDashboard/apriChat(email=${#authentication.name == chat.utenteDue.email ? chat.utenteUno.email : chat.utenteDue.email})}"-->
+<!--       th:text="${#authentication.name == chat.utenteDue.email ? chat.utenteUno.nome : chat.utenteDue.nome}"-->
+<!--       class="btn btn-link"></a>-->
+<!--</div>-->
 <div class="sidebar">
     <h3>Le Tue Chat</h3>
     <!-- Elenco delle chat -->
     <a th:each="chat : ${chats}"
-       th:href="@{/areaCliente/chatDashboard/apriChat(email=${#authentication.name == chat.utenteDue.email ? chat.utenteUno.email : chat.utenteDue.email})}"
+       th:href="@{/areaCliente/chatDashboard/apriChatRabbit(chatId=${chat.id}, email=${#authentication.name == chat.utenteDue.email ? chat.utenteUno.email : chat.utenteDue.email})}"
        th:text="${#authentication.name == chat.utenteDue.email ? chat.utenteUno.nome : chat.utenteDue.nome}"
        class="btn btn-link"></a>
 </div>
-
 
 <!-- Colonna destra: form per inviare messaggi -->
 <div class="content">
