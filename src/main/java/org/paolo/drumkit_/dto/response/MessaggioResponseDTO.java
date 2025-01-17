@@ -33,7 +33,13 @@ public class MessaggioResponseDTO {
 			return this;
 		}
 		public Builder setData(String data) {
-			this.data = data;
+			if (data != null && data.contains(":")) {
+				// Rimuove i secondi dal formato `yyyy-MM-dd HH:mm:ss` -> `yyyy-MM-dd HH:mm`
+				this.data = data.substring(0, data.lastIndexOf(":"));
+			} else {
+				// Mantieni il valore originale se non contiene ":"
+				this.data = data;
+			}
 			return this;
 		}
 		public MessaggioResponseDTO build() {

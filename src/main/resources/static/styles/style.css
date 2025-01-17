@@ -32,3 +32,66 @@ footer {
     margin-top: 20px;
     font-size: 0.9em;
 }
+
+
+
+
+
+/*ROBA CHAT */
+/* Stile generale per i messaggi */
+/* Stile generale per i messaggi */
+.list-group-item {
+    border-radius: 10px;
+    margin-bottom: 15px;
+    max-width: 80%; /* Aumentato per dare più spazio ai messaggi */
+    padding: 20px; /* Più padding per un layout spazioso */
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+/* Messaggi inviati */
+.messaggio-inviato {
+    align-self: flex-end;
+    background-color: #d1ecf1;
+    margin-left: auto;
+}
+
+/* Messaggi ricevuti */
+.messaggio-ricevuto {
+    align-self: flex-start;
+    background-color: #f8d7da;
+    margin-right: auto;
+}
+
+/* Nome */
+.nome {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 10px; /* Separazione tra nome e testo del messaggio */
+}
+
+/* Testo del messaggio */
+.testo-messaggio {
+    line-height: 1.5;
+    margin-bottom: 10px; /* Separazione tra messaggio e data */
+}
+
+/* Data */
+.data {
+    font-size: 0.75rem; /* Testo più piccolo */
+    color: #6c757d;
+    text-align: right;
+    display: block; /* Posiziona la data sotto il testo */
+}
+
+.data-dx {
+    text-align: right;
+}
+
+.data-sx {
+    text-align: left;
+}
+#chat {
+    max-height: 400px; /* O qualsiasi altezza desiderata */
+    overflow-y: auto;
+}

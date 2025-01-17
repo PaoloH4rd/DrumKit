@@ -1,0 +1,61 @@
+<!-- chatFragment.html -->
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <!-- Titolo della chat -->
+        <h1 class="text-center mb-4">
+            Chat con <span th:text="${nomeDestinatario}" class="text-primary"></span>
+        </h1>
+
+        <div class="list-group mt-4" id="chat">
+            <div th:each="messaggio : ${messaggi}"
+                 class="list-group-item"
+                 th:classappend="${messaggio.emailMittente == utenteLoggatoEmail} ? 'messaggio-inviato' : 'messaggio-ricevuto'">
+                <div class="d-flex flex-column">
+                    <!-- Nome del mittente/destinatario -->
+                    <h5 class="nome"
+                        th:class="${messaggio.emailMittente == utenteLoggatoEmail} ? 'testo-dx' : 'testo-sx'"
+                        th:text="${messaggio.emailMittente == utenteLoggatoEmail} ? 'Tu' : ${nomeDestinatario}"></h5>
+                    <!-- Testo del messaggio -->
+                    <p class="mb-2 testo-messaggio"
+                       th:class="${messaggio.emailMittente == utenteLoggatoEmail} ? 'testo-dx' : 'testo-sx'"
+                       th:text="${messaggio.testo}"></p>
+                    <!-- Data (ora in fondo al messaggio) -->
+                    <small class="data"
+                           th:class="${messaggio.emailMittente == utenteLoggatoEmail} ? 'data-dx' : 'data-sx'"
+                           th:text="${messaggio.data}"></small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form di invio messaggi -->
+        <form th:action="@{/areaCliente/chatDashboard/invia}"
+              method="post"
+              th:object="${inviaMessaggioRequestDTO}"
+              class="shadow p-4 rounded bg-white">
+            <!-- Campo nascosto per l'email del destinatario -->
+            <input type="hidden" name="emailDestinatario" th:value="${emailDestinatario}" />
+
+            <!-- Campo testo messaggio e pulsante accanto -->
+            <div class="input-group">
+                <input id="testo"
+                       type="text"
+                       name="testo"
+                       th:field="*{testo}"
+                       class="form-control"
+                       placeholder="Scrivi un messaggio"
+                       required />
+                <button type="submit" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                        <path d="M15.964 1.686a.5.5 0 0 1-.354.646l-14 4a.5.5 0 0 1-.276-.968l14-4a.5.5 0 0 1 .63.322z"/>
+                        <path d="M15.964 1.686 6.989 14.337a.5.5 0 0 1-.876-.47l2.068-6.835L.5 7.52a.5.5 0 0 1-.276-.97l14-4a.5.5 0 0 1 .74.635z"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Messaggio di errore -->
+            <div class="invalid-feedback mt-2" th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}">
+                Il messaggio non può essere vuoto.
+            </div>
+        </form>
+
+    </div>
+</div>

@@ -27,8 +27,6 @@ public class Messaggio {
 
     private boolean primoUtente;
 
-    private boolean isDisattivato;
-
     @ManyToOne
     @JoinColumn(name = "id_chat")
     private Chat chat;

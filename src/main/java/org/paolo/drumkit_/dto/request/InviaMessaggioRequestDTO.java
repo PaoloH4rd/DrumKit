@@ -7,12 +7,11 @@ import lombok.Data;
 
 @Data
 public class InviaMessaggioRequestDTO {
-    @Email
     private String emailMittente;
     @Email
     private String emailDestinatario;
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Il campo testo non può essere vuoto")
     private String testo;
     private String data;
 }
