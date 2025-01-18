@@ -1,14 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benvenuto</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/styles/style.css" rel="stylesheet">
 </head>
-<body>
-<h1>This is home page</h1>
-<h2>To proceed with books please authorise</h2>
-<a href="/login">Login</a>
-<p>Don't have account? Please register</p>
-<a href="/register">Registration</a>
+<style>
+    body {
+        background-color: #f4e6cd !important;
+    }
+</style>
+<body class=" text-center d-flex flex-column justify-content-center align-items-center vh-100">
+<div class="container">
+    <h1 class="display-4 mb-4">Benvenuto sulla piattaforma di compravendita di pezzi di batteria</h1>
+    <h2 class="h5 mb-5 text-muted">Accedi o registrati per iniziare a vendere e acquistare pezzi di batteria!</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Hai già un account?</h3>
+                    <p class="card-text text-muted">Effettua il login per accedere al tuo profilo e alle tue offerte.</p>
+                    <a href="/login" class="btn btn-primary btn-block">Login</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Sei nuovo qui?</h3>
+                    <p class="card-text text-muted">Registrati per iniziare a vendere o acquistare pezzi di batteria.</p>
+                    <a href="/register" class="btn btn-success btn-block">Registrati</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

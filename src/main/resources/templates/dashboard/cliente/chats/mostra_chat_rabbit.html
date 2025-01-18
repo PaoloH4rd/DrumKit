@@ -10,29 +10,46 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
   <script src="https://cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js"></script>
 
-  <script th:inline="javascript">
-    /*<![CDATA[*/
-    const socket = new SockJS('/ws');
-    const stompClient = Stomp.over(socket);
-
-    // Recupera dinamicamente l'ID della chat
-    const chatId = /*[[${chatId}]]*/ 0;  // Usa 0 come valore di fallback
-    stompClient.connect({}, function (frame) {
-      console.log('Connected: ' + frame);
-
-      stompClient.subscribe('/topic/chat/' + chatId, function (message) {
-        const msg = JSON.parse(message.body);
-        const chatDiv = document.getElementById('chat');
-        chatDiv.innerHTML += '<p><strong>' + msg.emailDestinatario + ':</strong> ' + msg.testo + '</p>';
-        chatDiv.scrollHeight; // Scrolla automaticamente in basso
-        chatDiv.scrollTop = chatDiv.scrollHeight;
-      });
-    });
-    /*]]>*/
-  </script>
+  <style>
+    /* Aggiungi questo stile per sovrapporre la barra di invio */
+    .chat-container {
+      position: relative;
+      padding-bottom: 60px; /* Lascia spazio per la barra di invio */
+    }
+    .message-list {
+      overflow-y: auto;
+      padding-bottom: 60px; /* Spazio per la barra di invio */
+    }
+    .input-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px; /* Margine per il contenitore */
+      background-color: white; /* Sfondo della barra di invio */
+    }
+  </style>
 </head>
 <body class="bg-light">
-<div class="container py-5">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" th:href="@{/dashboard}">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/areaCliente}">Area Cliente</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5 chat-container">
   <div class="row justify-content-center">
     <div class="col-lg-8 col-md-10">
       <!-- Titolo della chat -->
@@ -40,7 +57,7 @@
         Chat con <span th:text="${nomeDestinatario}" class="text-primary"></span>
       </h1>
 
-      <div class="list-group mt-4">
+      <div class="list-group message-list"> <!-- Cambiato in un contenitore con classe "message-list" -->
         <div th:each="messaggio : ${messaggi}"
              class="list-group-item"
              th:classappend="${messaggio.emailMittente == utenteLoggatoEmail} ? 'messaggio-inviato' : 'messaggio-ricevuto'">
@@ -61,42 +78,53 @@
         </div>
       </div>
 
-
-
       <!-- Form di invio messaggi -->
-      <form th:action="@{/areaCliente/chatDashboard/invia}"
-            method="post"
-            th:object="${inviaMessaggioRequestDTO}"
-            class="shadow p-4 rounded bg-white">
-        <!-- Campo nascosto per l'email del destinatario -->
-        <input type="hidden" name="emailDestinatario" th:value="${emailDestinatario}" />
+      <div class="input-container"> <!-- Contenitore per la barra di invio -->
+        <form th:action="@{/areaCliente/chatDashboard/invia}"
+              method="post"
+              th:object="${inviaMessaggioRequestDTO}"
+              class="shadow p-4 rounded bg-white">
+          <!-- Campo nascosto per l'email del destinatario -->
+          <input type="hidden" name="emailDestinatario" th:value="${emailDestinatario}" />
 
-        <!-- Campo testo messaggio e pulsante accanto -->
-        <div class="input-group">
-          <input id="testo"
-                 type="text"
-                 name="testo"
-                 th:field="*{testo}"
-                 class="form-control"
-                 placeholder="Scrivi un messaggio"
-                 required />
-          <button type="submit" class="btn btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
-              <path d="M15.964 1.686a.5.5 0 0 1-.354.646l-14 4a.5.5 0 0 1-.276-.968l14-4a.5.5 0 0 1 .63.322z"/>
-              <path d="M15.964 1.686 6.989 14.337a.5.5 0 0 1-.876-.47l2.068-6.835L.5 7.52a.5.5 0 0 1-.276-.97l14-4a.5.5 0 0 1 .74.635z"/>
-            </svg>
-          </button>
-        </div>
+          <!-- Campo testo messaggio e pulsante accanto -->
+          <div class="input-group">
+            <input id="testo"
+                   type="text"
+                   name="testo"
+                   th:field="*{testo}"
+                   class="form-control"
+                   placeholder="Scrivi un messaggio"
+                   required />
+            <button type="submit" class="btn btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                <path d="M15.964 1.686a.5.5 0 0 1-.354.646l-14 4a.5.5 0 0 1-.276-.968l14-4a.5.5 0 0 1 .63.322z"/>
+                <path d="M15.964 1.686 6.989 14.337a.5.5 0 0 1-.876-.47l2.068-6.835L.5 7.52a.5.5 0 0 1-.276-.97l14-4a.5.5 0 0 1 .74.635z"/>
+              </svg>
+            </button>
+          </div>
 
-        <!-- Messaggio di errore -->
-        <div class="invalid-feedback mt-2" th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}">
-          Il messaggio non può essere vuoto.
-        </div>
-      </form>
+          <!-- Messaggio di errore -->
+          <div class="invalid-feedback mt-2" th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}">
+            Il messaggio non può essere vuoto.
+          </div>
+        </form>
+      </div>
 
     </div>
   </div>
 </div>
-</body>
 
+<script>
+  // Funzione per scrollare fino all'ultimo messaggio
+  function scrollToBottom() {
+    const messageList = document.querySelector('.message-list');
+    messageList.scrollTop = messageList.scrollHeight;
+  }
+
+  // Chiamata alla funzione per lo scrolling
+  scrollToBottom();
+</script>
+
+</body>
 </html>

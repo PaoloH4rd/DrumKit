@@ -19,9 +19,10 @@ public class OrdineServiceImpl implements OrdineService {
     private final OrdineRepository repo;
 
     @Override
-    public List<Ordine> getByIdUtente(long id) {
-        return repo.findAllByUtente_IdAndIsDisattivatoIsFalse(id);
+    public Ordine getByIdUtente(long id) {
+        return repo.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
 
     @Override
     public List<Ordine> getOrdineGiornalieri(long id_admin) {

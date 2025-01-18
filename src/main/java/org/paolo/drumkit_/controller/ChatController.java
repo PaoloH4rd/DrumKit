@@ -60,6 +60,26 @@ public class ChatController {
             return "redirect:" + referer;
         }
     }
+    @PostMapping("/inviaRabbit")
+    public void inviaMessaggioRabbit(@Valid @ModelAttribute InviaMessaggioRequestDTO inviaMessaggioRequestDTO,
+                                     RedirectAttributes redirectAttributes, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            // Aggiungi un messaggio di errore per i problemi di validazione
+            redirectAttributes.addFlashAttribute("errorMessage", "Errore di validazione. Controlla i dati inseriti.");
+            return;        }
+        try {
+            Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            long idUser = uLoggato.getId();
+            chatFacade.inviaMessaggio(idUser, inviaMessaggioRequestDTO);
+
+            // Aggiungi un messaggio di successo
+            redirectAttributes.addFlashAttribute("successMessage", "Messaggio inviato con successo.");
+
+        } catch (DatoNonValidoException e) {
+            // Aggiungi un messaggio di errore specifico
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+    }
 
     //apri chat con utente email passato come parametro
 //    @GetMapping("/apriChat")

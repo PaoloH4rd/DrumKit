@@ -63,9 +63,9 @@ public class RigaOrdineServiceImpl implements RigaOrdineService {
         rigaOrdine.setPrezzoTot(prodotto.getPrezzo() * quantita);
         repo.save(rigaOrdine);
     }
-    public List<RigaOrdine> getAllRigheOrdine(Long idUtenteLoggato){
-//        return repo.findAllByUtenteId(idUtenteLoggato);
-        return List.of();
+    public List<RigaOrdine> getAllRigheOrdine(Long idOrdine) {
+//        return repo.findAllByOrdine(idOrdine);
+        return null;
     }
 
 }
