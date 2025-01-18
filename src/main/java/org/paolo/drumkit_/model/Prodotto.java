@@ -18,6 +18,10 @@ public class Prodotto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+
+    @Column
+    private String immagine;
+
     @Column(nullable = false)
     private String nome;
 
@@ -44,9 +48,6 @@ public class Prodotto {
     @OneToMany(mappedBy = "prodotto")
     private List<RigaOrdine> rigaOrdine;
 
-
-//    @OneToMany(mappedBy = "prodotto")
-//    private List<Chat> chats;
 
     @ManyToOne
     @JoinColumn(nullable = false , updatable = false , name = "id_utente")

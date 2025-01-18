@@ -1,38 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profilo Venditore</title>
-  <link rel="stylesheet" href="/styles/style.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/styles/style.css">
+  <style>
+    .navbar {
+      background-color: #343a40; /* Dark navbar */
+    }
+    .navbar-brand, .navbar-nav .nav-link {
+      color: #ffffff;
+    }
+    .navbar-brand:hover, .navbar-nav .nav-link:hover {
+      color: #ffc107;
+    }
+    .sidebar {
+      height: 100vh; /* Full height */
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #394c5f; /* Blue sidebar */
+      padding: 20px;
+      width: 250px;
+      color: #ffffff; /* White text */
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .sidebar h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #ffffff; /* White title */
+      text-align: center;
+    }
+    .sidebar a {
+      color: #ffffff; /* White text for links */
+      text-decoration: none;
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .sidebar a:hover {
+      background-color: #0056b3; /* Darker blue on hover */
+    }
+    .content {
+      margin-left: 260px; /* Account for sidebar width + spacing */
+      padding: 20px;
+    }
+
+    .seller-info-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h1>Profilo del Venditore</h1>
-</header>
-<main>
-  <!-- Sezione informazioni venditore -->
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand" th:href="@{/dashboard}">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/dashboard}">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/logout}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="sidebar">
+  <h3>Menu Cliente</h3>
+  <a th:href="@{/dashboard}">
+    <i class="fas fa-home"></i> Dashboard
+  </a>
+    <a th:href="@{/areaCliente/aggiugiProdotto}">
+        <i class="fas fa-shopping-cart"></i> Vendi Prodotto
+    </a>
+  <a th:href="@{/areaCliente/chatDashboard}">
+    <i class="fas fa-comments"></i> Chat
+  </a>
+</div>
+
+<div class="content">
+  <h1 class="mb-4">Profilo del Venditore</h1>
   <section id="seller-info">
-    <!-- Immagine del venditore -->
-    <img src="styles/images/placeholder.png" alt="Foto del venditore" id="seller-photo">
-    <div>
-      <h2 th:text="${venditore.nome}">Nome del Venditore</h2>
-      <p>
-      </p>
-      <a th:href="@{/contatta/{idVenditore}(idVenditore=${venditore.id})}" class="btn">
-        Contatta il Venditore
-      </a>
+    <div class="seller-info-container">
+      <div>
+        <h2 th:text="${venditore.nome}">Nome del Venditore</h2>
+      </div>
     </div>
   </section>
 
-  <!-- Sezione prodotti del venditore -->
-  <section id="seller-products">
-    <h3>Prodotti del Venditore</h3>
-    <div id="product-list">
-      </div>
-  </section>
-</main>
-<footer>
-</footer>
+<!--  <section id="seller-products" class="mt-5">-->
+<!--    <h2>Prodotti del Venditore</h2>-->
+<!--    <div class="row">-->
+<!--      <div class="col-md-4" th:each="prodotto : ${prodottiVenditore}">-->
+<!--        <div class="card">-->
+<!--          <img th:src="${prodotto.foto}" class="card-img-top" alt="Foto Prodotto">-->
+<!--          <div class="card-body">-->
+<!--            <h5 class="card-title" th:text="${prodotto.nome}">Nome Prodotto</h5>-->
+<!--            <p class="card-text" th:text="${prodotto.descrizione}">Descrizione breve del prodotto.</p>-->
+<!--            <p>Prezzo: <span th:text="${prodotto.prezzo}">0</span> €</p>-->
+<!--            <a th:href="@{/prodotto/{id}(id=${prodotto.id})}" class="btn btn-custom">Dettagli</a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </section>-->
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

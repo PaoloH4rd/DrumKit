@@ -9,17 +9,19 @@ public class ProdottoInVenditaResponseDTO {
     private String descrizione;
     private Double prezzo;
     private int quantita;
+    private String immagine;
     private UtenteVenditoreResponseDTO venditore;
 
     // Costruttore privato
     private ProdottoInVenditaResponseDTO( Long id,String nome, String descrizione, Double prezzo,
-                                          int quantita, UtenteVenditoreResponseDTO venditore) {
+                                          int quantita,String immagine, UtenteVenditoreResponseDTO venditore) {
         this.id = id;
         this.nome = nome;
         this.descrizione = descrizione;
         this.prezzo = prezzo;
         this.quantita = quantita;
         this.venditore = venditore;
+        this.immagine = immagine;
     }
 
     // Builder interno
@@ -29,6 +31,7 @@ public class ProdottoInVenditaResponseDTO {
         private String descrizione;
         private Double prezzo;
         private int quantita;
+        private String immagine;
         private UtenteVenditoreResponseDTO venditore;
 
         public Builder setId(Long id) {
@@ -55,6 +58,11 @@ public class ProdottoInVenditaResponseDTO {
             this.quantita = quantita;
             return this;
         }
+        //immagine
+        public Builder setImmagine(String immagine) {
+            this.immagine = immagine;
+            return this;
+        }
         public Builder setVenditore(UtenteVenditoreResponseDTO venditore) {
             this.venditore = venditore;
             return this;
@@ -67,7 +75,7 @@ public class ProdottoInVenditaResponseDTO {
             if (prezzo == null || prezzo < 0) {
                 throw new DatoNonValidoException("Il prezzo non è valido o è mancante");
             }
-            return new ProdottoInVenditaResponseDTO(id, nome, descrizione, prezzo, quantita, venditore);
+            return new ProdottoInVenditaResponseDTO(id, nome, descrizione, prezzo, quantita, immagine,venditore);
         }
     }
 

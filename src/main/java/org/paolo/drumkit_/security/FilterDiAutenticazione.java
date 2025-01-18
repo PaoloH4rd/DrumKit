@@ -40,6 +40,8 @@ public class FilterDiAutenticazione extends OncePerRequestFilter {
 				|| request.getRequestURI().contains("welcome")
 				|| request.getRequestURI().contains("favicon")
 				|| request.getRequestURI().contains(".css")
+				|| request.getRequestURI().contains(".js")
+				|| request.getRequestURI().contains("/immagine")
 				) {
 				//vai avanti con la richiesta
 			filterChain.doFilter(request,response);

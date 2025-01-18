@@ -161,4 +161,15 @@ public class UtenteServiceImpl implements UtenteService {
     public String getNomeByEmail(String email) {
         return Urepo.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)).getNome();
     }
+
+    @Override
+    public List<Utente> getUtentiBloccati() {
+        return Urepo.findAllByIsDisattivatoIsTrue();
+    }
+    @Override
+    public void setDisattivatoFalse(String email) {
+        Utente utente = getByEmail(email);
+        utente.setDisattivato(false);
+        Urepo.save(utente);
+    }
 }

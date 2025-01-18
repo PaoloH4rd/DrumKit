@@ -69,8 +69,13 @@ public class UtenteFacade {
     }
 
 
-    public void disattivaUtente(Long id) {
-        utenteService.setIsDisattivatoTrue(id);
+    public void disattivaUtente(String email    ) {
+        utenteService.setDisattivatoTrue(email);
+    }
+    //disattiva un admin
+    public void disattivaAdmin(Long adminId) {
+        Utente u = utenteService.getById(adminId);
+        utenteService.setDisattivatoTrue(u.getEmail());
     }
     //registrare un admin
     public void registraAdmin(String nome, String cognome, String email, String password, String passwordRipetuta,String dataNascita) {
@@ -82,5 +87,15 @@ public class UtenteFacade {
     //get nome by email
     public String getNomeByEmail(String email) {
         return utenteService.getNomeByEmail(email);
+    }
+    //get utenti bloccati
+    public List<UtenteResponseDTO> getUtentiBloccati() {
+        List<Utente> utenti = utenteService.getUtentiBloccati();
+        return utenti.stream().map(mapper::toUtenteDTO).collect(Collectors.toList());
+    }
+
+    //sbloccaun utente
+    public void attivaUtente(String email) {
+        utenteService.setDisattivatoFalse(email);
     }
 }

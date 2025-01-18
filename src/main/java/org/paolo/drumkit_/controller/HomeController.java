@@ -3,7 +3,6 @@ package org.paolo.drumkit_.controller;
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.dto.request.RegistrazioneUtenteDTO;
 import org.paolo.drumkit_.facade.UtenteFacade;
-import org.paolo.drumkit_.model.Utente;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 @Controller
 public class HomeController {
-    private final UtenteFacade utenteFacade;
-
-    @GetMapping("/")  // Use @GetMapping instead of @RequestMapping
+    @GetMapping("/")
     public String getHomePage() {
         //redirect to /welcome
         return "redirect:/welcome";
@@ -32,7 +29,11 @@ public class HomeController {
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
-        model.addAttribute("registrazioneUtenteDTO", new RegistrazioneUtenteDTO());
+        // Controlla se il modello contiene già il DTO
+        if (!model.containsAttribute("registrazioneUtenteDTO")) {
+            model.addAttribute("registrazioneUtenteDTO", new RegistrazioneUtenteDTO());
+        }
         return "register";
     }
+
 }

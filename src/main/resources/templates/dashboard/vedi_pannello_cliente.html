@@ -100,14 +100,14 @@
     <div class="row">
         <div class="col-md-4" th:each="prodotto : ${prodotti}">
             <form th:action="@{/areaCliente/aggiungiProdottoAlCarrello}" method="post" class="card">
-                <img th:src="@{/styles/images/placeholder.png}" class="card-img-top" alt="Prodotto">
+                <img th:src="@{/immagine/{filename}(filename=${prodotto.immagine})}" class="card-img-top" alt="Prodotto">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${prodotto.nome}">Nome Prodotto</h5>
                     <p class="card-text" th:text="${prodotto.descrizione}">Descrizione breve del prodotto.</p>
                     <p>
                         Venduto da:
-                        <a th:href="@{/areaCliente/profiloVenditore/{id}(id=${prodotto.venditore.id})}"
-                           th:text="${prodotto.venditore.getNome()}">Nome Venditore</a>
+                        <a th:href="@{/areaCliente/profiloVenditore(id=${prodotto.id})}"
+                           th:text="${prodotto.venditore.nome}">Nome Venditore</a>
                     </p>
                     <div class="form-group">
                         <label th:for="'productSelect_' + ${prodotto.id}">Seleziona quantità</label>

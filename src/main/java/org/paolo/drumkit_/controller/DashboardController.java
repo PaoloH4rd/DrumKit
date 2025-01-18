@@ -32,12 +32,15 @@ public class DashboardController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Utente utente = (Utente) authentication.getPrincipal();
             UtenteResponseDTO utenteResponseDTO = utenteFacade.getProfile(utente);
+
             model.addAttribute("utenteResponseDTO", utenteResponseDTO);
             return "dashboard/vedi_profilo";
         }
         @GetMapping("/profilo/cambiaPassword")
         public String mostraForm (Model model){
-            model.addAttribute("cambiaPasswordRequest", new CambiaPasswordRequestDTO());
+        if (!model.containsAttribute("cambiaPasswordRequest"))
+                model.addAttribute("cambiaPasswordRequest", new CambiaPasswordRequestDTO());
             return "dashboard/profilo/cambia_password";
-        }
+
+         }
 }

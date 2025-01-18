@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.security.PublicKey;
 import java.util.List;
 
 @Service
@@ -55,7 +54,7 @@ public class ProdottoServiceImpl implements ProdottoService {
     }
 
     @Override
-    public void creaProdotto(String nome, String descrizione, double prezzo, int quantita, Utente venditore) {
+    public void creaProdotto(String nome, String descrizione, double prezzo, int quantita, Utente venditore,String immagine) {
         Prodotto p = new Prodotto();
         p.setNome(nome);
         p.setDescrizione(descrizione);
@@ -63,6 +62,7 @@ public class ProdottoServiceImpl implements ProdottoService {
         p.setQuantita(quantita);
         p.setProprietario(venditore);
         p.setStato(StatoProdotto.DA_APPROVARE);
+        p.setImmagine(immagine);
         repo.save(p);
     }
     public Utente getProprietario(Long idProdotto) {
@@ -94,6 +94,10 @@ public class ProdottoServiceImpl implements ProdottoService {
         Prodotto p = getById(idProdotto);
         p.setStato(StatoProdotto.APPROVATO);
         repo.save(p);
+    }
+    @Override
+    public List<Prodotto> getAllProdottiApprovareById(Long idVenditore) {
+        return repo.findAllByProprietarioIdAndStato(idVenditore,StatoProdotto.DA_APPROVARE);
     }
 
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="it"><head>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aggiungi Prodotto</title>
@@ -59,7 +60,7 @@
             </div>
         </div>
         <div class="card-body">
-            <form th:action="@{/areaCliente/aggiungiProdottoVendita}" method="post" th:object="${prodottoRequestDTO}">
+            <form th:action="@{/areaCliente/aggiungiProdottoVendita}" method="post" th:object="${prodottoRequestDTO}" enctype="multipart/form-data"> <!-- Aggiunto enctype -->
                 <div class="form-group">
                     <label for="nome">Nome Prodotto:</label>
                     <input type="text" class="form-control" id="nome" th:field="*{nome}" required>
@@ -82,6 +83,13 @@
                     <label for="quantita">Quantità:</label>
                     <input type="number" class="form-control" id="quantita" th:field="*{quantita}" required>
                     <div class="text-danger" th:if="${#fields.hasErrors('quantita')}" th:errors="*{quantita}"></div>
+                </div>
+
+                <!-- Nuovo campo per l'immagine -->
+                <div class="form-group">
+                    <label for="immagine">Seleziona Immagine:</label>
+                    <input type="file" class="form-control" id="immagine" th:field="*{immagine}" accept="image/*" >
+                    <div class="text-danger" th:if="${#fields.hasErrors('immagine')}" th:errors="*{immagine}"></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">Aggiungi Prodotto</button>

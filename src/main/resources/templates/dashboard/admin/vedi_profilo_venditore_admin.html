@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profilo Venditore</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/styles/style.css">
+  <style>
+    .navbar {
+      background-color: #343a40; /* Dark navbar */
+    }
+    .navbar-brand, .navbar-nav .nav-link {
+      color: #ffffff;
+    }
+    .navbar-brand:hover, .navbar-nav .nav-link:hover {
+      color: #ffc107;
+    }
+    .content {
+      padding: 20px;
+    }
+    .btn-custom {
+      background-color: #28a745; /* Green button */
+      color: white;
+    }
+    .btn-custom:hover {
+      background-color: #218838;
+    }
+    .btn-danger {
+      background-color: #dc3545; /* Red button for deactivation */
+      color: white;
+    }
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <a class="navbar-brand" th:href="@{/dashboard}">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/dashboard}">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/logout}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="content">
+  <h1 class="mb-4">Profilo del Venditore</h1>
+  <section id="seller-info">
+    <div>
+      <h2 th:text="${venditore.nome}">Nome del Venditore</h2>
+      <a th:href="@{/contatta/{idVenditore}(idVenditore=${venditore.id})}" class="btn btn-custom">
+        Contatta il Venditore
+      </a>
+    </div>
+    <!-- Bottone per disattivare l'account del venditore -->
+    <div class="mt-3">
+      <form th:action="@{/pannelloAdmin/disattivaVenditore(id=${venditore.id})}" method="post">
+        <button type="submit" class="btn btn-danger">Disattiva Account</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="seller-products" class="mt-5">
+    <h2>Prodotti del Venditore</h2>
+    <div class="row">
+      <div class="col-md-4" th:each="prodotto : ${prodottiVenditore}">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${prodotto.nome}">Nome Prodotto</h5>
+            <p class="card-text" th:text="${prodotto.descrizione}">Descrizione breve del prodotto.</p>
+            <p>Prezzo: <span th:text="${prodotto.prezzo}">0</span> €</p>
+
+            <!-- Bottoni per approvare o rifiutare il prodotto -->
+            <div class="d-flex justify-content-between mt-3">
+              <form th:action="@{/pannelloAdmin/approvaProdotto}" method="post" style="display:inline;">
+                <input type="hidden" name="idProdotto" th:value="${prodotto.id}" />
+                <button type="submit" class="btn btn-custom">Approva</button>
+              </form>
+              <form th:action="@{/pannelloAdmin/rifiutaProdotto}" method="post" style="display:inline;">
+                <input type="hidden" name="idProdotto" th:value="${prodotto.id}" />
+                <button type="submit" class="btn btn-danger">Rifiuta</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

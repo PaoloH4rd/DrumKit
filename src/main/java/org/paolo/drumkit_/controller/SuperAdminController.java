@@ -23,7 +23,8 @@ public class SuperAdminController {
     //dashboard admin
     @GetMapping("")
     public String pannelloAdmin(Model model){
-        model.addAttribute("registrazioneUtenteDTO", new RegistrazioneUtenteDTO());
+        if (!model.containsAttribute("registrazioneUtenteDTO"))
+         model.addAttribute("registrazioneUtenteDTO", new RegistrazioneUtenteDTO());
 
         // Recupera la lista degli admin dal servizio
         List<AdminDisattivaSelectResponseDTO> admins = utenteFacade.getAllActiveAdmins();
@@ -37,7 +38,7 @@ public class SuperAdminController {
     @PostMapping("/disattivaAdmin")
     public String disattivaAdmin(@RequestParam("adminId") Long adminId,RedirectAttributes redirectAttributes) {
         try {
-            utenteFacade.disattivaUtente(adminId);
+            utenteFacade.disattivaAdmin(adminId);
             redirectAttributes.addFlashAttribute("successMessage", "Admin disattivato con successo");
             return "redirect:/pannelloSuperAdmin?succesMessage=true";
         }catch (HttpStatusCodeException e){
@@ -49,6 +50,8 @@ public class SuperAdminController {
       public String aggiungiAdmin(@ModelAttribute ("registrazioneUtenteDTO") @Valid RegistrazioneUtenteDTO registrazioneUtenteDTO,
                                   BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.registrazioneUtenteDTO", bindingResult);
+            redirectAttributes.addFlashAttribute("registrazioneUtenteDTO", registrazioneUtenteDTO);
             return "redirect:/pannelloSuperAdmin";
         }
         try {

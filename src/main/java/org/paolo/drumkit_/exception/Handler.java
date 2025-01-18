@@ -16,21 +16,22 @@ public class Handler {
         return modelAndView;
     }
 
-    @ExceptionHandler(ResponseStatusException.class)
-    public ModelAndView handleResponseStatusException(ResponseStatusException ex) {
-        ModelAndView modelAndView = new ModelAndView("Exceptions/dati_non_validi");
-        String errorMessage = switch (ex.getStatusCode().toString()) {
-            case "409 CONFLICT" -> "Account già esistente";
-            case "404 NOT_FOUND" -> "Account non esistente";
-            case "403 FORBIDDEN" -> "Accesso non consentito";
-            case "401 UNAUTHORIZED" -> "Accesso non autorizzato";
-            case "400 BAD_REQUEST" -> "Richiesta non valida";
-            default -> "Errore generico";
-        };
-
-        modelAndView.addObject("errore", errorMessage);
-        return modelAndView;
-    }
+//    @ExceptionHandler(ResponseStatusException.class)
+//    public ModelAndView handleResponseStatusException(ResponseStatusException ex) {
+////        ModelAndView modelAndView = new ModelAndView("Exceptions/dati_non_validi");
+////        String errorMessage = switch (ex.getStatusCode().toString()) {
+////            case "409 CONFLICT" -> "Account già esistente";
+//////            case "404 NOT_FOUND" -> "Account non esistente";
+////            case "403 FORBIDDEN" -> "Accesso non consentito";
+////            case "401 UNAUTHORIZED" -> "Accesso non autorizzato";
+////            case "400 BAD_REQUEST" -> "Richiesta non valida";
+//////            default -> "Errore generico";
+////        };
+////
+////        modelAndView.addObject("errore", errorMessage);
+////        return modelAndView;
+//
+//    }
     //TODO
 //    // Intercetta qualsiasi errore 403, non solo AccessDeniedException
 //    @ExceptionHandler(Exception.class)

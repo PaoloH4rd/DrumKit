@@ -2,7 +2,9 @@ package org.paolo.drumkit_.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
+@Data
 public class CambiaPasswordRequestDTO {
 
     @NotBlank(message = "La vecchia password non può essere vuota")

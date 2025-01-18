@@ -18,4 +18,8 @@ public interface UtenteService extends GeneralService<Utente> {
     List<Utente> getAllActiveAdmins();
     Utente getByEmailforChat(String email);
     String getNomeByEmail(String email);
+    //get tutti utenti bloccati
+    List<Utente> getUtentiBloccati();
+    //sblocca utente
+    void setDisattivatoFalse(String email);
 }

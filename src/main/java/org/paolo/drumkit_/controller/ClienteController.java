@@ -12,9 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequestMapping("/areaCliente")
@@ -31,16 +35,21 @@ public class ClienteController {
         return "dashboard/vedi_pannello_cliente";
     }
 
-    @GetMapping("/profiloVenditore/{id}")
-    public String profiloVenditore(@RequestParam Long id, Model model) {
+    @GetMapping("/profiloVenditore")
+    public String profiloVenditore(@RequestParam ("id") Long id, Model model) {
+        //metto il venditore nel model per visualizzarlo tramite UtenteVenditoreResponseDTO
         model.addAttribute("venditore", prodottoFacade.getVenditore(id));
+        //mostra i prodotti in vendita del venditore
+        //TODO: implementare metodo in ProdottoFacade
+//        List<ProdottoInVenditaResponseDTO> prodotti = prodottoFacade.getAllProdottiApprovatiDiUtente(id);
         return "dashboard/cliente/vedi_profilo_venditore";
     }
 
     @GetMapping("/aggiungiProdottoVendita")
     public String aggiungiProdottoVendita(Model model) {
         Utente utente = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("prodottoRequestDTO", new ProdottoRequestDTO());
+        if (!model.containsAttribute("prodottoRequestDTO"))
+            model.addAttribute("prodottoRequestDTO", new ProdottoRequestDTO());
         model.addAttribute("nome", utente.getNome());
         return "dashboard/cliente/aggiungi_prodotto_vendita";
     }
@@ -50,17 +59,28 @@ public class ClienteController {
                                           BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         Utente utenteLoggato = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.prodottoRequestDTO", bindingResult);
+            redirectAttributes.addFlashAttribute("prodottoRequestDTO", prodotto);
             return "dashboard/cliente/aggiungi_prodotto_vendita";
         }
         try {
-            prodottoFacade.aggiungiProdottoVendita(prodotto.getNome(), prodotto.getDescrizione(), prodotto.getPrezzo(), prodotto.getQuantita(), utenteLoggato.getId() );
+            MultipartFile immagine = prodotto.getImmagine();
+            if (immagine == null || immagine.isEmpty()) {
+                prodottoFacade.aggiungiProdottoVendita(prodotto.getNome(), prodotto.getDescrizione(),
+                    prodotto.getPrezzo(), prodotto.getQuantita(), utenteLoggato.getId(),"static/styles/images/item-placeholder.jpg" );
+
+            }else{
+                String imageName = prodottoFacade.saveImage(immagine);
+                prodottoFacade.aggiungiProdottoVendita(prodotto.getNome(), prodotto.getDescrizione(),
+                    prodotto.getPrezzo(), prodotto.getQuantita(), utenteLoggato.getId(),imageName);
+            }
             redirectAttributes.addFlashAttribute("successMessage", "Prodotto aggiunto con successo");
             return "redirect:/areaCliente/aggiungiProdottoVendita?successMessage=true";
+
         } catch (DatoNonValidoException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/areaCliente/aggiungiProdottoVendita?errorMessage=true";
         }
     }
-
 
 }

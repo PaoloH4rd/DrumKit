@@ -15,6 +15,7 @@ public class ProdottoMapper {
                 .setDescrizione(prodotto.getDescrizione())
                 .setPrezzo(prodotto.getPrezzo())
                 .setQuantita(prodotto.getQuantita())
+                .setImmagine(prodotto.getImmagine())
                 .setVenditore(new UtenteVenditoreResponseDTO.Builder()
                         .setId(prodotto.getProprietario().getId())
                         .setNome(prodotto.getProprietario().getNome())

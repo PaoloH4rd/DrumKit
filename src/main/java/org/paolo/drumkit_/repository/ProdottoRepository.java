@@ -13,4 +13,5 @@ public interface ProdottoRepository extends JpaRepository<Prodotto, Long> {
     Optional<Prodotto> findByIdAndIsDisattivatoIsFalse(long id_Prodotto);
     List<Prodotto> findAllByStato(StatoProdotto stato);
     List<Prodotto> findAllByStatoAndProprietarioIdNot(StatoProdotto stato, Long idUtente);
+    List<Prodotto> findAllByProprietarioIdAndStato(Long idUtente, StatoProdotto stato);
 }

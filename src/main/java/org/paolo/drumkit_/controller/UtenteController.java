@@ -6,11 +6,20 @@ import org.paolo.drumkit_.dto.request.CambiaPasswordRequestDTO;
 import org.paolo.drumkit_.dto.request.RegistrazioneUtenteDTO;
 import org.paolo.drumkit_.exception.DatoNonValidoException;
 import org.paolo.drumkit_.facade.UtenteFacade;
-import org.paolo.drumkit_.model.Utente;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,6 +32,8 @@ public class UtenteController {
     public String registraCliente (@ModelAttribute ("registrazioneUtenteDTO") @Valid RegistrazioneUtenteDTO registrazioneUtenteDTO, BindingResult theBindingResult,
                                    RedirectAttributes redirectAttributes) {
         if (theBindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.registrazioneUtenteDTO", theBindingResult);
+            redirectAttributes.addFlashAttribute("registrazioneUtenteDTO", registrazioneUtenteDTO);
             return "redirect:/register";
         }
         try {
@@ -30,18 +41,17 @@ public class UtenteController {
                     registrazioneUtenteDTO.getPassword(), registrazioneUtenteDTO.getPasswordRipetuta(), registrazioneUtenteDTO.getDataNascita());
             // Registration succeeded
             redirectAttributes.addFlashAttribute("successMessage", "Registrazione avvenuta con successo");
-            return "redirect:/register?successMessage=true";
+            return "redirect:/register";
         }catch (DatoNonValidoException e){
             // Gestione errori personalizzati
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/register?errorMessage=true";
+            return "redirect:/register";
         }
     }
 
     @PostMapping(path = "/all/utente/login")
     public String login(@RequestParam("email") String email,
-                        @RequestParam("password") String password,
-                        RedirectAttributes redirectAttributes, HttpSession session) {
+                        @RequestParam("password") String password, HttpSession session) {
         try {
             // provo login
             if (utenteFacade.login(email, password)) {
@@ -49,57 +59,72 @@ public class UtenteController {
                 session.setAttribute("email", email);
                 return "redirect:/dashboard";
             }
+            return "redirect:/login?error=true";
         } catch (DatoNonValidoException e) {
             // Gestione errori personalizzati
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/login?error=true";
         }
-        return "redirect:/login?error=true";
+
     }
     @PostMapping("/all/utente/cambiaPassword")
     public String cambiaPassword(
             @ModelAttribute("cambiaPasswordRequest") @Valid CambiaPasswordRequestDTO request,
             BindingResult thebindingresult, RedirectAttributes redirectAttributes, HttpSession session) {
+        if (thebindingresult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.cambiaPasswordRequest", thebindingresult);
+            redirectAttributes.addFlashAttribute("cambiaPasswordRequest", request);
+            return "redirect:/dashboard/profilo/cambia_password";
+        }
         try {
             // Verifica errori di validazione
-            if (thebindingresult.hasErrors()) {
-                return "redirect:/dashboard/profilo/cambia_password";
-            }
+
             utenteFacade.cambiaPassword((String) session.getAttribute("email"), request.getVecchiaPassword(),
                     request.getNuovaPassword(),request.getNuovaPasswordRipetuta());
             redirectAttributes.addFlashAttribute("successMessage", "Password cambiata con successo\n Effettua il login con la nuova password");
             session.invalidate();
-            return "redirect:/dashboard/profilo/cambiaPassword?success=true";
+            return "redirect:/dashboard/profilo/cambiaPassword";
 
         } catch (DatoNonValidoException e) {
             // Gestione errori personalizzati
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/dashboard/profilo/cambiaPassword?error=true";
+            return "redirect:/dashboard/profilo/cambiaPassword";
         }
     }
-
-//    @PostMapping("/superAdmin/utente/registraAdmin")
-//    public String registraAdmin (@Valid @ModelAttribute Utente u,BindingResult theBindingResult,
-//                                 @RequestParam("passwordSuperAdmin") String passwordSuperAdmin){
-//        //controllo password dell'admin
-//        if (theBindingResult.hasErrors()) {
-//            return "redirect:/register";
-//        }
-//        utenteFacade.registraAdmin(u.getNome(), u.getCognome(),u.getEmail(), u.getPassword(), passwordSuperAdmin);
-//        return "redirect:/welcome";
-//    }
 
     @PostMapping( "/logout")
     public String logoutPage(HttpSession session){
         session.invalidate();
         return "redirect:/login?logout=true";
     }
+    //ottieni foto
+// Ottieni foto
+    @GetMapping("/immagine/{filename:.+}")
+    public ResponseEntity<Resource> getImmagine(@PathVariable String filename) {
+        try {
+            // Costruisci il percorso corretto per le immagini
+            Path path = Paths.get("src/main/resources/static/styles/images/" + filename);
+            Resource resource = new UrlResource(path.toUri());
 
+            // Controlla se il file esiste e se è leggibile
+            if (resource.exists() && resource.isReadable()) {
+                String contentType = Files.probeContentType(path);
+                return ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType(contentType))
+                        .body(resource);
+            } else {
+                // Logga un messaggio di errore se il file non esiste
+                System.err.println("File non trovato: " + path.toString());
+                return ResponseEntity.notFound().build();
+            }
+        } catch (MalformedURLException e) {
+            // Gestisci l'eccezione in caso di errore nella costruzione dell'URL
+            System.err.println("Errore nell'URL: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        } catch (IOException e) {
+            // Gestisci l'eccezione in caso di errore durante la lettura del file
+            System.err.println("Errore nella lettura del file: " + e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
-
-
-//    @PutMapping("/admin/utente/disattivaCliente/{id}")
-
-//
-//    @PutMapping("/superAdmin/utente/disattivaAdmin/{id}")
 }
