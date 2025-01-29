@@ -47,7 +47,8 @@ public class ChatFacade {
         m.setPrimoUtente(c.getUtenteUno().getUsername().equals(u1.getUsername()));
         messaggioService.aggiungiMessaggio(m);
         MessaggioResponseDTO mDTO=chatMapper.toMessaggioResponseDTO(u1, u2, m);
-        customSenderMessaggioService.inviaNotifica(mDTO, "topicDiEsempio");
+//        customSenderMessaggioService.inviaNotifica(mDTO, "topicDiEsempio");
+        customSenderMessaggioService.sendPrivateMessage(u2.getUsername(), m.getTesto(), c.getId());
     }
     public List<MessaggioResponseDTO> getChat(long id, String email) {
         Utente u= utenteService.getById(id);

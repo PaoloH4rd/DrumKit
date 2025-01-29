@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client STOMP</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<h1>Client STOMP</h1>
+<script>
+    const socket = new SockJS('/ws'); // Assicurati che il percorso sia corretto
+    const stompClient = Stomp.over(socket);
+
+    // Funzione di connessione con gestione degli errori
+    stompClient.connect({}, (frame) => {
+        console.log('Connesso: ' + frame);
+
+        // Sottoscrivi al topic
+        stompClient.subscribe('/topic/messages', (message) => {
+            console.log('Messaggio ricevuto: ' + message.body);
+        });
+
+        // Invia un messaggio
+        stompClient.send("/app/send", {}, JSON.stringify({'message': 'Ciao dal client!'}));
+    }, (error) => {
+        console.error('Errore di connessione: ' + error);
+    });
+
+    // Gestione degli eventi di chiusura della connessione
+    socket.onclose = function() {
+        console.warn('Socket chiuso. Verifica la connessione al server.');
+    };
+
+    // Gestione degli errori del socket
+    socket.onerror = function(event) {
+        console.error('Errore del socket: ' + event);
+    };
+</script>
+</body>
+</html>

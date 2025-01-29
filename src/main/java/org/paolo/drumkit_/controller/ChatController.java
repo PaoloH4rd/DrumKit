@@ -9,6 +9,8 @@ import org.paolo.drumkit_.facade.ChatFacade;
 import org.paolo.drumkit_.facade.UtenteFacade;
 import org.paolo.drumkit_.model.Chat;
 import org.paolo.drumkit_.model.Utente;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,37 +41,15 @@ public class ChatController {
         return "dashboard/cliente/chat_dashboard";
     }
 
-    @PostMapping("/invia")
-    public String inviaMessaggio(@Valid @ModelAttribute InviaMessaggioRequestDTO inviaMessaggioRequestDTO,
-                                   BindingResult bindingResult,RedirectAttributes redirectAttributes,
-                                  @RequestHeader(value = "referer", required = false) final String referer){
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.inviaMessaggioRequestDTO", bindingResult);
-            redirectAttributes.addFlashAttribute("inviaMessaggioRequestDTO", inviaMessaggioRequestDTO);
-            // Aggiungi un messaggio di errore per i problemi di validazione
-            return "redirect:" + referer;        }
-        try {
-            Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            long idUser = uLoggato.getId();
-            chatFacade.inviaMessaggio(idUser, inviaMessaggioRequestDTO);
-
-            // Aggiungi un messaggio di successo
-            redirectAttributes.addFlashAttribute("successMessage", "Messaggio inviato con successo.");
-            return "redirect:" + referer;
-
-        } catch (DatoNonValidoException e) {
-            // Aggiungi un messaggio di errore specifico
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:" + referer;
-        }
-    }
-//    @PostMapping("/inviaRabbit")
-//    public void inviaMessaggioRabbit(@Valid @ModelAttribute InviaMessaggioRequestDTO inviaMessaggioRequestDTO,
-//                                     RedirectAttributes redirectAttributes, BindingResult bindingResult){
+//    @PostMapping("/invia")
+//    public String inviaMessaggio(@Valid @ModelAttribute InviaMessaggioRequestDTO inviaMessaggioRequestDTO,
+//                                   BindingResult bindingResult,RedirectAttributes redirectAttributes,
+//                                  @RequestHeader(value = "referer", required = false) final String referer){
 //        if (bindingResult.hasErrors()) {
+//            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.inviaMessaggioRequestDTO", bindingResult);
+//            redirectAttributes.addFlashAttribute("inviaMessaggioRequestDTO", inviaMessaggioRequestDTO);
 //            // Aggiungi un messaggio di errore per i problemi di validazione
-//            redirectAttributes.addFlashAttribute("errorMessage", "Errore di validazione. Controlla i dati inseriti.");
-//            return;        }
+//            return "redirect:" + referer;        }
 //        try {
 //            Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //            long idUser = uLoggato.getId();
@@ -77,12 +57,22 @@ public class ChatController {
 //
 //            // Aggiungi un messaggio di successo
 //            redirectAttributes.addFlashAttribute("successMessage", "Messaggio inviato con successo.");
+//            return "redirect:" + referer;
 //
 //        } catch (DatoNonValidoException e) {
 //            // Aggiungi un messaggio di errore specifico
 //            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+//            return "redirect:" + referer;
 //        }
 //    }
+    @MessageMapping("/sendDm") // Gestisce i messaggi inviati a "/app/sendToTopicA"
+    @SendTo("/topic/dm")         //  broadcast a "/topic/dm"
+    public String handleDmMessage(String message) {
+        System.out.println("Messaggio ricevuto: " + message);
+        return "Risposta dal backend: " + message.toUpperCase();
+    }
+
+
 
     @GetMapping("/apriChatRabbit")
     public String getChatRabbit(@RequestParam("chatId") Long chatId, @RequestParam("email") String email, Model model) {
@@ -97,10 +87,32 @@ public class ChatController {
         model.addAttribute("nomeDestinatario", nomeDestinatario);
         model.addAttribute("utenteLoggatoEmail", uLoggato.getUsername());
         model.addAttribute("chatId", chatId);
+        model.addAttribute("idClient", uLoggato.getId());
+
+//        return "dashboard/cliente/chats/mostra_chat_test";
         return "dashboard/cliente/chats/mostra_chat_rabbit";
     }
 
 
+    @PostMapping("/invia")
+    public void inviaMessaggioRabbit(@Valid @ModelAttribute InviaMessaggioRequestDTO inviaMessaggioRequestDTO,
+                                     RedirectAttributes redirectAttributes, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            // Aggiungi un messaggio di errore per i problemi di validazione
+            redirectAttributes.addFlashAttribute("errorMessage", "Errore di validazione. Controlla i dati inseriti.");
+            return;        }
+        try {
+            Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            long idUser = uLoggato.getId();
+            chatFacade.inviaMessaggio(idUser, inviaMessaggioRequestDTO);
 
+            // Aggiungi un messaggio di successo
+            redirectAttributes.addFlashAttribute("successMessage", "Messaggio inviato con successo.");
+
+        } catch (DatoNonValidoException e) {
+            // Aggiungi un messaggio di errore specifico
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+    }
 
 }

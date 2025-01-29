@@ -3,6 +3,7 @@ package org.paolo.drumkit_.service.def;
 import org.paolo.drumkit_.dto.response.MessaggioResponseDTO;
 
 public interface CustomSenderMessaggioService {
-    public void inviaNotifica(MessaggioResponseDTO m, String topic);
+     void inviaNotifica(MessaggioResponseDTO m, String topic);
+     void sendPrivateMessage(String idUtente, String message, Long idChat);
 
 }

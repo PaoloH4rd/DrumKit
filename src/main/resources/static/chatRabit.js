@@ -1,6 +1,6 @@
 
-sendMessage().then(() => console.log('Invio messaggio avviato'));
-
+// sendMessage().then(() => console.log('Invio messaggio avviato'));
+console.log('Invio messaggio avviato');
 async function receiveMessages() {
     const exchange = 'ExchangeDurable'; // Nome dell'exchange
     const queue = 'listaDurable';       // Nome della coda
