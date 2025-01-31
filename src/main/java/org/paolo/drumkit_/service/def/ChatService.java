@@ -10,4 +10,5 @@ public interface ChatService  {
     Chat getByUsernameAndAltroNome(String username,String secondoUsername);
     void creaChat(Utente utenteUno, Utente utenteDue);
     Chat salva(Chat c);
+    Chat getById(Long id);
 }

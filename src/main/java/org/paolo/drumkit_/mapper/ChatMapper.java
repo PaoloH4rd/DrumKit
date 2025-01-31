@@ -39,7 +39,7 @@ public class ChatMapper {
 //        return messaggioResponseDTO;
         return new MessaggioResponseDTO.Builder()
                 .setData(m.getDataOra().format(DateTimeFormatter.ofPattern("EEEE dd MMM yyyy hh:mm:ss")))
-//                .setEmailDestinatario(m.isPrimoUtente()?u2.getUsername():u1.getUsername())
+                .setEmailDestinatario(m.isPrimoUtente()?u2.getUsername():u1.getUsername())
                 .setEmailMittente(m.isPrimoUtente()?u1.getUsername():u2.getUsername())
                 .setTesto(m.getTesto())
                 .build();

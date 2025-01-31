@@ -1,6 +1,5 @@
 package org.paolo.drumkit_.configuration;
 
-import org.paolo.drumkit_.listener.ListenerMessaggi;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -13,23 +12,46 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMqConfiguration {
 
     @Bean
+    protected Queue getQueueC() {
+        return QueueBuilder.durable("Cestino")
+                .build();
+    }
+
+
+    @Bean
     protected Queue getQueue() {
-        return QueueBuilder.durable("listaDurable")
+        return QueueBuilder.durable("Utile")
                 .build();
     }
 
     @Bean
     protected Exchange getExchange() {
-        return ExchangeBuilder.topicExchange("ExchangeDurable")
+        return ExchangeBuilder.directExchange("diretto")
                 .durable(true)
                 .build();
     }
+//    @Bean
+//    protected Binding getBinding() {
+//        return BindingBuilder
+//                .bind(getQueue())
+//                .to(getExchange())
+//                .with("chat.private.#")
+//                .noargs();
+//    }
     @Bean
     protected Binding getBinding() {
         return BindingBuilder
                 .bind(getQueue())
                 .to(getExchange())
-                .with("topicDiEsempio")
+                .with("#")
+                .noargs();
+    }
+    @Bean
+    protected Binding getBindingFra() {
+        return BindingBuilder
+                .bind(getQueueC())
+                .to(getExchange())
+                .with("chat.private.#")
                 .noargs();
     }
 
@@ -43,13 +65,16 @@ public class RabbitMqConfiguration {
         return c;
     }
 
-    @Bean
-    protected MessageListenerContainer getContainer() {
-        SimpleMessageListenerContainer smlc=new SimpleMessageListenerContainer();
-        smlc.setQueues(getQueue());
-        smlc.setConnectionFactory(getConnection());
-        smlc.setMessageListener(new ListenerMessaggi());
-        return smlc;
-    }
+
+
+
+//    @Bean
+//    protected MessageListenerContainer getContainer() {
+//        SimpleMessageListenerContainer smlc=new SimpleMessageListenerContainer();
+//        smlc.setQueues(getQueue());
+//        smlc.setConnectionFactory(getConnection());
+//        smlc.setMessageListener(new ListenerMessaggi());
+//        return smlc;
+//    }
 
 }

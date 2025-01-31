@@ -50,4 +50,9 @@ public class ChatServiceImpl implements ChatService {
         }
         return repo.save(c);
     }
+    //get by id
+    @Override
+    public Chat getById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
 }

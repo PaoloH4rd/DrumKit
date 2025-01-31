@@ -3,40 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client STOMP</title>
+    <title>Chat Privata</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
-<h1>Client STOMP</h1>
-<script>
-    const socket = new SockJS('/ws'); // Assicurati che il percorso sia corretto
-    const stompClient = Stomp.over(socket);
+<h1>Chat Privata</h1>
 
-    // Funzione di connessione con gestione degli errori
-    stompClient.connect({}, (frame) => {
-        console.log('Connesso: ' + frame);
+<input type="hidden" id="chatId" th:value="${chatId}"> <!-- ID della chat passato da Thymeleaf -->
+<input type="text" id="messageInput" placeholder="Scrivi un messaggio...">
+<button id="sendButton">Invia</button>
 
-        // Sottoscrivi al topic
-        stompClient.subscribe('/topic/messages', (message) => {
-            console.log('Messaggio ricevuto: ' + message.body);
-        });
+<div id="messages" style="margin-top: 20px;"></div> <!-- Area per visualizzare i messaggi -->
 
-        // Invia un messaggio
-        stompClient.send("/app/send", {}, JSON.stringify({'message': 'Ciao dal client!'}));
-    }, (error) => {
-        console.error('Errore di connessione: ' + error);
+<script th:inline="javascript">
+    // Crea una connessione STOMP
+    var socket = new SockJS('/ws'); // Sostituisci '/your-endpoint' con l'endpoint corretto
+    var stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+
+        // Visualizza il valore di chatId
+        var chatId = document.getElementById('chatId').value;
+        console.log('Valore di chatId: ' + chatId);
+
+        stompClient.subscribe('/topic/Cestino', function (message) {
+            if (message.body) {
+                console.log('Message received:', message.body);
+                document.getElementById('messages').innerHTML += '<p>' + message.body + '</p>';
+            } else {
+                console.log('Empty message received');
+            }
+        }, { ack: 'client' }); // You can also handle manual ack if needed
+
+
+
+// Invia il messaggio quando si fa clic su un pulsante
+        document.getElementById('sendButton').onclick = function() {
+            var messaggioText = document.getElementById('messageInput').value; // Ottieni il testo del messaggio
+
+            // Costruisci l'oggetto messaggio
+            var messaggio = {
+                testo: messaggioText,
+                // aggiungi altri campi necessari qui, se necessario
+            };
+
+            // Invia il messaggio al server
+            stompClient.send('/app/chat/private/' + chatId, {}, JSON.stringify(messaggio));
+
+
+            // Pulisci il campo di input dopo l'invio
+            document.getElementById('messageInput').value = '';
+        };
+
+    }, function(error) {
+        console.error('Connessione fallita: ' + error);
     });
 
-    // Gestione degli eventi di chiusura della connessione
-    socket.onclose = function() {
-        console.warn('Socket chiuso. Verifica la connessione al server.');
-    };
-
-    // Gestione degli errori del socket
-    socket.onerror = function(event) {
-        console.error('Errore del socket: ' + event);
-    };
 </script>
 </body>
 </html>
