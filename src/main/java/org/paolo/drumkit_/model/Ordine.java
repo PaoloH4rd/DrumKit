@@ -22,7 +22,7 @@ public class Ordine {
     @JoinColumn(nullable = false , updatable = false , name = "id_utente")
     private Utente utente;
 
-    @Column(nullable = false)
+    @Column
     private LocalDate dataConferma;
 
     @Column(nullable = false)

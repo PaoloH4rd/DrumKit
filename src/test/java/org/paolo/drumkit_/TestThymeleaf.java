@@ -25,7 +25,7 @@ public class TestThymeleaf {
                         .param("dataNascita", "1999-01-01")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)) // Form data
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection()) // Controlla redirect
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/register?successMessage=true")) // Verifica URL di redirect
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/register")) // Verifica URL di redirect
                 .andExpect(MockMvcResultMatchers.flash().attribute("successMessage", "Registrazione avvenuta con successo")); // Verifica attributo flash
     }
     @Test
