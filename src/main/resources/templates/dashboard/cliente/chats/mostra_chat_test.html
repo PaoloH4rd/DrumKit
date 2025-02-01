@@ -28,7 +28,7 @@
         var chatId = document.getElementById('chatId').value;
         console.log('Valore di chatId: ' + chatId);
 
-        stompClient.subscribe('/topic/Cestino', function (message) {
+        stompClient.subscribe('/topic/amq.topic.'+chatId, function (message) {
             if (message.body) {
                 console.log('Message received:', message.body);
                 document.getElementById('messages').innerHTML += '<p>' + message.body + '</p>';

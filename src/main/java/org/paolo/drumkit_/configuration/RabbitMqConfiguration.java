@@ -18,15 +18,11 @@ public class RabbitMqConfiguration {
     }
 
 
-    @Bean
-    protected Queue getQueue() {
-        return QueueBuilder.durable("Utile")
-                .build();
-    }
+
 
     @Bean
     protected Exchange getExchange() {
-        return ExchangeBuilder.directExchange("diretto")
+        return ExchangeBuilder.topicExchange("amq.topic")
                 .durable(true)
                 .build();
     }
@@ -39,19 +35,12 @@ public class RabbitMqConfiguration {
 //                .noargs();
 //    }
     @Bean
-    protected Binding getBinding() {
-        return BindingBuilder
-                .bind(getQueue())
-                .to(getExchange())
-                .with("#")
-                .noargs();
-    }
-    @Bean
     protected Binding getBindingFra() {
         return BindingBuilder
                 .bind(getQueueC())
                 .to(getExchange())
-                .with("chat.private.#")
+                //.with("chat.private.#")
+                .with("amq.topic.#")
                 .noargs();
     }
 

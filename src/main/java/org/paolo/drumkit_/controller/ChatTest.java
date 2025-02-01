@@ -33,7 +33,6 @@ public class ChatTest {
 
 
     @MessageMapping("/chat/private/{chatId}")
-    @SendTo("/topic/chat.private.{chatId}")
     public void sendMessage(@DestinationVariable Long chatId, Messaggio messaggio) {
         // Invia il messaggio alla coda appropriata
         Chat chat = chatService.getById(chatId);
@@ -45,10 +44,10 @@ public class ChatTest {
         try {
             // Converte l'oggetto MessaggioResponseDTO in una stringa JSON
             String json = mapper.writeValueAsString(m);
-            System.out.println();
+            System.out.println(json);
 //            rabbitTemplate.convertAndSend("ExchangeDurable", "chat." + chatId, json);
-//            rabbitTemplate.convertAndSend("diretto", "chat.private.1", json);
-            rabbitTemplate.convertAndSend("", "Cestino", json);
+            rabbitTemplate.convertAndSend("amq.topic","amq.topic."+chatId, json);
+//            rabbitTemplate.convertAndSend("", "Cestino", json);
 
 
 
