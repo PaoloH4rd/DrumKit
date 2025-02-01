@@ -36,6 +36,12 @@ public class OrdineServiceImpl implements OrdineService {
     }
 
     @Override
+    public Ordine getOrdineAperto(Long idUtenteLoggato) {
+
+        return repo.findByUtente_IdAndDataConfermaIsNull(idUtenteLoggato).orElse(null);
+    }
+
+    @Override
     public void add(Ordine ordine) {
         repo.save(ordine);
     }

@@ -15,4 +15,5 @@ public interface OrdineRepository extends JpaRepository<Ordine, Long> {
     List<Ordine> findAllByStatoOrdineAndIsDisattivatoIsFalse(StatoOrdine statoOrdine);
     List<Ordine> findAllByIsDisattivatoIsFalse();
     Optional<Ordine> findByIdAndIsDisattivatoIsFalse(long id_ordine);
+    Optional<Ordine> findByUtente_IdAndDataConfermaIsNull(Long idUtente);
 }
