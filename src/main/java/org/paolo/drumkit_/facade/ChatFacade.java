@@ -44,11 +44,12 @@ public class ChatFacade {
         Messaggio m=new Messaggio();
         m.setChat(c);
         m.setTesto(inviaMessaggioRequestDTO.getTesto());
+        //se l'utente che invia il messaggio è l'utente loggatto
         m.setPrimoUtente(c.getUtenteUno().getUsername().equals(u1.getUsername()));
+
         messaggioService.aggiungiMessaggio(m);
-        MessaggioResponseDTO mDTO=chatMapper.toMessaggioResponseDTO(u1, u2, m);
-        customSenderMessaggioService.inviaNotifica(mDTO, "topicDiEsempio");
-//        customSenderMessaggioService.sendPrivateMessage(u2.getUsername(), m.getTesto(), c.getId());
+        MessaggioResponseDTO mDTO=chatMapper.toMessaggioResponseDTO(u1, u2, inviaMessaggioRequestDTO);
+        customSenderMessaggioService.inviaNotifica(mDTO, String.valueOf(c.getId()));
     }
 
     public List<MessaggioResponseDTO> getChat(long id, String email) {
@@ -60,11 +61,10 @@ public class ChatFacade {
         Utente u= utenteService.getById(id);
         return chatService.getAllByUsername(u.getUsername());
     }
-    //get id from chat
-    public long getChatId(long id, String email) {
-        Utente u= utenteService.getById(id);
-        Chat c=chatService.getByUsernameAndAltroNome(u.getUsername(), email);
-        return c.getId();
+
+    //torna la chat con l'utente
+    public Chat getById(long id) {
+        return chatService.getById(id);
     }
 
 }

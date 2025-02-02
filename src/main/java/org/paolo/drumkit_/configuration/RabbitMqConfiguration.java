@@ -18,22 +18,13 @@ public class RabbitMqConfiguration {
     }
 
 
-
-
     @Bean
     protected Exchange getExchange() {
         return ExchangeBuilder.topicExchange("amq.topic")
                 .durable(true)
                 .build();
     }
-//    @Bean
-//    protected Binding getBinding() {
-//        return BindingBuilder
-//                .bind(getQueue())
-//                .to(getExchange())
-//                .with("chat.private.#")
-//                .noargs();
-//    }
+
     @Bean
     protected Binding getBindingFra() {
         return BindingBuilder
@@ -54,16 +45,5 @@ public class RabbitMqConfiguration {
         return c;
     }
 
-
-
-
-//    @Bean
-//    protected MessageListenerContainer getContainer() {
-//        SimpleMessageListenerContainer smlc=new SimpleMessageListenerContainer();
-//        smlc.setQueues(getQueue());
-//        smlc.setConnectionFactory(getConnection());
-//        smlc.setMessageListener(new ListenerMessaggi());
-//        return smlc;
-//    }
 
 }

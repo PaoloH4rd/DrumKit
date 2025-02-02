@@ -27,6 +27,7 @@ public class Messaggio {
 
     private boolean primoUtente;
 
+
     @ManyToOne
     @JoinColumn(name = "id_chat")
     private Chat chat;

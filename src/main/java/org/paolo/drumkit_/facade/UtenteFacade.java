@@ -98,4 +98,9 @@ public class UtenteFacade {
     public void attivaUtente(String email) {
         utenteService.setDisattivatoFalse(email);
     }
+
+    // get by email
+    public Utente getByEmail(String email) {
+        return utenteService.getByEmail(email);
+    }
 }

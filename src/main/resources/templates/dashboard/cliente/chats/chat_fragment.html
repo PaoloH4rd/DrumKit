@@ -1,61 +1,135 @@
-<!-- chatFragment.html -->
-<div class="row justify-content-center">
-    <div class="col-lg-8 col-md-10">
-        <!-- Titolo della chat -->
-        <h1 class="text-center mb-4">
-            Chat con <span th:text="${nomeDestinatario}" class="text-primary"></span>
-        </h1>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
+    <title>Chat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <link href="/styles/style.css" rel="stylesheet">
 
-        <div class="list-group mt-4" id="chat">
-            <div th:each="messaggio : ${messaggi}"
-                 class="list-group-item"
-                 th:classappend="${messaggio.emailMittente == utenteLoggatoEmail} ? 'messaggio-inviato' : 'messaggio-ricevuto'">
-                <div class="d-flex flex-column">
-                    <!-- Nome del mittente/destinatario -->
-                    <h5 class="nome"
-                        th:class="${messaggio.emailMittente == utenteLoggatoEmail} ? 'testo-dx' : 'testo-sx'"
-                        th:text="${messaggio.emailMittente == utenteLoggatoEmail} ? 'Tu' : ${nomeDestinatario}"></h5>
-                    <!-- Testo del messaggio -->
-                    <p class="mb-2 testo-messaggio"
-                       th:class="${messaggio.emailMittente == utenteLoggatoEmail} ? 'testo-dx' : 'testo-sx'"
-                       th:text="${messaggio.testo}"></p>
-                    <!-- Data (ora in fondo al messaggio) -->
-                    <small class="data"
-                           th:class="${messaggio.emailMittente == utenteLoggatoEmail} ? 'data-dx' : 'data-sx'"
-                           th:text="${messaggio.data}"></small>
+    <style>
+        .chat-container {
+            position: relative;
+        }
+        .message-list {
+            overflow-y: scroll;
+            /* Aggiunge spazio intorno ai messaggi */
+            padding: 20px 20px 60px;
+        }
+
+        .input-container {
+            position: relative;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background-color: white;
+        }
+        .list-group  {
+            height: 70vh;
+        }
+
+    </style>
+</head>
+<body class="bg-light">
+<script th:inline="javascript">
+    var socket = new SockJS('/ws');
+    var stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        var chatId = document.getElementById('chatId').value;
+        console.log('Chat ID:', chatId);
+        document.getElementsByClassName('message-list')[0].scrollTop = document.getElementsByClassName('message-list')[0].scrollHeight;
+
+        stompClient.subscribe('/topic/amq.topic.' + chatId, function (message) {
+            if (message.body) {
+                var messaggio = JSON.parse(message.body);
+                console.log('Ricevuto:', messaggio);
+                var isMittente = messaggio.emailMittente === /*[[${utenteLoggatoEmail}]]*/;
+                var nomeDestinatario = /*[[${nomeDestinatario}]]*/;
+
+                var messaggioHtml = `
+                  <div class="list-group-item ${isMittente ? 'messaggio-inviato' : 'messaggio-ricevuto'}">
+                    <div class="d-flex flex-column">
+                      <h5 class="nome ${isMittente ? 'testo-dx' : 'testo-sx'}">
+                        ${isMittente ? 'Tu' : nomeDestinatario}
+                      </h5>
+                      <p class="mb-2 testo-messaggio ${isMittente ? 'testo-dx' : 'testo-sx'}">
+                        ${messaggio.testo}
+                      </p>
+                      <small class="data ${isMittente ? 'data-dx' : 'data-sx'}">
+                        ${messaggio.data}
+                      </small>
+                    </div>
+                  </div>
+                `;
+                document.querySelector('.message-list').innerHTML += messaggioHtml;
+                document.getElementsByClassName('message-list')[0].scrollTop = document.getElementsByClassName('message-list')[0].scrollHeight;
+            }
+        });
+    });
+
+
+    function inviaMessaggio() {
+        var messaggioText = document.getElementById('testo').value;
+        var chatId = document.getElementById('chatId').value;
+        var emailMittente = /*[[${utenteLoggatoEmail}]]*/;
+        var emailDestinatario = /*[[${emailDestinatario}]]*/;
+
+        var messaggio = {
+            emailMittente: emailMittente,
+            emailDestinatario: emailDestinatario,
+            testo: messaggioText,
+            data: new Date().toISOString()
+        };
+
+        stompClient.send('/app/chat/private/' + chatId, {}, JSON.stringify(messaggio));
+        document.getElementById('testo').value = '';
+    }
+</script>
+
+<div class="container py-5 chat-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <h1 class="text-center mb-4">
+                Chat con <span th:text="${nomeDestinatario}" class="text-primary"></span>
+            </h1>
+            <input type="hidden" id="chatId" th:value="${chatId}">
+            <div class="list-group message-list">
+                <div th:each="messaggio : ${messaggi}"
+                     class="list-group-item"
+                     th:classappend="${messaggio.emailMittente == utenteLoggatoEmail} ? 'messaggio-inviato' : 'messaggio-ricevuto'">
+                    <div class="d-flex flex-column">
+                        <h5 class="nome"
+                            th:class="${messaggio.emailMittente == utenteLoggatoEmail} ? 'testo-dx' : 'testo-sx'"
+                            th:text="${messaggio.emailMittente == utenteLoggatoEmail} ? 'Tu' : ${nomeDestinatario}"></h5>
+                        <p class="mb-2 testo-messaggio"
+                           th:class="${messaggio.emailMittente == utenteLoggatoEmail} ? 'testo-dx' : 'testo-sx'"
+                           th:text="${messaggio.testo}"></p>
+                        <small class="data"
+                               th:class="${messaggio.emailMittente == utenteLoggatoEmail} ? 'data-dx' : 'data-sx'"
+                               th:text="${messaggio.data}"></small>
+                    </div>
+                </div>
+            </div>
+            <div class="input-container">
+                <div class="shadow p-4 rounded bg-white">
+                    <div class="input-group">
+                        <input id="testo" type="text" class="form-control" placeholder="Scrivi un messaggio" required />
+                        <button type="button" class="btn btn-primary" onclick="inviaMessaggio()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                                <path d="M15.964 1.686a.5.5 0 0 1-.354.646l-14 4a.5.5 0 0 1-.276-.968l14-4a.5.5 0 0 1 .63.322z"/>
+                                <path d="M15.964 1.686 6.989 14.337a.5.5 0 0 1-.876-.47l2.068-6.835L.5 7.52a.5.5 0 0 1-.276-.97l14-4a.5.5 0 0 1 .74.635z"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Form di invio messaggi -->
-        <form th:action="@{/areaCliente/chatDashboard/invia}"
-              method="post"
-              th:object="${inviaMessaggioRequestDTO}"
-              class="shadow p-4 rounded bg-white">
-            <!-- Campo nascosto per l'email del destinatario -->
-            <input type="hidden" name="emailDestinatario" th:value="${emailDestinatario}" />
-
-            <!-- Campo testo messaggio e pulsante accanto -->
-            <div class="input-group">
-                <input id="testo"
-                       type="text"
-                       name="testo"
-                       th:field="*{testo}"
-                       class="form-control"
-                       placeholder="Scrivi un messaggio"
-                       required />
-                <button type="submit" class="btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
-                        <path d="M15.964 1.686a.5.5 0 0 1-.354.646l-14 4a.5.5 0 0 1-.276-.968l14-4a.5.5 0 0 1 .63.322z"/>
-                        <path d="M15.964 1.686 6.989 14.337a.5.5 0 0 1-.876-.47l2.068-6.835L.5 7.52a.5.5 0 0 1-.276-.97l14-4a.5.5 0 0 1 .74.635z"/>
-                    </svg>
-                </button>
-            </div>
-            <!-- Messaggio di errore -->
-            <div class="invalid-feedback mt-2" th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}">
-                Il messaggio non può essere vuoto.
-            </div>
-        </form>
-
     </div>
 </div>
+</body>
+</html>

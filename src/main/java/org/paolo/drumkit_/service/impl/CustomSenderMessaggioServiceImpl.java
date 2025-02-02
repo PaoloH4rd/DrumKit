@@ -17,22 +17,19 @@ public class CustomSenderMessaggioServiceImpl implements CustomSenderMessaggioSe
     private final ObjectMapper mapper; // Inietta automaticamente il mapper
 
     @Override
-    public void inviaNotifica(MessaggioResponseDTO m, String topic) {
+    public void inviaNotifica(MessaggioResponseDTO m, String chatId) {
         try {
             // Converte l'oggetto MessaggioResponseDTO in una stringa JSON
             String json = mapper.writeValueAsString(m);
-            System.out.println();
-            System.out.println("topic nel send:");
-            System.out.println(topic);
-            template.convertAndSend("ExchangeDurable", topic, json);
-            template.convertAndSend("ExchangeDurable", "/exchange/amq.topic/topic.chat.private.1", json);
+//            rabbitTemplate.convertAndSend("ExchangeDurable", "chat." + chatId, json);
+            template.convertAndSend("amq.topic","amq.topic."+chatId, json);
 
-            System.out.println("Messaggio inviato con successo");
-            //mostra  il json inviato
-            System.out.println(json);
+
+
         } catch (JsonProcessingException e) {
             // Gestisce errori nella serializzazione del JSON
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Errore nella conversione del messaggio in JSON", e);
         }
+
     }
 }

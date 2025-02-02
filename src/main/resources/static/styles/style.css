@@ -47,7 +47,6 @@ footer {
     max-width: 80%; /* Aumentato per dare più spazio ai messaggi */
     padding: 20px; /* Più padding per un layout spazioso */
     word-wrap: break-word;
-    overflow: hidden;
 }
 
 /* Messaggi inviati */
