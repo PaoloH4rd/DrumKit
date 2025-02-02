@@ -15,19 +15,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class GestoreFilterChain {
-	
+
 	private final FilterDiAutenticazione filter;
 	private final AuthenticationProvider provider;
 	@Bean
 	protected SecurityFilterChain getFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(req->req
-					.requestMatchers("/ws/**").permitAll()
+					.requestMatchers("/ws**").permitAll()
 					.requestMatchers("/ws").permitAll()
-					.requestMatchers("/immagine/**").permitAll()
-					.requestMatchers("/pannelloAdmin/**").hasAnyRole(Ruolo.ADMIN.toString(), Ruolo.SUPER_ADMIN.toString())
-					.requestMatchers("/pannelloSuperAdmin/**").hasRole(Ruolo.SUPER_ADMIN.toString())
-					.requestMatchers("/dashboard/**").authenticated()
+					.requestMatchers("/immagine**").permitAll()
+					.requestMatchers("/pannelloAdmin**").hasAnyRole(Ruolo.ADMIN.toString(), Ruolo.SUPER_ADMIN.toString())
+					.requestMatchers("/pannelloSuperAdmin**").hasRole(Ruolo.SUPER_ADMIN.toString())
+					.requestMatchers("/dashboard**").authenticated()
 					.anyRequest().permitAll()
 					)
 
