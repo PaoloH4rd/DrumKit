@@ -3,10 +3,7 @@ package org.paolo.drumkit_.facade;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.exception.DatoNonValidoException;
-import org.paolo.drumkit_.model.Ordine;
-import org.paolo.drumkit_.model.RigaOrdine;
-import org.paolo.drumkit_.model.StatoOrdine;
-import org.paolo.drumkit_.model.Utente;
+import org.paolo.drumkit_.model.*;
 import org.paolo.drumkit_.service.def.OrdineService;
 import org.paolo.drumkit_.service.def.ProdottoService;
 import org.paolo.drumkit_.service.def.RigaOrdineService;
@@ -74,6 +71,15 @@ public class RigaOrdineFacade {
         if(ordine==null){
             throw new DatoNonValidoException("Non ci sono prodotti nel carrello");
         }
+        for (RigaOrdine riga : ordine.getRigaOrdine()) {
+            // Ottieni la quantità disponibile aggiornata dal database
+            Prodotto prodotto = prodottoService.getById(riga.getProdotto().getId());
+            // Verifica se la quantità disponibile è sufficiente
+            if (prodotto.getQuantita() < riga.getQuantita()) {
+                throw new DatoNonValidoException("Quantità non disponibile per il prodotto: " + prodotto.getNome());
+            }
+        }
+        // Aggiorna la quantità disponibile dei prodotti e le righe ordine
         ordine.setDataConferma(LocalDate.now());
         if(ordine.getRigaOrdine()==null) throw new DatoNonValidoException("Non ci sono prodotti nel carrello");
         for (RigaOrdine r : ordine.getRigaOrdine()) {
@@ -83,9 +89,53 @@ public class RigaOrdineFacade {
                 r.setPrezzoTot(r.getProdotto().getPrezzo() * r.getQuantita());
             }
             prodottoService.update(r.getProdotto());
-            rigaOrdineService.update(r);
+            r.getProdotto().setQuantita(r.getProdotto().getQuantita()-r.getQuantita());
+
+            if (r.getProdotto().getQuantita() == 0) {
+                r.getProdotto().setStato(StatoProdotto.VENDUTO);
+                rigaOrdineService.update(r);
+            }
         }
         ordineService.update(ordine);
+
         return ordine;
+    }
+
+    public double getTotaleCarrello(long id) {
+        Ordine ordine = ordineService.getOrdineAperto(id);
+        if(ordine==null){
+            return 0;
+        }
+        // altrimenti ritorno la somma dei prezzi totali delle righe ordine
+        return ordine.getRigaOrdine()==null?0:ordine.getRigaOrdine().stream().mapToDouble(RigaOrdine::getPrezzoTot).sum();
+    }
+
+
+    public Ordine getOrdineAperto(long idLoggato) {
+        return ordineService.getOrdineAperto(idLoggato);
+    }
+
+    public void cambiaQuantita(Long idProdotto, int quantita, long id) {
+        //scala la quantità di un prodotto nel carrello
+        Ordine ordine = ordineService.getOrdineAperto(id);
+    }
+
+    public void rimuoviProdotto(Long idProdotto, long idLoggato) {
+        //rimuovi un prodotto dal carrello
+        Ordine ordine = ordineService.getOrdineAperto(idLoggato);
+        if(ordine==null){
+            return;
+        }
+        RigaOrdine r = null;
+        for (RigaOrdine riga : ordine.getRigaOrdine()) {
+            if (riga.getProdotto().getId() == idProdotto) {
+                r = riga;
+                break;
+            }
+        }
+        if (r != null) {
+            ordine.getRigaOrdine().remove(r);
+            rigaOrdineService.delete(r);
+        }
     }
 }

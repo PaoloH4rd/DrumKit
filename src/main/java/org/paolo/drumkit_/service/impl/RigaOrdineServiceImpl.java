@@ -67,5 +67,10 @@ public class RigaOrdineServiceImpl implements RigaOrdineService {
 //        return repo.findAllByOrdine(idOrdine);
         return null;
     }
+    //delete riga ordine
+    @Override
+    public void delete(RigaOrdine r) {
+        repo.delete(r);
+    }
 
 }

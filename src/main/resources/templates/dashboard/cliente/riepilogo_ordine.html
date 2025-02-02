@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Riepilogo Ordine</title>
+  <!-- Bootstrap CSS (opzionale, per lo stile) -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="text-center">Riepilogo Ordine</h1>
+
+  <!-- Tabella per i prodotti nell'ordine -->
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>Prodotto</th>
+      <th>Quantità</th>
+      <th>Prezzo Unitario</th>
+      <th>Totale</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Itera sulle righe dell'ordine -->
+    <tr th:each="riga : ${ordine.rigaOrdine}">
+      <td th:text="${riga.prodotto.nome}">Nome Prodotto</td>
+      <td th:text="${riga.quantita}">0</td>
+      <td th:text="${#numbers.formatCurrency(riga.prodotto.prezzo)}">0.00 €</td>
+      <td th:text="${#numbers.formatCurrency(riga.prodotto.prezzo * riga.quantita)}">0.00 €</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Totale dell'ordine -->
+  <div class="text-right">
+    <h4>Totale Ordine: <span th:text="${#numbers.formatCurrency(totaleCarrello)}">0.00 €</span></h4>
+  </div>
+
+  <!-- Pulsanti per confermare o annullare l'ordine -->
+  <div class="text-center mt-4">
+    <a th:href="@{/areaCliente}" class="btn btn-secondary">Torna alla Dashboard</a>
+    <a th:href="@{/confermaOrdine}" class="btn btn-success ml-2">Conferma Ordine</a>
+  </div>
+</div>
+
+<!-- Bootstrap JS (opzionale, per funzionalità aggiuntive) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

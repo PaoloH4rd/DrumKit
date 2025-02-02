@@ -43,14 +43,6 @@
 </head>
 <body>
 
-<!--<div class="sidebar">-->
-<!--    <h3>Le Tue Chat</h3>-->
-<!--    &lt;!&ndash; Elenco delle chat &ndash;&gt;-->
-<!--    <a th:each="chat : ${chats}"-->
-<!--       th:href="@{/areaCliente/chatDashboard/apriChat(email=${#authentication.name == chat.utenteDue.email ? chat.utenteUno.email : chat.utenteDue.email})}"-->
-<!--       th:text="${#authentication.name == chat.utenteDue.email ? chat.utenteUno.nome : chat.utenteDue.nome}"-->
-<!--       class="btn btn-link"></a>-->
-<!--</div>-->
 <div class="sidebar">
     <h3>Le Tue Chat</h3>
     <!-- Elenco delle chat -->
@@ -60,7 +52,6 @@
        class="btn btn-link"></a>
 </div>
 
-<!-- Colonna destra: form per inviare messaggi -->
 <div class="content">
     <div class="container mt-5">
         <header class="text-center mb-4">
@@ -68,7 +59,6 @@
             <p class="text-muted">Compila il modulo per inviare un messaggio a un altro utente.</p>
         </header>
 
-        <!-- Form per inviare un messaggio -->
         <form th:action="@{/areaCliente/chatDashboard/invia}" method="post" th:object="${inviaMessaggioRequestDTO}" class="shadow p-4 rounded bg-light">
             <!-- Campo per l'email del destinatario -->
             <div class="form-group">

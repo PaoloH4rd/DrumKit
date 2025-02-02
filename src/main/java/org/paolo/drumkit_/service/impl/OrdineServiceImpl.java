@@ -74,4 +74,9 @@ public class OrdineServiceImpl implements OrdineService {
         o.setDisattivato(true);
         repo.save(o);
     }
+    //implementa
+    @Override
+    public List<Ordine> getAllOrdiniByUtenteId(long id) {
+        return repo.findAllByUtente_IdAndIsDisattivatoIsFalse(id);
+    }
 }

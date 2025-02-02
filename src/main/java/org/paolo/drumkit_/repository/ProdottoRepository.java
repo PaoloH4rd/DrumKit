@@ -1,6 +1,7 @@
 package org.paolo.drumkit_.repository;
 
 
+import jakarta.validation.constraints.NotNull;
 import org.paolo.drumkit_.model.Prodotto;
 import org.paolo.drumkit_.model.StatoProdotto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,6 @@ public interface ProdottoRepository extends JpaRepository<Prodotto, Long> {
     List<Prodotto> findAllByStato(StatoProdotto stato);
     List<Prodotto> findAllByStatoAndProprietarioIdNot(StatoProdotto stato, Long idUtente);
     List<Prodotto> findAllByProprietarioIdAndStato(Long idUtente, StatoProdotto stato);
+
+    List<Prodotto> findAllByProprietarioEmailAndStato(@NotNull String proprietarioEmail, StatoProdotto stato);
 }

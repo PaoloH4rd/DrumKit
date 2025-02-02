@@ -13,4 +13,5 @@ public interface ProdottoService extends GeneralService<Prodotto> {
     List<Prodotto> getAllProdottiApprovatiNonDiUtenteLoggato(Long idUtente);
      void setStatoProdottoApprovato(Long idProdotto);
      List<Prodotto> getAllProdottiApprovareById(Long idVenditore);
+    List<Prodotto> getAllApprovatiByVenditoreEmail(String email);
     }

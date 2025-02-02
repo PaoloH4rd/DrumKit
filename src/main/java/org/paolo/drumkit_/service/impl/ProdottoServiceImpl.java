@@ -8,6 +8,7 @@ import org.paolo.drumkit_.model.Utente;
 import org.paolo.drumkit_.repository.ProdottoRepository;
 import org.paolo.drumkit_.service.def.ProdottoService;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -98,6 +99,9 @@ public class ProdottoServiceImpl implements ProdottoService {
     @Override
     public List<Prodotto> getAllProdottiApprovareById(Long idVenditore) {
         return repo.findAllByProprietarioIdAndStato(idVenditore,StatoProdotto.DA_APPROVARE);
+    }
+    public List<Prodotto> getAllApprovatiByVenditoreEmail(String email) {
+        return repo.findAllByProprietarioEmailAndStato(email, StatoProdotto.APPROVATO);
     }
 
 }

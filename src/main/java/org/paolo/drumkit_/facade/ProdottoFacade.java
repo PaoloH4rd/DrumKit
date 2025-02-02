@@ -53,9 +53,6 @@ public class ProdottoFacade {
             String directoryPath = "C:\\Users\\paolo\\IdeaProjects\\DrumKit\\src\\main\\resources\\static\\styles\\images\\"; // Modifica il percorso secondo le tue necessità
             // Crea la directory se non esiste
             File directory = new File(directoryPath);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
 
             String originalFileName = file.getOriginalFilename();
             //estrae l'estensione del file originale
@@ -67,8 +64,7 @@ public class ProdottoFacade {
             file.transferTo(new File(filePath));
             return fileName;
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Errore durante il salvataggio dell'immagine");
+            return null;
         }
     }
     //get all prodotti da approvare di un venditore
@@ -77,6 +73,13 @@ public class ProdottoFacade {
                 .map(mapper::toProdottoInVenditaResponseDTO)
                 .collect(Collectors.toList());
     }
+
+    public List<ProdottoInVenditaResponseDTO> getAllProdottiApprovatiVenditore(String email) {
+        return prodottoService.getAllApprovatiByVenditoreEmail(email).stream()
+                .map(mapper::toProdottoInVenditaResponseDTO)
+                .collect(Collectors.toList());
+    }
+
 
 
 }

@@ -9,4 +9,6 @@ public interface RigaOrdineService extends GeneralService<RigaOrdine> {
 
     void aggiungiProdottoAlCarrello(Prodotto prodotto, int quantita);
     List<RigaOrdine> getAllRigheOrdine(Long idUtenteLoggato);
+
+    void delete(RigaOrdine r);
 }

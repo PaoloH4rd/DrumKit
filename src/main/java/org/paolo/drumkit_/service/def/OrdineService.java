@@ -11,4 +11,6 @@ public interface OrdineService extends  GeneralService<Ordine>{
     List<Ordine> getByStato(StatoOrdine s);
 
     Ordine getOrdineAperto(Long idUtenteLoggato);
+
+    List<Ordine> getAllOrdiniByUtenteId(long id);
 }

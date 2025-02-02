@@ -101,25 +101,29 @@
         <div class="col-md-4" th:each="prodotto : ${prodotti}">
             <form th:action="@{/areaCliente/aggiungiProdottoAlCarrello}" method="post" class="card">
                 <img th:src="@{/immagine/{filename}(filename=${prodotto.immagine})}" class="card-img-top" alt="Prodotto">
+
                 <div class="card-body">
                     <h5 class="card-title" th:text="${prodotto.nome}">Nome Prodotto</h5>
+
                     <p class="card-text" th:text="${prodotto.descrizione}">Descrizione breve del prodotto.</p>
+
+                    <p class="card-text">Prezzo: <span th:text="${prodotto.prezzo}">Prezzo</span> €</p>
                     <p>
                         Venduto da:
                         <a th:href="@{/areaCliente/profiloVenditore(id=${prodotto.id})}"
                            th:text="${prodotto.venditore.nome}">Nome Venditore</a>
                     </p>
+
                     <div class="form-group">
                         <label th:for="'productSelect_' + ${prodotto.id}">Seleziona quantità</label>
-                        <label>
-                            <select class="form-control" th:id="'productSelect_' + ${prodotto.id}" name="quantity" required>
-                                <option th:each="i : ${#numbers.sequence(1, prodotto.quantita)}"
-                                        th:value="${i}"
-                                        th:text="${i}">1</option>
-                            </select>
-                        </label>
+                        <select class="form-control" th:id="'productSelect_' + ${prodotto.id}" name="quantita" required>
+                            <option th:each="i : ${#numbers.sequence(1, prodotto.quantita)}"
+                                    th:value="${i}"
+                                    th:text="${i}">1</option>
+                        </select>
                     </div>
-                    <input type="hidden" name="productId" th:value="${prodotto.id}">
+                    <input type="hidden" name="prodottoId" th:value="${prodotto.id}">
+
                     <button type="submit" class="btn btn-custom">Aggiungi al carrello</button>
                 </div>
             </form>
