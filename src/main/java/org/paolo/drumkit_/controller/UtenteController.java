@@ -52,7 +52,6 @@ public class UtenteController {
     @PostMapping(path = "/all/utente/login")
     public String login(@RequestParam("email") String email,
                         @RequestParam("password") String password, HttpSession session) {
-        try {
             // provo login
             if (utenteFacade.login(email, password)) {
                 // Set the user email in the session upon successful login
@@ -60,11 +59,6 @@ public class UtenteController {
                 return "redirect:/dashboard";
             }
             return "redirect:/login?error=true";
-        } catch (DatoNonValidoException e) {
-            // Gestione errori personalizzati
-            return "redirect:/login?error=true";
-        }
-
     }
     @PostMapping("/all/utente/cambiaPassword")
     public String cambiaPassword(
@@ -73,19 +67,15 @@ public class UtenteController {
         if (thebindingresult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.cambiaPasswordRequest", thebindingresult);
             redirectAttributes.addFlashAttribute("cambiaPasswordRequest", request);
-            return "redirect:/dashboard/profilo/cambia_password";
+            return "redirect:/dashboard/profilo/cambiaPassword";
         }
         try {
-            // Verifica errori di validazione
-
             utenteFacade.cambiaPassword((String) session.getAttribute("email"), request.getVecchiaPassword(),
                     request.getNuovaPassword(),request.getNuovaPasswordRipetuta());
             redirectAttributes.addFlashAttribute("successMessage", "Password cambiata con successo\n Effettua il login con la nuova password");
             session.invalidate();
             return "redirect:/dashboard/profilo/cambiaPassword";
-
         } catch (DatoNonValidoException e) {
-            // Gestione errori personalizzati
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/dashboard/profilo/cambiaPassword";
         }
