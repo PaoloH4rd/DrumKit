@@ -11,7 +11,6 @@ import org.paolo.drumkit_.model.Chat;
 import org.paolo.drumkit_.model.Messaggio;
 import org.paolo.drumkit_.service.def.ChatService;
 import org.paolo.drumkit_.service.impl.CustomSenderMessaggioServiceImpl;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.*;
@@ -22,7 +21,7 @@ import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
-public class ChatTest {
+public class ChatSocketController {
     private final ChatFacade chatFacade;
     private final UtenteFacade utenteFacade;
     private final ChatService chatService;
@@ -57,38 +56,4 @@ public class ChatTest {
         }
 
     }
-
-
-//    @MessageMapping("/chat/private/{chatId}")
-//    public void sendPrivateMessage(@DestinationVariable Long chatId, Messaggio messaggio) {
-//        Chat chat = chatService.getById(chatId);
-//        messaggio.setChat(chat);
-//        messaggio.setDataOra(LocalDateTime.now());
-//        MessaggioResponseDTO m = chatMapper.toMessaggioResponseDTO(chat.getUtenteUno(),chat.getUtenteDue(), messaggio);
-//
-//        try {
-//            // Converte l'oggetto MessaggioResponseDTO in una stringa JSON
-//            String json = mapper.writeValueAsString(m);
-//            System.out.println();
-//            rabbitTemplate.convertAndSend("ExchangeDurable", "chat.private." + chatId, m);
-//            System.out.println(json);
-//        } catch (JsonProcessingException e) {
-//            // Gestisce errori nella serializzazione del JSON
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Errore nella conversione del messaggio in JSON", e);
-//        }
-//
-////        customSenderMessaggioService.inviaNotifica(m, destination);
-//
-//    }
-
-
 }
-
-
-
-//    @MessageMapping("/chat/private/{chatId}")
-//    @SendTo("/exchange/ExcengeDurable/chat.private.{chatId}")
-//    public String sendMessage(@Payload String message, @DestinationVariable String chatId) {
-//        System.out.println("Messaggio ricevuto: " + message);
-//        return message;
-//    }
