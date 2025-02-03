@@ -69,12 +69,7 @@ public class AdminController {
             return "redirect:/pannelloAdmin/pannelloBlocchi";
         }
     }
-    @PostMapping("/sbloccaUtente")
-    public String sbloccaUtente(@RequestParam String email, RedirectAttributes redirectAttributes){
-        utenteFacade.attivaUtente(email);
-        redirectAttributes.addFlashAttribute("successMessage", "Utente sbloccato con successo");
-        return "redirect:/pannelloAdmin";
-    }
+
     @GetMapping("/profiloVenditore")
     public String profiloVenditore(@RequestParam Long id, Model model) {
         UtenteVenditoreResponseDTO venditore = prodottoFacade.getVenditore(id);

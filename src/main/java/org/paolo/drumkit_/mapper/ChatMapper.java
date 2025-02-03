@@ -36,6 +36,11 @@ public class ChatMapper {
                 .build();
     }
     public MessaggioResponseDTO toMessaggioResponseDTO(Utente u1, Utente u2, InviaMessaggioRequestDTO m) {
+
+        //se la data è null
+        if(m.getData()==null){
+            m.setData(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE dd MMM yyyy hh:mm:ss a", Locale.ITALIAN);
         ZoneId zoneId = ZoneId.of("Europe/Rome");
         ZonedDateTime zonedDateTime = ZonedDateTime.parse(m.getData(), DateTimeFormatter.ISO_DATE_TIME.withZone(zoneId));

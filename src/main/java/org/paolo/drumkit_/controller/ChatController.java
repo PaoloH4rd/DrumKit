@@ -9,8 +9,6 @@ import org.paolo.drumkit_.facade.ChatFacade;
 import org.paolo.drumkit_.facade.UtenteFacade;
 import org.paolo.drumkit_.model.Chat;
 import org.paolo.drumkit_.model.Utente;
-import org.paolo.drumkit_.service.def.ChatService;
-import org.paolo.drumkit_.service.impl.CustomSenderMessaggioServiceImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +34,8 @@ public class ChatController {
         Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         //caricare la lista delle chat dell'utente loggato
         List<Chat> chats = chatFacade.getChats(uLoggato.getId());
+        //aggiungi al model email utente loggato
+        model.addAttribute("emailMittente", uLoggato.getUsername());
         model.addAttribute("chats", chats);
 
         return "dashboard/cliente/chat_dashboard";
@@ -43,13 +43,12 @@ public class ChatController {
 
     @PostMapping("/invia")
     public String inviaMessaggio(@Valid @ModelAttribute InviaMessaggioRequestDTO inviaMessaggioRequestDTO,
-                                   BindingResult bindingResult,RedirectAttributes redirectAttributes,
-                                  @RequestHeader(value = "referer", required = false) final String referer){
+                                   BindingResult bindingResult,RedirectAttributes redirectAttributes){
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.inviaMessaggioRequestDTO", bindingResult);
             redirectAttributes.addFlashAttribute("inviaMessaggioRequestDTO", inviaMessaggioRequestDTO);
             // Aggiungi un messaggio di errore per i problemi di validazione
-            return "redirect:" + referer;        }
+            return "redirect:/areaCliente/chatDashboard" ;        }
         try {
             Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             long idUser = uLoggato.getId();
@@ -57,12 +56,12 @@ public class ChatController {
 
             // Aggiungi un messaggio di successo
             redirectAttributes.addFlashAttribute("successMessage", "Messaggio inviato con successo.");
-            return "redirect:" + referer;
+            return "redirect:/areaCliente/chatDashboard" ;
 
         } catch (DatoNonValidoException e) {
             // Aggiungi un messaggio di errore specifico
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:" + referer;
+            return "redirect:/areaCliente/chatDashboard";
         }
     }
 
@@ -81,8 +80,7 @@ public class ChatController {
         model.addAttribute("chatId", chatId);
         model.addAttribute("idClient", uLoggato.getId());
 
-//        return "dashboard/cliente/chats/mostra_chat_test";
-//        return "dashboard/cliente/chats/mostra_chat_rabbit";
+
         return "dashboard/cliente/chats/chat_fragment";
     }
 

@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Data
 public class InviaMessaggioRequestDTO {
+
     private String emailMittente;
     @Email
     private String emailDestinatario;

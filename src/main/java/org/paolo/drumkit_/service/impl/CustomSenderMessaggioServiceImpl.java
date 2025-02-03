@@ -21,7 +21,7 @@ public class CustomSenderMessaggioServiceImpl implements CustomSenderMessaggioSe
         try {
             // Converte l'oggetto MessaggioResponseDTO in una stringa JSON
             String json = mapper.writeValueAsString(m);
-//            rabbitTemplate.convertAndSend("ExchangeDurable", "chat." + chatId, json);
+            // Invia il messaggio alla coda "amq.topic" con il routing key "amq.topic."+chatId
             template.convertAndSend("amq.topic","amq.topic."+chatId, json);
 
 

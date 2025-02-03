@@ -6,12 +6,11 @@ import org.paolo.drumkit_.model.RigaOrdine;
 
 import java.util.List;
 
-public interface RigaOrdineService extends GeneralService<RigaOrdine> {
-
-    void aggiungiProdottoAlCarrello(Prodotto prodotto, int quantita);
-    List<RigaOrdine> getAllRigheOrdine(Long idUtenteLoggato);
+public interface RigaOrdineService  {
 
     void delete(RigaOrdine r);
 
     List<RigaOrdine> getAllRigheOrdineByOrdine(Ordine ordine);
+
+    void add(RigaOrdine r);
 }

@@ -73,7 +73,7 @@
             Blocca Utente
         </div>
         <div class="card-body">
-            <form th:action="@{/pannelloAdmin/bloccaUtente}" method="post" th:object="${bloccaUtenteRequestDTO}">
+            <form th:action="@{/pannelloAdmin/disattivaVenditore}" method="post" th:object="${bloccaUtenteRequestDTO}">
                 <div class="form-group">
                     <label for="email">Email Utente:</label>
                     <input type="email" class="form-control" id="email" th:field="*{email}" required>
@@ -84,23 +84,6 @@
         </div>
     </div>
 
-    <!-- Unblock User Section -->
-    <div class="card">
-        <div class="card-header bg-success text-white">
-            Sblocca Utente
-        </div>
-        <div class="card-body">
-            <form th:action="@{/pannelloAdmin/sbloccaUtente}" method="post">
-                <div class="form-group">
-                    <label for="userSelect">Seleziona Utente Bloccato</label>
-                    <select class="form-control" id="userSelect" name="userId" required>
-                        <option th:each="utente : ${utentiBloccati}" th:value="${utente.id}" th:text="${utente.nome + ' (' + utente.email + ')'}"></option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-success">Sblocca Utente</button>
-            </form>
-        </div>
-    </div>
     <div class="alert alert-danger" th:if="${errorMessage}">
         <span th:text="${errorMessage}"></span>
     </div>
@@ -111,7 +94,7 @@
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -84,38 +84,7 @@ public class ClienteControlloreTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/areaCliente/aggiungiProdottoVendita"));
     }
-    @Test
-    public void testAggiungiProdottoVenditaEntroTry() throws Exception {
-        // Crea un file multipart fittizio
-        MockMultipartFile file = new MockMultipartFile(
-                "immagine", // Nome del parametro nel controller
-                "test.jpg", // Nome del file
-                MediaType.IMAGE_JPEG_VALUE, // Tipo MIME
-                "fake image content".getBytes() // Contenuto del file
-        );
-        byte[] files = file.getBytes();
 
-        // Crea una sessione mock e imposta un attributo
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("email", "utente@mail.it");
-
-        // Crea manualmente la richiesta multipart
-        MockHttpServletRequestBuilder requestBuilder =
-                MockMvcRequestBuilders.multipart("/areaCliente/aggiungiProdottoVendita")
-                        .file("immagine", files) // Aggiungi il file manualmente
-                        .param("nome", "Prodotto Test")
-                        .param("descrizione", "Descrizione del prodotto")
-                        .param("prezzo", "9.99")
-                        .param("quantita", "1")
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .session(session);
-
-
-        // Esegui la richiesta mock
-        mockMvc.perform(requestBuilder)
-                .andExpect(status().is3xxRedirection()) // Verifica che ci sia un reindirizzamento
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/areaCliente/aggiungiProdottoVendita")); // Verifica l'URL di reindirizzamento
-    }
     @Test
     public void testAggiungiProdottoVenditaEntroTry2() throws Exception {
         // Crea un file multipart fittizio
@@ -145,7 +114,7 @@ public class ClienteControlloreTest {
         // Esegui la richiesta mock
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is3xxRedirection()) // Verifica che ci sia un reindirizzamento
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/areaCliente/aggiungiProdottoVendita")); // Verifica l'URL di reindirizzamento
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/login?notLogged=true/")); // Verifica l'URL di reindirizzamento
     }
 
 

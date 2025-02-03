@@ -33,10 +33,6 @@ public class UtenteFacade {
         return utenteService.loginCheck(email, password);
     }
 
-//    public void registraAdmin( String nome,String cognome, String email, String password, String passwordSuperAdmin) {
-//         utenteService.creaAdmin(nome,cognome,email,password,passwordSuperAdmin);
-//    }
-
     public UtenteResponseDTO getProfile(Utente utente) {
         //converte l'utente in DTO
         return mapper.toUtenteDTO(utente);
@@ -76,14 +72,14 @@ public class UtenteFacade {
     public void disattivaAdmin(Long adminId) {
         Utente u = utenteService.getById(adminId);
         utenteService.setDisattivatoTrue(u.getEmail());
+
     }
-    //registrare un admin
     public void registraAdmin(String nome, String cognome, String email, String password, String passwordRipetuta,String dataNascita) {
-        if(!password.equals(passwordRipetuta)) {
-            throw new DatoNonValidoException("Password non corrispondenti");
-        }
+        if (!password.equals(passwordRipetuta))
+            throw new DatoNonValidoException("Le password non coincidono");
         utenteService.creaAdmin(nome,cognome,email,password,passwordRipetuta,dataNascita);
     }
+
     //get nome by email
     public String getNomeByEmail(String email) {
         return utenteService.getNomeByEmail(email);
@@ -92,11 +88,6 @@ public class UtenteFacade {
     public List<UtenteResponseDTO> getUtentiBloccati() {
         List<Utente> utenti = utenteService.getUtentiBloccati();
         return utenti.stream().map(mapper::toUtenteDTO).collect(Collectors.toList());
-    }
-
-    //sbloccaun utente
-    public void attivaUtente(String email) {
-        utenteService.setDisattivatoFalse(email);
     }
 
     // get by email

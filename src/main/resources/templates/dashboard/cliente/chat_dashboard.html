@@ -71,6 +71,9 @@
                      th:errors="*{emailDestinatario}">Email non valida.</div>
             </div>
 
+            <!-- Campo nascosto per l'email del mittente -->
+            <input type="hidden" th:field="*{emailMittente}" th:value="${emailMittente}" />
+
             <div class="form-group">
                 <label for="testo">Testo del Messaggio</label>
                 <textarea id="testo" name="testo" rows="5" th:field="*{testo}"

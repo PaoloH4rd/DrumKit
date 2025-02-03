@@ -30,29 +30,8 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void creaChat(Utente utenteUno, Utente utenteDue) {
-        Chat c=getByUsernameAndAltroNome(utenteUno.getUsername(), utenteDue.getUsername());
-        if(c!=null) throw new ResponseStatusException(HttpStatus.CONFLICT);
-        c=new Chat();
-        c.setUtenteDue(utenteDue);
-        c.setUtenteUno(utenteUno);
-        repo.save(c);
-
-    }
-
-    @Override
     public Chat salva(Chat c) {
-        if(c.getId()!=0||c.getUtenteUno()==null||c.getUtenteDue()==null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-        if(getByUsernameAndAltroNome(c.getUtenteUno().getUsername(), c.getUtenteDue().getUsername())!=null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
         return repo.save(c);
     }
-    //get by id
-    @Override
-    public Chat getById(Long id) {
-        return repo.findById(id).orElse(null);
-    }
+
 }

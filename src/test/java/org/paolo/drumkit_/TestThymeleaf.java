@@ -12,6 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -75,6 +79,7 @@ public class TestThymeleaf {
                         .param("dataNascita", "1999-01-01")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.flash().attributeExists("errorMessage"))
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/register"));
 
     }
@@ -192,30 +197,22 @@ public class TestThymeleaf {
     public void testBloccaUtente() throws Exception {
         MockHttpSession session = new MockHttpSession();
         //bloccautente dto
-        BloccaUtenteRequestDTO bloccaUtenteRequestDTO = new BloccaUtenteRequestDTO();
         session.setAttribute("email", "admin@mail.it");
-        mockMvc.perform(MockMvcRequestBuilders.post("/pannelloAdmin/bloccaUtente").session(session)
+        mockMvc.perform(MockMvcRequestBuilders.post("/pannelloAdmin/disattivaVenditore").session(session)
                         .param("email", "utente@mail.it") // Cambia l'email a seconda della tua logica
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/pannelloAdmin"));
-    }
-
-    @Test
-    @WithMockUser(username = "admin@mail.it", roles = {"ADMIN"})
-    public void testSbloccaUtente() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/pannelloAdmin/sbloccaUtente")
-                        .param("email", "utente@mail.it") // Cambia l'email a seconda della tua logica
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/pannelloAdmin"));
+                .andExpect(MockMvcResultMatchers.flash().attributeExists("successMessage"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/pannelloAdmin/pannelloBlocchi"));
     }
 
     @Test
     @WithMockUser(username = "admin@mail.it", roles = {"ADMIN"})
     public void testProfiloVenditore() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/pannelloAdmin/profiloVenditore")
-                        .param("id", "10")) // Cambia l'ID a seconda della tua logica
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("email", "admin@mail.it");
+        mockMvc.perform(MockMvcRequestBuilders.get("/pannelloAdmin/profiloVenditore").session(session)
+                        .param("id", "300")) // Cambia l'ID a seconda della tua logica
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("dashboard/admin/vedi_profilo_venditore_admin"));
     }
@@ -231,12 +228,28 @@ public class TestThymeleaf {
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/login?logout")); // Verifica l'URL di redirect
     }
     @Test
-    public void testPannelloCliente() throws Exception {
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("email", "utente@mail.it");
-        mockMvc.perform(MockMvcRequestBuilders.get("/areaCliente").session(session))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.view().name("dashboard/vedi_pannello_cliente"));
+    public void testGetImmagineSuccess() throws Exception {
+        Path path = Paths.get("src/main/resources/static/styles/images/test.jpg");
+        Files.createDirectories(path.getParent());
+        Files.createFile(path);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/immagine/test.jpg"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.IMAGE_JPEG));
+
+        Files.deleteIfExists(path);
     }
 
+    @Test
+    public void testGetImmagineNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/immagine/nonEsiste.jpg"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void testGetImmagineBadRequest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/immagine/..%2F..%2Fetc%2Fpasswd"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
+

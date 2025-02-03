@@ -20,6 +20,4 @@ public interface UtenteService extends GeneralService<Utente> {
     String getNomeByEmail(String email);
     //get tutti utenti bloccati
     List<Utente> getUtentiBloccati();
-    //sblocca utente
-    void setDisattivatoFalse(String email);
 }

@@ -1,7 +1,6 @@
 package org.paolo.drumkit_.service.impl;
 
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.paolo.drumkit_.exception.DatoNonValidoException;
@@ -31,7 +30,7 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     public Utente getByEmail(String email) {
-        return Urepo.findByEmailAndIsDisattivatoIsFalse(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utente non trovato"));
+        return Urepo.findByEmailAndIsDisattivatoIsFalse(email).orElseThrow(() -> new DatoNonValidoException("Utente non trovato"));
     }
     @Override
     public Utente getByEmailforChat(String email) {
@@ -63,16 +62,11 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     public Utente getById(long id) {
-        return Urepo.findById(id).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return Urepo.findById(id).orElse(null);
     }
 
-    @Override
+    //set disattivato true
     public void setIsDisattivatoTrue(long id) {
-        Utente utente = getById(id);
-        utente.setDisattivato(true);
-        Urepo.save(utente);
-
     }
 
     @Override
@@ -82,7 +76,11 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     public void setDisattivatoTrue(String email) {
+        //controllo che l'utente esista e che sia un utente cliente
         Utente utente = getByEmail(email);
+        if (utente.getRuolo() == Ruolo.ADMIN) throw new DatoNonValidoException("Non puoi disattivare un admin");
+        //non puoi disattivare un utente gia disattivato
+        if (utente.isDisattivato()) throw new DatoNonValidoException("Utente già disattivato");
         utente.setDisattivato(true);
         Urepo.save(utente);
     }
@@ -93,13 +91,10 @@ public class UtenteServiceImpl implements UtenteService {
         if (optionalUtente.isPresent()) throw new DatoNonValidoException("Utente già esistente");
         Utente utente = new Utente();
         LocalDate data_Nascita;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Adatta il formato al tuo caso
-            data_Nascita = LocalDate.parse(dataNascita, formatter);
-        } catch (DateTimeParseException e) {
-            throw new DatoNonValidoException("Formato data non valido. Usa il formato AAAA-MM-GG.");
-        }
-        //si setta il suo utentename
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Adatta il formato al tuo caso
+        data_Nascita = LocalDate.parse(dataNascita, formatter);
+
+        //si setta il suo utentename e i campi
         utente.setNome(nome);
         utente.setCognome(cognome);
         utente.setEmail(email);
@@ -148,10 +143,5 @@ public class UtenteServiceImpl implements UtenteService {
     public List<Utente> getUtentiBloccati() {
         return Urepo.findAllByIsDisattivatoIsTrue();
     }
-    @Override
-    public void setDisattivatoFalse(String email) {
-        Utente utente = getByEmail(email);
-        utente.setDisattivato(false);
-        Urepo.save(utente);
-    }
+
 }

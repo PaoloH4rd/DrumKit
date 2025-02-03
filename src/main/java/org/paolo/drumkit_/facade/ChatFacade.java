@@ -49,6 +49,7 @@ public class ChatFacade {
 
         messaggioService.aggiungiMessaggio(m);
         MessaggioResponseDTO mDTO=chatMapper.toMessaggioResponseDTO(u1, u2, inviaMessaggioRequestDTO);
+        //invia il messaggio a rabbit solo se il message mapping ha chiamato questo metodo
         customSenderMessaggioService.inviaNotifica(mDTO, String.valueOf(c.getId()));
     }
 
@@ -60,11 +61,6 @@ public class ChatFacade {
     public List<Chat> getChats(long id) {
         Utente u= utenteService.getById(id);
         return chatService.getAllByUsername(u.getUsername());
-    }
-
-    //torna la chat con l'utente
-    public Chat getById(long id) {
-        return chatService.getById(id);
     }
 
 }

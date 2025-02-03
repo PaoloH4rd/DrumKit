@@ -151,11 +151,4 @@ public class RigaOrdineFacade {
         }
     }
 
-    public List<RigaOrdine> getAllRigheOrdineByOrdine(Ordine ordine) {
-        return rigaOrdineService.getAllRigheOrdineByOrdine(ordine);
-    }
-
-    public Ordine getUltimoOrdine(Long idLoggato) {
-        return ordineService.getUltimoOrdine(idLoggato);
-    }
 }

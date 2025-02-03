@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -37,14 +36,9 @@ public class SuperAdminController {
 
     @PostMapping("/disattivaAdmin")
     public String disattivaAdmin(@RequestParam("adminId") Long adminId,RedirectAttributes redirectAttributes) {
-        try {
             utenteFacade.disattivaAdmin(adminId);
             redirectAttributes.addFlashAttribute("successMessage", "Admin disattivato con successo");
-            return "redirect:/pannelloSuperAdmin?succesMessage=true";
-        }catch (HttpStatusCodeException e){
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/pannelloSuperAdmin?errorMessage=true";
-        }
+            return "redirect:/pannelloSuperAdmin";
     }
     @PostMapping("/aggiungiAdmin")
       public String aggiungiAdmin(@ModelAttribute ("registrazioneUtenteDTO") @Valid RegistrazioneUtenteDTO registrazioneUtenteDTO,
@@ -58,10 +52,10 @@ public class SuperAdminController {
             utenteFacade.registraAdmin(registrazioneUtenteDTO.getNome(), registrazioneUtenteDTO.getCognome(), registrazioneUtenteDTO.getEmail(),
                     registrazioneUtenteDTO.getPassword(), registrazioneUtenteDTO.getPasswordRipetuta(), registrazioneUtenteDTO.getDataNascita());
             redirectAttributes.addFlashAttribute("successMessage", "Admin aggiunto con successo");
-            return "redirect:/pannelloSuperAdmin?successMessage=true";
+            return "redirect:/pannelloSuperAdmin";
         }catch (DatoNonValidoException e){
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/pannelloSuperAdmin?errorMessage=true";
+            return "redirect:/pannelloSuperAdmin";
         }
     }
 }
