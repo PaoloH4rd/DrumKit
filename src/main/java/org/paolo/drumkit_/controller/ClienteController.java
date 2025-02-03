@@ -67,7 +67,7 @@ public class ClienteController {
             MultipartFile immagine = prodotto.getImmagine();
             if (immagine == null || immagine.isEmpty()) {
                 prodottoFacade.aggiungiProdottoVendita(prodotto.getNome(), prodotto.getDescrizione(),
-                    prodotto.getPrezzo(), prodotto.getQuantita(), utenteLoggato.getId(),"static/styles/images/item-placeholder.jpg" );
+                    prodotto.getPrezzo(), prodotto.getQuantita(), utenteLoggato.getId(),"item-placeholder.jpg" );
 
             }else{
                 String imageName = prodottoFacade.saveImage(immagine);

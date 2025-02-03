@@ -25,17 +25,6 @@ public class ProdottoServiceImpl implements ProdottoService {
         repo.save(prodotto);
     }
 
-    @Override
-    public void update(Prodotto prodotto) {
-        Prodotto p = new Prodotto();
-        p.setId(prodotto.getId());
-        p.setNome(prodotto.getNome());
-        p.setDescrizione(prodotto.getDescrizione());
-        p.setPrezzo(prodotto.getPrezzo());
-        p.setQuantita(prodotto.getQuantita());
-        p.setRigaOrdine(prodotto.getRigaOrdine());
-        repo.save(p);
-    }
 
     @Override
     public Prodotto getById(long id) {

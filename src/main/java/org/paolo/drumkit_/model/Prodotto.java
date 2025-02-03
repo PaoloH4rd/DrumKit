@@ -39,12 +39,9 @@ public class Prodotto {
 
     //di default il prodotto è in attesa di approvazione
     @Column(nullable = false, columnDefinition = "varchar(255) default 'DA_APPROVARE'")
-    @Enumerated(EnumType.STRING) // O EnumType.ORDINAL se vuoi usare numeri
+    @Enumerated(EnumType.STRING)
     private StatoProdotto stato;
 
-    private String motivoRifiuto; // Campo per memorizzare il motivo di rifiuto
-
-    //il mio prodotto puo essere in piu righe ordine
     @OneToMany(mappedBy = "prodotto")
     private List<RigaOrdine> rigaOrdine;
 

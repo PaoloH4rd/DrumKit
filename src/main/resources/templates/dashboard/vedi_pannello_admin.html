@@ -80,7 +80,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/dashboard}">Home</a>
+                <a class="nav-link" th:href="@{/pannelloAdmin}">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/logout}">Logout</a>
@@ -106,7 +106,7 @@
                         <strong>Prezzo:</strong> <span th:text="${prodotto.prezzo}">€0.00</span>
                     </p>
                     <p class="card-text">
-                        <a th:href="@{/pannelloAdmin/profiloVenditore(id=${prodotto.venditore.id})}" class="btn btn-link">Profilo del venditore</a>
+                        <a th:href="@{/pannelloAdmin/profiloVenditore(id=${prodotto.id})}" class="btn btn-link">Profilo del venditore</a>
                     </p>
                     <div class="d-flex justify-content-between">
                         <form th:action="@{/pannelloAdmin/approvaProdotto}" method="post" style="display:inline;">

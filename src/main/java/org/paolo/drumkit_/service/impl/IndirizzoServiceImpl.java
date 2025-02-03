@@ -28,22 +28,6 @@ public class IndirizzoServiceImpl implements IndirizzoService {
     }
 
     @Override
-    public void update(Indirizzo indirizzo) {
-        Indirizzo i = new Indirizzo();
-        i.setId(indirizzo.getId());
-        i.setIndirizzoR1(indirizzo.getIndirizzoR1());
-        i.setIndirizzoR2(indirizzo.getIndirizzoR2());
-        i.setNome(indirizzo.getNome());
-        i.setCap(indirizzo.getCap());
-        i.setComune(indirizzo.getComune());
-        i.setNumeroTel(indirizzo.getNumeroTel());
-        i.setDefault(indirizzo.isDefault());
-        i.setStato(indirizzo.getStato());
-        i.setUtente(indirizzo.getUtente());
-        repo.save(i);
-    }
-
-    @Override
     public Indirizzo getById(long id) {
         return repo.findByIdAndIsDisattivatoIsFalse(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));

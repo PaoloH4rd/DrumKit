@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
-    @Query("select c from Chat c where c.utenteUno.id= :id or c.utenteDue.id= :id")
-    List<Chat> findAllByIdUtente(long id);
 
     @Query("select c from Chat c where c.utenteUno.email= :email or c.utenteDue.email= :email")
     List<Chat> findAllByEmail(String email);

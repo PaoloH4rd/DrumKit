@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
 <head>
   <meta charset="UTF-8">
   <title>Riepilogo Ordine</title>
@@ -22,11 +22,11 @@
     </thead>
     <tbody>
     <!-- Itera sulle righe dell'ordine -->
-    <tr th:each="riga : ${ordine.rigaOrdine}">
-      <td th:text="${riga.prodotto.nome}">Nome Prodotto</td>
-      <td th:text="${riga.quantita}">0</td>
-      <td th:text="${#numbers.formatCurrency(riga.prodotto.prezzo)}">0.00 €</td>
-      <td th:text="${#numbers.formatCurrency(riga.prodotto.prezzo * riga.quantita)}">0.00 €</td>
+    <tr th:each="rigaOrdine : ${righeOrdine}">
+      <td th:text="${rigaOrdine.prodotto.nome}">Nome Prodotto</td>
+      <td th:text="${rigaOrdine.quantita}">0</td>
+      <td th:text="${#numbers.formatCurrency(rigaOrdine.prodotto.prezzo)}">0.00 €</td>
+      <td th:text="${#numbers.formatCurrency(rigaOrdine.prodotto.prezzo * riga.quantita)}">0.00 €</td>
     </tr>
     </tbody>
   </table>
@@ -39,7 +39,6 @@
   <!-- Pulsanti per confermare o annullare l'ordine -->
   <div class="text-center mt-4">
     <a th:href="@{/areaCliente}" class="btn btn-secondary">Torna alla Dashboard</a>
-    <a th:href="@{/confermaOrdine}" class="btn btn-success ml-2">Conferma Ordine</a>
   </div>
 </div>
 

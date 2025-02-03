@@ -69,7 +69,7 @@ public class UtenteFacade {
     }
 
 
-    public void disattivaUtente(String email    ) {
+    public void disattivaUtente(String email ) {
         utenteService.setDisattivatoTrue(email);
     }
     //disattiva un admin

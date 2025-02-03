@@ -2,6 +2,7 @@ package org.paolo.drumkit_.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
+import org.paolo.drumkit_.model.Ordine;
 import org.paolo.drumkit_.model.Prodotto;
 import org.paolo.drumkit_.model.RigaOrdine;
 import org.paolo.drumkit_.repository.RigaOrdineRepository;
@@ -24,16 +25,6 @@ public class RigaOrdineServiceImpl implements RigaOrdineService {
         repo.save(rigaOrdine);
     }
 
-    @Override
-    public void update(RigaOrdine rigaOrdine) {
-        RigaOrdine old = new RigaOrdine();
-        old.setId(rigaOrdine.getId());
-        old.setOrdine(rigaOrdine.getOrdine());
-        old.setQuantita(rigaOrdine.getQuantita());
-        old.setProdotto(rigaOrdine.getProdotto());
-        old.setPrezzoTot(rigaOrdine.getPrezzoTot());
-        repo.save(old);
-    }
 
     @Override
     public RigaOrdine getById(long id) {
@@ -71,6 +62,11 @@ public class RigaOrdineServiceImpl implements RigaOrdineService {
     @Override
     public void delete(RigaOrdine r) {
         repo.delete(r);
+    }
+    //getall
+    @Override
+    public List<RigaOrdine> getAllRigheOrdineByOrdine(Ordine ordine) {
+        return repo.findAllByOrdine(ordine);
     }
 
 }

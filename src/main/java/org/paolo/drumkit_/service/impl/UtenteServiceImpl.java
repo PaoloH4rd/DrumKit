@@ -56,24 +56,6 @@ public class UtenteServiceImpl implements UtenteService {
     }
 
     @Override
-    @Transactional
-    public void update(Utente u) {
-        if (u.getId() < 1) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID utente non valido");
-        }
-        // Recupera l'utente dal database
-        Utente existingUtente = Urepo.findById(u.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utente non trovato"));
-        //aggiorna i campi
-        existingUtente.setNome(u.getNome());
-        existingUtente.setCognome(u.getCognome());
-        existingUtente.setEmail(u.getEmail());
-        existingUtente.setPassword(u.getPassword());
-        existingUtente.setRuolo(u.getRuolo());
-        Urepo.save(u);
-    }
-
-    @Override
     public void cambiaPassword(Utente u) {
         Urepo.save(u);
     }

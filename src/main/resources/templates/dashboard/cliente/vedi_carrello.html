@@ -55,6 +55,9 @@
     <div class="alert alert-danger" th:if="${errorMessage}">
         <span th:text="${errorMessage}"></span>
     </div>
+    <div class="alert alert-danger" th:if="${successMessage}">
+        <span th:text="${successMessage}"></span>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

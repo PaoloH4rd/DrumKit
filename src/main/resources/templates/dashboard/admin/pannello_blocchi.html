@@ -101,7 +101,14 @@
             </form>
         </div>
     </div>
+    <div class="alert alert-danger" th:if="${errorMessage}">
+        <span th:text="${errorMessage}"></span>
+    </div>
+    <div class="alert alert-info" th:if="${successMessage}">
+        <span th:text="${successMessage}"></span>
+    </div>
 </div>
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.dto.request.BloccaUtenteRequestDTO;
 import org.paolo.drumkit_.dto.response.ProdottoInVenditaResponseDTO;
 import org.paolo.drumkit_.dto.response.UtenteResponseDTO;
+import org.paolo.drumkit_.dto.response.UtenteVenditoreResponseDTO;
 import org.paolo.drumkit_.facade.ProdottoFacade;
 import org.paolo.drumkit_.facade.UtenteFacade;
 import org.springframework.stereotype.Controller;
@@ -57,11 +58,16 @@ public class AdminController {
         return "dashboard/admin/pannello_blocchi";
     }
     //blocca utente
-    @PostMapping("/bloccaUtente")
+    @PostMapping("/disattivaVenditore")
     public String bloccaUtente(@Valid @ModelAttribute ("bloccaUtenteRequestDTO")BloccaUtenteRequestDTO bloccaUtenteRequestDTO, RedirectAttributes redirectAttributes){
-        utenteFacade.disattivaUtente(bloccaUtenteRequestDTO.getEmail());
-        redirectAttributes.addFlashAttribute("successMessage", "Utente bloccato con successo");
-        return "redirect:/pannelloAdmin";
+        try {
+            utenteFacade.disattivaUtente(bloccaUtenteRequestDTO.getEmail());
+            redirectAttributes.addFlashAttribute("successMessage", "Utente bloccato con successo");
+            return "redirect:/pannelloAdmin/pannelloBlocchi";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/pannelloAdmin/pannelloBlocchi";
+        }
     }
     @PostMapping("/sbloccaUtente")
     public String sbloccaUtente(@RequestParam String email, RedirectAttributes redirectAttributes){
@@ -71,10 +77,12 @@ public class AdminController {
     }
     @GetMapping("/profiloVenditore")
     public String profiloVenditore(@RequestParam Long id, Model model) {
-        model.addAttribute("venditore", prodottoFacade.getVenditore(id));
+        UtenteVenditoreResponseDTO venditore = prodottoFacade.getVenditore(id);
+        model.addAttribute("venditore", venditore);
         //vedi prodotti in vendita dell'utente
-        List<ProdottoInVenditaResponseDTO> prodottiVenditore = prodottoFacade.getAllProdottiDaApprovareVenditore(id);
+        List<ProdottoInVenditaResponseDTO> prodottiVenditore = prodottoFacade.getAllProdottiDaApprovareVenditore(venditore.getId());
         model.addAttribute("prodottiVenditore", prodottiVenditore);
+        model.addAttribute("bloccaUtenteRequestDTO", new BloccaUtenteRequestDTO());
         return "dashboard/admin/vedi_profilo_venditore_admin";
     }
 

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 @Service
@@ -88,15 +87,17 @@ public class RigaOrdineFacade {
             }else{
                 r.setPrezzoTot(r.getProdotto().getPrezzo() * r.getQuantita());
             }
-            prodottoService.update(r.getProdotto());
+            prodottoService.add(r.getProdotto());
             r.getProdotto().setQuantita(r.getProdotto().getQuantita()-r.getQuantita());
 
             if (r.getProdotto().getQuantita() == 0) {
                 r.getProdotto().setStato(StatoProdotto.VENDUTO);
-                rigaOrdineService.update(r);
+                rigaOrdineService.add(r);
             }
         }
-        ordineService.update(ordine);
+        //stato ordine
+        ordine.setStatoOrdine(StatoOrdine.CONFERMATO);
+        ordineService.add(ordine);
 
         return ordine;
     }
@@ -118,6 +119,17 @@ public class RigaOrdineFacade {
     public void cambiaQuantita(Long idProdotto, int quantita, long id) {
         //scala la quantità di un prodotto nel carrello
         Ordine ordine = ordineService.getOrdineAperto(id);
+        if(ordine==null){
+            return;
+        }
+        for (RigaOrdine riga : ordine.getRigaOrdine()) {
+            if (riga.getProdotto().getId() == idProdotto) {
+                riga.setQuantita(quantita);
+                riga.setPrezzoTot(riga.getProdotto().getPrezzo() * quantita);
+                rigaOrdineService.add(riga);
+                break;
+            }
+        }
     }
 
     public void rimuoviProdotto(Long idProdotto, long idLoggato) {
@@ -137,5 +149,13 @@ public class RigaOrdineFacade {
             ordine.getRigaOrdine().remove(r);
             rigaOrdineService.delete(r);
         }
+    }
+
+    public List<RigaOrdine> getAllRigheOrdineByOrdine(Ordine ordine) {
+        return rigaOrdineService.getAllRigheOrdineByOrdine(ordine);
+    }
+
+    public Ordine getUltimoOrdine(Long idLoggato) {
+        return ordineService.getUltimoOrdine(idLoggato);
     }
 }

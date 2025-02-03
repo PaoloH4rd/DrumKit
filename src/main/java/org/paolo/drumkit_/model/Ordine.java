@@ -26,6 +26,7 @@ public class Ordine {
     private LocalDate dataConferma;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatoOrdine statoOrdine;
 
     private boolean isDisattivato;
