@@ -55,7 +55,7 @@ public class RigaOrdineFacade {
         }
         rigaOrdineService.add(r);
     }
-    //,eglio tornare una lista di righe ordine
+    //meglio tornare una lista di righe ordine
     public List<RigaOrdine> getProdottiCarrello(Long idUtenteLoggato) {
         Ordine ordine = ordineService.getOrdineAperto(idUtenteLoggato);
         if(ordine==null){

@@ -144,4 +144,13 @@ public class UtenteServiceImpl implements UtenteService {
         return Urepo.findAllByIsDisattivatoIsTrue();
     }
 
+    @Override
+    public void setDisattivatoTrueSAdmin(String email) {
+        Utente utente = getByEmail(email);
+        if (utente.getRuolo() == Ruolo.CLIENTE) throw new DatoNonValidoException("Non puoi disattivare un cliente");
+        if (utente.isDisattivato()) throw new DatoNonValidoException("Utente già disattivato");
+        utente.setDisattivato(true);
+        Urepo.save(utente);
+    }
+
 }

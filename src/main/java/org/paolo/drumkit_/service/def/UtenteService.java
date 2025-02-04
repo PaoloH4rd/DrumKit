@@ -1,6 +1,7 @@
 package org.paolo.drumkit_.service.def;
 
 
+import jakarta.validation.constraints.NotNull;
 import org.paolo.drumkit_.model.Utente;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface UtenteService extends GeneralService<Utente> {
     String getNomeByEmail(String email);
     //get tutti utenti bloccati
     List<Utente> getUtentiBloccati();
+
+    void setDisattivatoTrueSAdmin( String email);
 }

@@ -26,9 +26,6 @@ public class Chat {
     @JoinColumn(name = "id_utente_due")
     private Utente utenteDue;
 
-//    @ManyToOne
-//    @JoinColumn(nullable = false , updatable = false , name = "id_prodotto")
-//    private Prodotto prodotto;
 
     @OneToMany(mappedBy = "chat")
     private List<Messaggio> messaggi;

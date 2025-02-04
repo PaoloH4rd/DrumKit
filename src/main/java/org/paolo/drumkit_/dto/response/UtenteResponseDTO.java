@@ -74,7 +74,6 @@ public class UtenteResponseDTO {
     public String getDataNascita() {
         //formatta la data di nascita in modo che sia leggibile e in ordine giorno/mese/anno
         String[] data = dataNascita.split("-");
-        System.out.println(data[2] + "/" + data[1] + "/" + data[0]);
         return data[2] + "/" + data[1] + "/" + data[0];
     }
 

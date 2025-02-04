@@ -71,7 +71,7 @@ public class UtenteFacade {
     //disattiva un admin
     public void disattivaAdmin(Long adminId) {
         Utente u = utenteService.getById(adminId);
-        utenteService.setDisattivatoTrue(u.getEmail());
+        utenteService.setDisattivatoTrueSAdmin(u.getEmail());
 
     }
     public void registraAdmin(String nome, String cognome, String email, String password, String passwordRipetuta,String dataNascita) {

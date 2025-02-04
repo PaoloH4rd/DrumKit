@@ -36,6 +36,7 @@ public class SuperAdminController {
 
     @PostMapping("/disattivaAdmin")
     public String disattivaAdmin(@RequestParam("adminId") Long adminId,RedirectAttributes redirectAttributes) {
+        
             utenteFacade.disattivaAdmin(adminId);
             redirectAttributes.addFlashAttribute("successMessage", "Admin disattivato con successo");
             return "redirect:/pannelloSuperAdmin";
