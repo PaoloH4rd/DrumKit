@@ -19,6 +19,7 @@ public class GestoreFilterChain {
 	private final FilterDiAutenticazione filter;
 	private final AuthenticationProvider provider;
 	@Bean
+	// Configura le regole di sicurezza
 	protected SecurityFilterChain getFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(req->req

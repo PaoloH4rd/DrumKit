@@ -17,6 +17,7 @@ import java.util.Locale;
 
 @Component
 public class ChatMapper {
+    //metodo per convertire una lista di messaggi in una lista di messaggiResponseDTO
     public List<MessaggioResponseDTO> toMessaggioResponseDTOList(Chat c){
         if(c==null||c.getMessaggi()==null)return new ArrayList<>();
         return c.getMessaggi().stream()
@@ -25,7 +26,7 @@ public class ChatMapper {
                 .toList();
 
     }
-
+    //metodo per convertire un messaggio in un messaggioResponseDTO
     public MessaggioResponseDTO toMessaggioResponseDTOdb(Utente u1, Utente u2, Messaggio m) {
         return new MessaggioResponseDTO.Builder()
                 .setData(m.getDataOra().format(DateTimeFormatter.ofPattern("EEEE dd MMM yyyy hh:mm:ss")))
@@ -41,6 +42,7 @@ public class ChatMapper {
         if(m.getData()==null){
             m.setData(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
         }
+        // creo un oggetto ZonedDateTime con la data e l'ora attuale e lo converto in stringa con il formato specificato
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE dd MMM yyyy hh:mm:ss a", Locale.ITALIAN);
         ZoneId zoneId = ZoneId.of("Europe/Rome");
         ZonedDateTime zonedDateTime = ZonedDateTime.parse(m.getData(), DateTimeFormatter.ISO_DATE_TIME.withZone(zoneId));

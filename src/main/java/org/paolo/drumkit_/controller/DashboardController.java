@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DashboardController {
     private final UtenteFacade utenteFacade;
 
+    // Mostra la dashboard
     @GetMapping("")
     public String dashboard(Model model) {
             // Ottieni l'utente autenticato
@@ -25,7 +26,7 @@ public class DashboardController {
             model.addAttribute("nome", utente.getNome());
             return "vedi_dashboard";
         }
-
+    // Mostra il profilo dell'utente
     @GetMapping("/profilo")
     public String getUserProfile (Model model){
         // Ottieni l'utente autenticato
@@ -36,6 +37,7 @@ public class DashboardController {
         model.addAttribute("utenteResponseDTO", utenteResponseDTO);
         return "dashboard/vedi_profilo";
     }
+    // Mostra il form per cambiare la password
     @GetMapping("/profilo/cambiaPassword")
     public String mostraForm (Model model){
     if (!model.containsAttribute("cambiaPasswordRequest"))

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 public class ChatSocketController {
     private final ChatFacade chatFacade;
     private final UtenteFacade utenteFacade;
-
+    //invia messaggio privato a una chat
     @MessageMapping("/chat/private/{chatId}")
     public void sendMessage(@DestinationVariable Long chatId, InviaMessaggioRequestDTO messaggio) {
         Utente uLoggato = utenteFacade.getByEmail(messaggio.getEmailMittente());

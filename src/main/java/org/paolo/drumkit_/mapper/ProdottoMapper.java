@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProdottoMapper {
+    //mappa prodotto in vendita in DTO
     public ProdottoInVenditaResponseDTO toProdottoInVenditaResponseDTO(Prodotto prodotto) {
         return new ProdottoInVenditaResponseDTO.Builder()
                 .setId(prodotto.getId())
@@ -24,6 +25,7 @@ public class ProdottoMapper {
                         .build())
                 .build();
     }
+    //mappa utente venditore in DTO
     public UtenteVenditoreResponseDTO toUtenteVenditoreResponseDTO(Utente utente) {
         return new UtenteVenditoreResponseDTO.Builder()
                 .setId(utente.getId())

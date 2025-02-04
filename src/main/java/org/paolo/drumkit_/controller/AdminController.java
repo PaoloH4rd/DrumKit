@@ -17,6 +17,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+//controller per la dashboard dell'admin
 @RequestMapping("/pannelloAdmin")
 public class AdminController {
     private final ProdottoFacade prodottoFacade;
@@ -30,13 +31,14 @@ public class AdminController {
         return "/dashboard/vedi_pannello_admin";
     }
 
+    //approva prodotto
     @PostMapping("/approvaProdotto")
     public String approvaProdotto(@RequestParam Long idProdotto, RedirectAttributes redirectAttributes){
         prodottoFacade.approvaProdotto(idProdotto);
         redirectAttributes.addFlashAttribute("successMessage", "Prodotto approvato con successo");
         return "redirect:/pannelloAdmin?successMessage=true";
     }
-
+    //rifiuta prodotto
     @PostMapping("/rifiutaProdotto")
     public String rifiutaProdotto(@RequestParam Long idProdotto, RedirectAttributes redirectAttributes){
         prodottoFacade.rifiutaProdotto(idProdotto);
@@ -70,6 +72,7 @@ public class AdminController {
         }
     }
 
+    //profilo venditore
     @GetMapping("/profiloVenditore")
     public String profiloVenditore(@RequestParam Long id, Model model) {
         UtenteVenditoreResponseDTO venditore = prodottoFacade.getVenditore(id);

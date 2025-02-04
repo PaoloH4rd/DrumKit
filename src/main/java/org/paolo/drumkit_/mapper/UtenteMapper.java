@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 public class UtenteMapper {
-
+    // Mappa un Utente in un UtenteResponseDTO
     public UtenteResponseDTO toUtenteDTO(Utente utente) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return new UtenteResponseDTO.Builder()
@@ -25,6 +25,7 @@ public class UtenteMapper {
                         .toList())
                 .build();
     }
+    // Mappa un Utente in un AdminDisattivaSelectResponseDTO
     public AdminDisattivaSelectResponseDTO toAdminDTO(Utente utente) {
         return new AdminDisattivaSelectResponseDTO.Builder()
                 .setId(utente.getId())

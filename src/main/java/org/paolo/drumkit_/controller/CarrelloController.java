@@ -21,6 +21,7 @@ public class CarrelloController {
     private final RigaOrdineFacade rigaOrdineFacade;
 
     @GetMapping("")
+    //visualizza il carrello
     public String pannelloCarrello(Model model, RedirectAttributes redirectAttributes) {
         Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<RigaOrdine> righeOrdine = rigaOrdineFacade.getProdottiCarrello(uLoggato.getId());
@@ -31,7 +32,7 @@ public class CarrelloController {
         return "dashboard/cliente/vedi_carrello";
     }
 
-
+    //conferma carrello
     @PostMapping("/confermaCarrello")
     public String confermaCarrello( RedirectAttributes redirectAttributes) {
         Utente uLoggato = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();

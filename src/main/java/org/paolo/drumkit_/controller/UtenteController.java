@@ -48,18 +48,20 @@ public class UtenteController {
             return "redirect:/register";
         }
     }
-
+    //login
     @PostMapping(path = "/all/utente/login")
     public String login(@RequestParam("email") String email,
                         @RequestParam("password") String password, HttpSession session) {
             // provo login
             if (utenteFacade.login(email, password)) {
-                // Set the user email in the session upon successful login
+                // Login riuscito
                 session.setAttribute("email", email);
                 return "redirect:/dashboard";
             }
             return "redirect:/login?error=true";
     }
+
+    //cambia password
     @PostMapping("/all/utente/cambiaPassword")
     public String cambiaPassword(
             @ModelAttribute("cambiaPasswordRequest") @Valid CambiaPasswordRequestDTO request,
@@ -70,6 +72,7 @@ public class UtenteController {
             return "redirect:/dashboard/profilo/cambiaPassword";
         }
         try {
+            // Cambia password utente loggato
             utenteFacade.cambiaPassword((String) session.getAttribute("email"), request.getVecchiaPassword(),
                     request.getNuovaPassword(),request.getNuovaPasswordRipetuta());
             redirectAttributes.addFlashAttribute("successMessage", "Password cambiata con successo\n Effettua il login con la nuova password");

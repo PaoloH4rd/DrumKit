@@ -26,7 +26,7 @@ public class ChatController {
     private final ChatFacade chatFacade;
     private final UtenteFacade utenteFacade;
 
-
+    //visualizza le chat
     @GetMapping("")
     public String chats(Model model) {
         if (!model.containsAttribute("inviaMessaggioRequestDTO"))
@@ -40,7 +40,7 @@ public class ChatController {
 
         return "dashboard/cliente/chat_dashboard";
     }
-
+    //invia messaggio
     @PostMapping("/invia")
     public String inviaMessaggio(@Valid @ModelAttribute InviaMessaggioRequestDTO inviaMessaggioRequestDTO,
                                    BindingResult bindingResult,RedirectAttributes redirectAttributes){
@@ -64,13 +64,15 @@ public class ChatController {
             return "redirect:/areaCliente/chatDashboard";
         }
     }
-
+    //apri chat
     @GetMapping("/apriChatRabbit")
     public String getChatRabbit(@RequestParam("chatId") Long chatId, @RequestParam("email") String email, Model model) {
         if (!model.containsAttribute("inviaMessaggioRequestDTO"))
             model.addAttribute("inviaMessaggioRequestDTO", new InviaMessaggioRequestDTO());
         Utente uLoggato = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+
+        //caricare la lista dei messaggi della chat selezionata con l'utente loggato
         String nomeDestinatario = utenteFacade.getNomeByEmail(email);
         List<MessaggioResponseDTO> messaggi = chatFacade.getChat(uLoggato.getId(), email);
         model.addAttribute("messaggi", messaggi);

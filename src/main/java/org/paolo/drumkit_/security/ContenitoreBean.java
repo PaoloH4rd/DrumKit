@@ -27,17 +27,20 @@ public class ContenitoreBean {
 		return (u) -> repo.findByEmailAndIsDisattivatoIsFalse(u).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));	}
 	
 	@Bean
+	//implementazione di PasswordEncoder
 	protected PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
 	@Bean
+	//implementazione di AuthenticationManager
 	protected AuthenticationManager getManager
 				(AuthenticationConfiguration auth) throws Exception {
 		return auth.getAuthenticationManager();
 	}
 	
 	@Bean
+	//implementazione di AuthenticationProvider
 	protected AuthenticationProvider getAuthenticationProvider() {
 		DaoAuthenticationProvider dap=new DaoAuthenticationProvider();
 		dap.setUserDetailsService(getDetailsService());

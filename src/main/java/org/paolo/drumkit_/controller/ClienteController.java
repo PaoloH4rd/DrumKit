@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.paolo.drumkit_.dto.request.ProdottoRequestDTO;
 import org.paolo.drumkit_.dto.response.ProdottoInVenditaResponseDTO;
-import org.paolo.drumkit_.exception.DatoNonValidoException;
 import org.paolo.drumkit_.facade.ProdottoFacade;
 import org.paolo.drumkit_.facade.RigaOrdineFacade;
 import org.paolo.drumkit_.model.Utente;
@@ -28,7 +27,7 @@ public class ClienteController {
 
     private final ProdottoFacade prodottoFacade;
     private final RigaOrdineFacade rigaOrdineFacade;
-
+    //visualizza il pannello del cliente
     @GetMapping("")
     public String pannelloCliente(Model model) {
         Utente u = (Utente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -36,7 +35,7 @@ public class ClienteController {
         model.addAttribute("prodotti", prodotti);
         return "dashboard/vedi_pannello_cliente";
     }
-
+    //visualizza il profilo del venditore
     @GetMapping("/profiloVenditore")
     public String profiloVenditore(@RequestParam ("id") Long id, Model model) {
         //metto il venditore nel model per visualizzarlo tramite UtenteVenditoreResponseDTO
@@ -45,7 +44,7 @@ public class ClienteController {
         model.addAttribute("prodotti", prodotti);
         return "dashboard/cliente/vedi_profilo_venditore";
     }
-
+    // aggiungi prodotto in vendita
     @GetMapping("/aggiungiProdottoVendita")
     public String aggiungiProdottoVendita(Model model) {
         Utente utente = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -55,15 +54,18 @@ public class ClienteController {
         return "dashboard/cliente/aggiungi_prodotto_vendita";
     }
 
+    //aggiungi prodotto in vendita
     @PostMapping("/aggiungiProdottoVendita")
     public String aggiungiProdottoVendita(@ModelAttribute("prodottoRequestDTO") @Valid ProdottoRequestDTO prodotto,
                                           BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         Utente utenteLoggato = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //controllo validità dati
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.prodottoRequestDTO", bindingResult);
             redirectAttributes.addFlashAttribute("prodottoRequestDTO", prodotto);
             return "redirect:/areaCliente/aggiungiProdottoVendita";
         }
+        //controllo immagini vuote
             MultipartFile immagine = prodotto.getImmagine();
             if (immagine == null || immagine.isEmpty()) {
                 prodottoFacade.aggiungiProdottoVendita(prodotto.getNome(), prodotto.getDescrizione(),
@@ -78,6 +80,7 @@ public class ClienteController {
             return "redirect:/areaCliente/aggiungiProdottoVendita";
 
     }
+    //aggiungi prodotto al carrello
     @PostMapping("/aggiungiProdottoAlCarrello")
     public String aggiungiProdottoAlCarrello(@ModelAttribute("prodottoId") Long prodottoId, @RequestParam int quantita) {
         Utente uLoggato = (Utente)SecurityContextHolder.getContext().getAuthentication().getPrincipal();

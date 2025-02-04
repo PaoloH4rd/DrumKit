@@ -33,7 +33,7 @@ public class SuperAdminController {
         return "/dashboard/vedi_pannello_superadmin";
     }
 
-
+    //disattiva admin
     @PostMapping("/disattivaAdmin")
     public String disattivaAdmin(@RequestParam("adminId") Long adminId,RedirectAttributes redirectAttributes) {
         
@@ -41,6 +41,7 @@ public class SuperAdminController {
             redirectAttributes.addFlashAttribute("successMessage", "Admin disattivato con successo");
             return "redirect:/pannelloSuperAdmin";
     }
+    //aggiungi admin
     @PostMapping("/aggiungiAdmin")
       public String aggiungiAdmin(@ModelAttribute ("registrazioneUtenteDTO") @Valid RegistrazioneUtenteDTO registrazioneUtenteDTO,
                                   BindingResult bindingResult, RedirectAttributes redirectAttributes) {
@@ -50,6 +51,7 @@ public class SuperAdminController {
             return "redirect:/pannelloSuperAdmin";
         }
         try {
+            // Registra l'admin
             utenteFacade.registraAdmin(registrazioneUtenteDTO.getNome(), registrazioneUtenteDTO.getCognome(), registrazioneUtenteDTO.getEmail(),
                     registrazioneUtenteDTO.getPassword(), registrazioneUtenteDTO.getPasswordRipetuta(), registrazioneUtenteDTO.getDataNascita());
             redirectAttributes.addFlashAttribute("successMessage", "Admin aggiunto con successo");
